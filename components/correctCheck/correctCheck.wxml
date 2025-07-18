@@ -1,0 +1,21 @@
+<view class='mask' wx:if='{{show}}' catchtouchmove='ture' style="height:{{maskHeight}}rpx;top:-{{scrollViewTop}}px;" catchtap="clickMask">
+	<view class='center-content '
+		style=" margin-top:{{windowHeight /4}}rpx; background-color: #fff; height: {{windowHeight / 3}}rpx; width: {{windowWidth - 40}}rpx;">
+
+		<view class="center-content">
+			<view class="flex-row p-20" style="font-size: 38rpx;">请供货商重新填写数据</view>
+      <image src="../../images/gantanhao.png" class="img"></image>
+      <view class="flex-row" style="width: {{windowWidth - 40}}rpx;">
+         
+         <view class='btn'>
+      <text class="cancleBtn" bindtap="cancle" hover-class="hover">取消</text>
+    </view>
+    <view class='btn'>
+      <text class="sureBtn" catchtap='confirm' hover-class="hover">确定</text>
+    </view>
+      </view>
+      
+			
+		</view>
+	</view>
+</view>

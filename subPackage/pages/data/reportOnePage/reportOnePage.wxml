@@ -1,0 +1,89 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex flex-column">
+
+<back-navbar style="height: {{navBarHeight}}rpx;" title="报表中心" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+
+<!--  top -->
+<view class=" flex-row-between  border-bottom bg-white">
+  <view class="flex-row">
+    <view class="p-20" bindtap="toDatePage">
+      <image src="../../../../images/calender.png" class="icon"></image>
+    </view>
+    <view class="flex-column">
+      <view class="flex-row" wx:if="{{startDate == stopDate}}">
+        <view class=" font-sm"> {{tool.transferDateString(startDate)}}</view>
+
+      </view>
+      <view class="flex-row" wx:else>
+        <view class=" font-sm" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+        <text class="p-10">-</text>
+        <view class=" font-sm" wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="flex-row p-20" bindtap="toMyDate">
+    <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon margin-right"></image>
+  </view>
+</view>
+
+
+<view class="flex-column font-md bg-white">
+
+ <view class="flex-column">
+   <view class="flex-row-between p-30 " bindtap="openList" data-index="0" hover-class="hover">
+   <text>门店</text>
+   <image src="{{openIndex == 0 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
+   </view>
+   <view class="sub_list flex-column  {{openIndex == 0 ? 'is-active' : ''}}">
+    <view class="flex-row  border-bottom p-30" bindtap="toTwoPage" data-id="{{item.gbDepartmentId}}" data-type="dep"  data-name="{{item.gbDepartmentName}}" wx:for="{{mendianArr}}"  hover-class="hover">{{item.gbDepartmentName}}</view>
+   </view>
+ </view>
+
+ <view class="flex-column ">
+   <view class="flex-row-between p-30" bindtap="openList" data-index="1" hover-class="hover">
+   <text>出货</text>
+   <image src="{{openIndex == 1 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
+   </view>
+   <view class="sub_list flex-column {{openIndex == 1 ? 'is-active' : ''}}">
+   
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" data-id="{{item.gbDepartmentId}}" data-name="{{item.gbDepartmentName}}" wx:for="{{kitchenArr}}"  hover-class="hover" data-type="out">{{item.gbDepartmentName}}</view>
+  
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" data-id="{{item.gbDepartmentId}}" data-name="{{item.gbDepartmentName}}" wx:for="{{stockArr}}"  hover-class="hover" data-type="out">{{item.gbDepartmentName}}</view>
+  
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" data-id="{{item.gbDepartmentId}}" data-name="{{item.gbDepartmentName}}" wx:for="{{purArr}}"  hover-class="hover" data-type="outPur">{{item.gbDepartmentName}}</view>
+  
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPageNx" data-id="{{item.nxDgdNxDistributerId}}" data-name="京京送货" wx:for="{{appArr}}"  hover-class="hover" data-type="out">京京送货</view>
+   </view>
+   
+ </view>
+
+ <view class="flex-column">
+   <view class="flex-row-between p-30"  bindtap="openList" data-index="2" hover-class="hover">
+   <text>商品</text>
+   <image src="{{openIndex == 2 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
+   </view>
+   <view class="sub_list flex-column {{openIndex == 2 ? 'is-active' : ''}}">
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsSales" data-name="销售统计">数量统计</view>
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsCost" data-name="成本统计">成本统计</view>
+    <block  wx:if="{{userInfo.gbDistributerEntity.gbDistributerBusinessType == 21 ||userInfo.gbDistributerEntity.gbDistributerBusinessType == 22  }}">
+      <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsProfit" data-name="利润统计">利润统计</view>
+
+    </block>
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsFresh" data-name="保鲜统计">保鲜统计</view>
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsPrice" data-name="价控统计">价控统计</view>
+    <view class="flex-row p-30 border-bottom" bindtap="toTwoPage" hover-class="hover" data-type="goodsByDepartment" data-name="价控统计">门店统计</view>
+</view>
+ </view>
+
+
+
+
+
+
+</view>
+
+</view>

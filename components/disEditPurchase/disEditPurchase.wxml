@@ -1,0 +1,76 @@
+<view class='aaa' wx:if='{{show}}' catchtouchmove='ture' style="height:{{windowHeight}}rpx;" >
+
+<view class='body bg-white' style=" margin-top:{{scrollViewTop + 560}}rpx; ">
+  <view class='flex-row goodsTitle p-20'>
+    <text class="brand"
+      wx:if="{{item.nxDgGoodsBrand !== 'null' && item.nxDgGoodsBrand.length > 0}}">{{item.nxDgGoodsBrand}}</text>
+    <text class="mr-20">{{item.nxDgGoodsName}}</text>
+    <block wx:if="{{item.nxDgGoodsStandardWeight !== 'null' && item.nxDgGoodsStandardWeight.length > 0}}">
+      <text
+        wx:if="{{item.nxDgGoodsStandardname !== '斤'}}">({{item.nxDgGoodsStandardname}}/{{item.nxDgGoodsStandardWeight}})</text>
+    </block>
+
+    <block wx:else>
+      <text wx:if="{{item.nxDgGoodsStandardname !== '斤'}}">({{item.nxDgGoodsStandardname}})</text>
+    </block>
+
+  </view>
+  <view class='flex-column font-lg p-20'>
+    <block wx:if="{{item.nxDgBuyingPriceIsGrade == 1}}">
+    <view class="flex-column">
+   
+    <radio-group class="radio_group p-20" bindchange="radioChange">
+      <label class="mr-20">
+        <text class="mr-10">精选:</text>
+        <checkbox value="1" checked="{{purchaseGoods.nxDpgCostLevel == 1 ? 'true' :'' }}"/>
+      </label>
+      <label class="mr-20">
+        <text class="mr-10">优选:</text>
+        <checkbox value="2"  checked="{{purchaseGoods.nxDpgCostLevel == 2 ? 'true' :'' }}"/>
+      </label>
+      <label class="mr-20">
+        <text class="mr-10"> 普通:</text>
+        <checkbox value="3"  checked="{{purchaseGoods.nxDpgCostLevel == 3 ? 'true' :'' }}"/>
+      </label>
+    </radio-group>
+  </view>
+  </block>
+
+
+    <view class="flex-row p-20" >
+      <text class="explain mr-20">修改库存进货数量:</text>
+      <input class="orderInput" value="{{planOrder}}" bindinput="getPlanOrder" ></input>
+    </view>
+    
+
+    <checkbox-group class="radio-group" bindchange="radioChange">
+      <label
+        class="radio flex-row border-bottom {{item.nxDepartmentOrdersEntities.length -1 == index ? 'is-last' :''}}"
+        wx:for="{{item.nxDepartmentOrdersEntities}}" wx:for-item="orders" wx:if="{{orders.hasChoice}}">
+        <checkbox value="{{orders.nxDepartmentOrdersId}}" checked="true" />
+        <view class="flex-row">
+          <text
+            wx:if="{{orders.nxDepartmentEntity.nxDepartmentFatherId > 0}}">{{orders.nxDepartmentEntity.fatherDepartmentEntity.nxDepartmentAttrName}}.</text>
+          <text class="mr-20">{{orders.nxDepartmentEntity.nxDepartmentAttrName}}</text>
+          <text>{{orders.nxDoQuantity}}{{orders.nxDoStandard}}</text>
+        </view>
+      </label>
+    </checkbox-group>
+  </view>
+
+  <view class="flex-row  p-20 margin-top">
+    <view class='btn'>
+      <text class="delteBtn" bindtap="delete" hover-class="hover">删除进货</text>
+    </view>
+    <view class='btn'>
+      <text class="cancleBtn" bindtap="cancle" hover-class="hover">取消</text>
+    </view>
+    <view class='btn'>
+      <text class="sureBtn" catchtap='confirmEdit' hover-class="hover">确定</text>
+    </view>
+
+  </view>
+
+</view>
+
+</view>

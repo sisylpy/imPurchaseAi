@@ -1,0 +1,121 @@
+<wxs src="../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex flex-column" >
+
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="{{gbDisInfo.gbDistributerName}} 价格" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+    <view class="flex-column p-20 border-bottom bg-white" wx:for="{{purArr}}" wx:key="gbDistributerPurchaseGoodsId" wx:for-index="index">
+      <view class="flex-row font-md">
+        <view class="mr-10">{{index + 1}}.</view>
+
+        <text class="brand mr-10" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsBrand !== null && item.gbDistributerGoodsEntity.gbDgGoodsBrand.length > 0}}">{{item.gbDistributerGoodsEntity.gbDgGoodsBrand}}</text>
+        <text class="mr-10">{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+        <text class="  mr-10" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && item.gbDistributerGoodsEntity.gbDgGoodsDetail !==  'null'}}">{{item.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
+
+        <block wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight !== 'null' && item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight.length > 0}}">
+          <text class=" mr-10" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}})</text>
+        </block>
+        <block wx:else>
+          <text class=" mr-10 ">({{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+        </block>
+        <text class=" mr-10 gray " wx:if="{{item.gbDgGoodsPlace !== 'null' && item.gbDgGoodsPlace.length > 0}}">产地:{{item.gbDgGoodsPlace}}</text>
+        <block wx:if="{{item.gbDistributerGoodsEntity.gbDgControlFresh == 1}}">
+          <text class="ricai">{{item.gbDistributerGoodsEntity.gbDgFreshWasteHour}}小时</text>
+        </block>
+
+
+      </view>
+
+      <block wx:if="{{item.gbDpgStatus !== -1}}">
+        <view class="flex-row">
+          <!-- <view class="mr-10 empty">{{index + 1}}.</view> -->
+
+          <view class=" flex-row-wrap" style="width:{{windowWidth - 100}}rpx; ">
+
+            <view class="mr-20 small flex-row  " wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="noChoicePurchase" data-fatherindex="{{fatherIndex}}" data-index="{{index}}" data-orderindex="{{orderIndex}}">
+              <view class="flex-row">
+
+                <image src='{{orders.hasChoice ? "../../../images/checkbox-checked.png" : "../../../images/checkbox-checked-2.png"}}' class="icon"></image>
+
+
+                <block wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
+                  <text class="mr-10">{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+                <block wx:else>
+                  <text class="mr-10 "> {{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+                <text class="mr-20 ">{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+                <block wx:if="{{orders.gbDoDsStandardScale !== null && orders.gbDoDsStandardScale.length > 0 && orders.gbDoDsStandardScale !== '-1'}}">
+                  <text class="small">({{orders.gbDoDsStandardScale}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}/{{orders.gbDoStandard}})</text>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="flex-row-reverse p-20" >
+
+          <view class="purBtn  {{item.isSelected == false ? 'is-unactive' : ''}}" style="width: {{(windowWidth - 200) / 4}}rpx; margin-left: 40rpx;" bindtap="showInputOrder" data-item="{{item}}" data-finish="true">
+            <text style="font-size: 24rpx;">完成采购</text>
+          </view>
+
+          <view class="flex-row">
+            <view class="purBtn {{item.isSelected == false ? 'is-unactive' : ''}}" style="width: {{(windowWidth - 200) / 4}}rpx; " bindtap="{{item.isSelected == false ? 'showTishi' : 'markGbPurGoodsFinish'}}" data-item="{{item}}" data-finish="false">
+              <text class="five-weight" style="font-size: 28rpx;">买了</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!--  退货 -->
+      <block wx:else>
+        <view class="flex-column" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="noChoicePurchase" data-fatherindex="{{fatherIndex}}" data-index="{{index}}" data-orderindex="{{orderIndex}}">
+          <view class="flex-row">
+
+            <view class="mr-10 empty">{{index + 1}}.</view>
+
+            <view class=" flex-column" style="width:{{windowWidth - 100}}rpx; ">
+              <view class="mr-20 middle flex-row with-tb-padding">
+                <!-- <image src='../../images/warn-3.png' class="icon"></image> -->
+                <block wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
+                  <text class="mr-10">{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+                <block wx:else>
+                  <text class="mr-10 "> {{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+
+              </view>
+              <view class="flex-row  middle">
+                <text class="third-row"> 数量:{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+                <text class="third-row">单价:{{orders.gbDoPrice}}元</text>
+                <text class="third-row">金额:{{orders.gbDoSubtotal}}元</text>
+              </view>
+            </view>
+          </view>
+          <view class="flex-row">
+            <view class="mr-20 empty">{{index + 1}}.</view>
+            <view class="flex-row-reverse" style="width:{{windowWidth - 100}}rpx;">
+
+              <view class="retrunBtn" style="width: {{(windowWidth - 200) / 3}}rpx; " bindtap="showReturnType" data-item="{{item}}" data-orders="{{orders}}">
+                <text style="font-size: 24rpx;">退货</text>
+              </view>
+            </view>
+          </view>
+
+        </view>
+
+
+      </block>
+
+
+    </view>
+
+ 
+</view>
+
+
+
+
+<inputOrder show="{{show}}" bindconfirm="confirm" bindcancle="cancle" bindfinish="markGbPurGoodsFinish" item="{{item}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" scaleInput="{{scaleInput}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" />
+

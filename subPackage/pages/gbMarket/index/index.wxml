@@ -1,0 +1,305 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class=" customerPage" id="mltest">
+  <view class="flex-column">
+    <view class="top_img_fixed flex-row" style="width: 100%; height: 110rpx; line-height: 110rpx; padding-top: {{statusBarHeight}}rpx;">
+      <image src="/images/back-2.png" mode="aspectFill" class="icon" bindtap="toBack"/>
+      <image wx:if="{{userInfo.nxJrdhWxAvartraUrl.length > 0}}" src="{{url + userInfo.nxJrdhWxAvartraUrl}}" class="top_img" catchtap="toEditHome"></image>
+      <view class="flex-column">
+        <text class="top_bar_title_small ">{{userInfo.nxJrdhWxNickName}}</text>
+      </view>
+    </view>
+    <image src="../../../../images/top.png" style="width: 100%; height: {{statusBarHeight + 110}}rpx;"></image>
+  </view>
+
+	<!-- emptyView -->
+  <view class="emptyView {{batchArr.length >  0   ? 'hidden' : ''}}" style="height: {{windowHeight - 200}}rpx; text-align:center;">
+					<view class="normal  empty_view">
+						<view class="flex-column-center">
+							<image class="empty_image" src="../../../../images/gouwucheicon-3.png"></image>
+							<text class="big">现在没有订货</text>
+							<text class="small gray with-tb-padding"></text>
+						</view>
+					</view>
+				</view>
+				<!-- ./emptyView -->
+ 
+  <view class="flex-column p-20"  wx:for="{{batchArr}}" wx:for-item="batch" wx:for-index="batchIndex">
+            <!-- batchmethod -->
+            <view class="flex-row-between" style=" width: {{windowWidth - 60}}rpx; ">
+              <view class="time_back flex-column">
+                <view class="flex-row">
+                  <text class="mr-10">日期: </text>
+                  <text class="mr-10">{{tool.getAttrDate(batch.gbDpbDate)}}</text>
+                  <text>{{batch.gbDpbTime}}</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- goods -->
+            <view class="flex-stretch ">
+              <view class="vline">
+              </view>
+              <view class="body  whiteBack" style="width:{{windowWidth - 100}}rpx; margin-left: 10rpx;">
+                <view class="flex-row p-20">
+                  <view class="flex-column-center third-row">
+                    <image src="{{url + batch.nxJrdhPurEntity.gbDuWxAvartraUrl}}" class="face_img">
+                    </image>
+                    <view class="extremeSmall username">
+                      {{tool.getAttrName(batch.nxJrdhPurEntity.gbDuWxNickName) }}
+                    </view>
+                  </view>
+
+                  <!-- 2 -->
+                  <view class="flex-column-center form_top1 third-row">
+                    <image src="../../../../images/order_icon.png" class="icon"></image>
+                    <view class="small flex-row">
+                      <text class="margin-right">{{batch.gbDistributerSupplierEntity.gbDistributerSupplierName}}</text>
+                    </view>
+                  </view>
+
+                  <!-- 3 -->
+                  <view class="flex-column-center third-row">
+
+                    <block wx:if="{{batch.nxJrdhSellerEntity !== null}}">
+                      <image src="{{url + batch.nxJrdhSellerEntity.nxJrdhWxAvartraUrl}}" class="face_img"> </image>
+                    </block>
+                    <block wx:else>
+                      <image src="../../../../images/user.png" class="face_img"> </image>
+                    </block>
+                    <view class="extremeSmall" wx:if="{{batch.nxJrdhSellerEntity !== null}}">
+                      {{batch.nxJrdhSellerEntity.nxJrdhWxNickName}}</view>
+                    <view class="extremeSmall red" wx:else>卖家未读</view>
+                  </view>
+                </view>
+
+                <!--  -->
+                <view class="flex-column form_body">
+                  <view class=" flex-row with-s-padding  with-dashed-bottom  {{batch.gbDPGEntities.length - 1 == index ? 'is-last' : ''}} " wx:for="{{batch.gbDPGEntities}}" wx:key="gbDistributerPurchaseBatchId">
+                    <view class="flex-row-default middle">
+                      <text class="mr-10">{{index + 1}}.</text>
+                      <view class="flex-column" style="width:{{windowWidth - 150}}rpx; ">
+                        <view class="flex-row-between">
+                          <view class="flex-row">
+                            <text class="brand" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsBrand !== null && item.gbDistributerGoodsEntity.gbDgGoodsBrand.length > 0}}">{{item.gbDistributerGoodsEntity.gbDgGoodsBrand}}</text>
+                            <text>{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+                            <text class="margin-right" wx:if="{{item.gbDistributerGoodsEntity.gbDgBuyingPriceIsGrade == 1}}">[精选]</text>
+              <text class="margin-right"  wx:if="{{item.gbDistributerGoodsEntity.gbDgBuyingPriceIsGrade == 2}}">[优选]</text>
+              <text class="margin-right"  wx:if="{{item.gbDistributerGoodsEntity.gbDgBuyingPriceIsGrade == 3}}">[普通]</text>
+                            <block wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight !== 'null' && item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight.length > 0}}">
+                              <text class="" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}}/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+                            </block>
+                            <block wx:else>
+                              <text class="" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+                            </block>
+                            <text class="margin-left" wx:if="{{item.gbDpbPurchaseType == 0}}">订货: {{item.gbDpgQuantity}}</text>
+                          </view>
+                          <view class="" wx:if="{{item.gbDpgStatus < 2}}">
+                            <view class="flex-row  with-lr-padding">
+                              <block>
+                                <view class="flex-column-center " bindtap="cancelDisBatchItem" hover-class="hoverBtn" data-id="{{item.gbDistributerPurchaseGoodsId}}">
+                                  <image src="../../../../images/ashbin.png" class="icon_order"></image>
+                                </view>
+                              </block>
+                            </view>
+                          </view>
+                        </view>
+
+                        <view class="flex-column extreamSmall five-weight" wx:if="{{batch.gbDpbStatus > 0}}">
+                          <view class="flex-row ">
+                            <view class="flex-row third-row">
+                              <text class="mr-10">单价:</text>
+                              <text>{{item.gbDpgBuyPrice}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">进货:</text>
+                              <text>{{item.gbDpgBuyQuantity}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">小计:</text>
+                              <text>{{item.gbDpgBuySubtotal}}元</text>
+                            </view>
+                          </view>
+
+                          <block wx:if="{{item.gbDistributerGoodsEntity.gbDgBuyingPriceIsGrade == 0 }}">
+                            <view class="flex-row  five-weight" >
+                            <view class="flex-row third-row">
+                              <text class="mr-10">上次:</text>
+                              <text >{{item.gbDistributerGoodsEntity.gbDgBuyingPrice}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">涨幅:</text>
+                              <text >{{tool.getProfitPercent(item.gbDistributerGoodsEntity.gbDgBuyingPrice,item.gbDpgBuyPrice)}}%</text>
+                            </view>
+                          </view>
+                          </block>
+
+                          <block wx:else>
+                            <view class="flex-row  five-weight" wx:if="{{item.gbDpgCostLevel == 1}}">
+                            <view class="flex-row third-row">
+                              <text class="mr-10">上次:</text>
+                              <text >{{item.gbDistributerGoodsEntity.gbDgBuyingPriceOne}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">涨幅:</text>
+                              <text >{{tool.getProfitPercent(item.gbDistributerGoodsEntity.gbDgBuyingPriceOne,item.gbDpgBuyPrice)}}%</text>
+                            </view>
+                          </view>
+
+                          <view class="flex-row  five-weight" wx:if="{{item.gbDpgCostLevel == 2}}">
+                            <view class="flex-row third-row">
+                              <text class="mr-10">上次:</text>
+                              <text >{{item.gbDistributerGoodsEntity.gbDgBuyingPriceTwo}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">涨幅:</text>
+                              <text >{{tool.getProfitPercent(item.gbDistributerGoodsEntity.gbDgBuyingPriceTwo,item.gbDpgBuyPrice)}}%</text>
+                            </view>
+                          </view>
+                          <view class="flex-row  five-weight" wx:if="{{item.gbDpgCostLevel == 3}}">
+                            <view class="flex-row third-row">
+                              <text class="mr-10">上次:</text>
+                              <text >{{item.gbDistributerGoodsEntity.gbDgBuyingPriceThree}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                            </view>
+                            
+                            <view class="flex-row third-row" wx:if="{{item.gbDpgBuyQuantity !== null &&  item.gbDpgBuyQuantity > 0 }}">
+                              <text class="mr-10">涨幅:</text>
+                              <text >{{tool.getProfitPercent(item.gbDistributerGoodsEntity.gbDgBuyingPriceThree,item.gbDpgBuyPrice)}}%</text>
+                            </view>
+                          </view>
+
+                          
+                          </block>
+                          
+                        </view>
+                        <block  wx:if="{{item.gbDpgPurchaseType == 0}}">
+                          <view class="flex-row">
+                            <text class="mr-10 gray">进货:</text>
+                            <text>{{item.gbDpgQuantity}}</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{item.gbDpgPurchaseType == 1}}">
+                          <view class="flex-cloumn small with-tb-padding border-bottom" wx:for-item="orders" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-index="orderIndex">
+                            <view class="flex-row ">
+
+                              <block wx:if="{{orders.gbDepartmentEntity !== null}}">
+          <text class="mr-10">订货:{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+        </block>
+                              <block wx:if="{{orders.gbRestrauntEntity !== null}}">
+                                <text class="mr-10">{{orders.gbRestrauntEntity.gbRestrauntAttrName}}</text>
+                              </block>
+                              <block wx:if="{{orders.gbDepartmentEntity !== null}}">
+                                <text class="mr-10">{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                              </block>
+
+                            </view>
+
+                            <view class="flex-row " wx:if="{{batch.gbDpbStatus > 0}}">
+                              
+                              <view class="flex-row" style="width:{{(windowWidth - 140)}}rpx;;">
+                              <view class="flex-row third-row">
+                                <text class="mr-10">订货:</text>
+                                <text>{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+                              </view>
+                                <view class="third-row">
+                                  <text class="mr-10">数量:</text>
+                                  <text wx:if="{{orders.gbDoWeight !== null && orders.gbDoWeight !== '0.0'}}">{{orders.gbDoWeight}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                                </view>
+                                <view class="third-row">
+                                  <text class="mr-10">小计:</text>
+                                  <text class="" wx:if="{{orders.gbDoCostSubtotal !== null && orders.gbDoCostSubtotal !== '0.0'}}">{{orders.gbDoCostSubtotal}}元</text>
+                                </view>
+                              </view>
+                            </view>
+                          </view>
+                        </block>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+
+                <view class="flex-column small with-tb-padding darkGray">
+                  <block wx:if="{{batch.gbDpbStatus > 0}}">
+                    <view class="flex-row-between">
+                      <view></view>
+                      <view>
+                        <text class="mr-10">总计:</text>
+                        <text class="big">¥{{batch.gbDpbSellSubtotal}}</text>
+                      </view>
+                    </view>
+                    <view class="flex-column-center p-20">
+                      <view class="finish_btn" style="width: {{windowWidth - 300}}rpx;" bindtap="showFinish" data-item="{{batch}}">完成订货</view>
+                    </view>
+                  </block>
+                </view>
+              </view>
+            </view>
+          </view>
+
+
+
+</view>
+
+
+
+
+
+
+<view class="mask {{notBuyUser ? 'is-active' :''}}">
+
+  <view class="whiteBack" style="margin-top:{{(windowHeight - 640)/2 }}rpx;margin-left: 50rpx; width:{{windowWidth - 100}}rpx;">
+    <view class="margin_bottom  flex-column-center normal p-20">
+      <view class="tishiView" style="width:{{windowWidth/5}}rpx; height:{{windowWidth/5}}rpx; margin-top:-{{windowWidth/10 + 10}}rpx; z-index: 9999;border-radius: 50%;">
+        <!-- <image src="../../../../images/weixin-4.png" class="tishi_icon" style="width:{{windowWidth/5 -80}}rpx; height:{{windowWidth/5 - 80}}rpx;  border-radius: 50%; margin-top:40rpx; margin-left: 40rpx;"> -->
+        <!-- </image> -->
+      </view>
+
+      <view class="flex-column-center p-20">
+        <view class="flex-row ">
+          <view class="middle">使用微信头像注册用户</view>
+        </view>
+      </view>
+       <view class="flex-column">
+        <view class="flex-row p-20">
+         <text class="flex-row margin-right shrink_fix">头像:</text>
+         <image class="url"  src="{{avatarUrl == '' ? '../../../../images/user.png' : avatarUrl }}"></image>
+         <!-- <image class='class_img url' src='{{src}}' bindtap='choiceImg'></image> -->
+
+       </view>
+       <view class="flex-row p-20">
+         <text class="margin-right shrink_fix">用户名:</text>
+         <input type="text" value="{{nickName}}" bindinput="getNickName" class="input" style="border-bottom: 1px solid gray;"/>
+
+       </view>
+       </view>
+     
+      <view class="p-20 flex-row">
+        <!--  -->
+        <button class="iknow mainBack p-20" open-type="chooseAvatar"   bind:chooseavatar="onChooseAvatar" bindtap="registerBuyer" style="width:{{windowWidth - 200}}rpx; text-align: center;" hover-class="hover">
+          注册用户
+        </button>
+        <!-- <input type="nickname" class="weui-input" placeholder="请输入昵称"/> -->
+      </view>
+    </view>
+
+  </view>
+</view>
+
+
+
+
+
+
+<isPurchase show="{{showIsPurchase}}" bindtoDeletePurchaseGoods="toDeletePurchaseGoods" bindtoEditPurchaseGoods="toEditPurchaseGoods" bindconfirm="confirm" bindcancle="cancleIsPurchase" bindfinish="finishgbPurGoods" item="{{item}}" consultItem="{{consultItem}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" scaleInput="{{scaleInput}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" todayBuyingPrice="{{todayBuyingPrice}}" priceLevel="{{priceLevel}}" />
+
+<disEditPurchase show="{{showEditPurchase}}"  binddelPurGoods="consfirmDeletePlanPurchseGoods" bindconfirmEditGoods="confirmEditPurGoods"  item="{{item}}" bindgetFocus="getFocus" puringIndex="{{puringIndex}}" bindcancle="cancle" modalHeight="{{windowHeight > maskHeight ? windowHeight : maskHeight }}" scrollViewTop="{{scrollViewTop}}" modalContentHeight="{{modalContentHeight}}" windowHeight="{{windowHeight}}" ids="{{ids}}" planOrder="{{planOrder}}"  purchaseGoods="{{purchaseGoods}}"  />
+
+<purchaseOrder show="{{showOrderPurchase}}" bindconfirmorder="confirmorder" bindcancle="cancle" item="{{item}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" todayBuyingPrice="{{todayBuyingPrice}}" priceLevel="{{priceLevel}}" />
+
+
+
+  <payType show="{{showPay}}" bindconfirmPay="confirmPay" bindcancle="cancle" item="{{batch}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" url="{{url}}"  />

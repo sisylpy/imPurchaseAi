@@ -1,0 +1,80 @@
+<view class='mask' wx:if='{{show}}' catchtouchmove='ture' style="height:{{maskHeight}}rpx;top:-{{scrollViewTop}}rpx;">
+  <view class='modal-content flex-column ' style=" margin-top:{{scrollViewTop + windowHeight / 4}}rpx;">
+    <view class="top">
+      <view class='goodsTitle flex-row'>
+        <text class="brand" wx:if="{{item.gbDistributerGoodsEntity.nxDgGoodsBrand.length > 0 && item.gbDistributerGoodsEntity.nxDgGoodsBrand !== 'null'}}">{{item.gbDistributerGoodsEntity.nxDgGoodsBrand}}</text>
+        <text>{{item.gbDistributerGoodsEntity.nxDgGoodsName}}</text>
+       
+
+        <block wx:if="{{item.gbDistributerGoodsEntity.nxDgGoodsStandardWeight !== 'null' && item.gbDistributerGoodsEntity.nxDgGoodsStandardWeight.length > 0}}">
+          <text class="" wx:if="{{item.gbDistributerGoodsEntity.nxDgGoodsStandardname !== '斤'}}">({{item.gbDistributerGoodsEntity.nxDgGoodsStandardWeight}}/{{item.gbDistributerGoodsEntity.nxDgGoodsStandardname}})</text>
+        </block>
+        <block wx:else>
+          <text class="" wx:if="{{item.gbDistributerGoodsEntity.nxDgGoodsStandardname !== '斤' }}">({{item.gbDistributerGoodsEntity.nxDgGoodsStandardname}})</text>
+        </block>
+      </view>
+    </view>
+
+    <view class="body">
+      <view class='goods_contents'>
+        <view class="flex-row-between p-20">
+         <view class="flex-row" wx:if="{{item.nxDepartmentOrdersEntities.length == 0}}"> 
+          <text class="mr-10">库存进货:</text>
+          <text class="mainColor">{{item.nxDpgQuantity}}</text>
+         </view>
+              
+        </view>
+        <view class="flex-row p-20" wx:if="{{item.nxDpgCostLevel > 0}}">
+          <text class="mr-10">进货级别:</text>
+          <text wx:if="{{item.nxDpgCostLevel == 1}}">[精选]</text>
+        <text wx:if="{{item.nxDpgCostLevel == 2}}">[优选]</text>
+        <text wx:if="{{item.nxDpgCostLevel == 3}}">[普通]</text>
+        </view>
+      
+        <view class="flex-row-between" style="padding: 20rpx 20rpx;">
+           <view class="flex-row">
+      
+          <text class="mr-10">单价:(元/{{item.gbDistributerGoodsEntity.nxDgGoodsStandardname}})</text>
+           </view>
+        
+          <view class="flex-row">
+            <view class="add_btn" hover-class="hover" bindtap="changePrice"  data-type="reduce">
+              <image src="../../images/reduce 2.png" class="add_btn_icon"></image>
+            </view>
+            <view class="inputView" style="width: {{windowWidth / 5}}rpx; margin-right:10rpx;">
+              <input class='input' type='digit' value="{{item.nxDpgBuyPrice}}" bindinput="getPurchasePrice" hold-keyboard='true'></input>
+            </view>
+            <view class="add_btn"  hover-class="hover"  bindtap="changePrice"  data-type="add">
+              <image src="../../images/add-5.png" class="add_btn_icon"></image>
+            </view>
+          </view>
+        </view>
+
+      </view>
+
+      <view class='flex-row'>
+
+        <view class="btn_row">
+          <view class="finish-btn1  flex-row">
+            <view class="flex-row p-20">
+            <view class="" bindtap="toDeletePurchaseGoods" data-item="{{purGoods}}">
+              <image src="../../images/Delete-2.png" class="icon"></image>
+            </view>
+
+            <view class="" data-index="{{index}}" data-parentindex="{{fatherIndex}}" bindtap="toEditPurchaseGoods" data-item="{{purGoods}}" style="margin-left: 40rpx;">
+              <image src="../../images/edit-3.png" class="icon"></image>
+            </view>
+          </view>
+          </view>
+          <view class="btn_row_finish" style="width: {{windowWidth - 460}}rpx; ">
+            <text class='cancel-btn' bindtap="cancle" hover-class="hoverBtn">关闭</text>
+            <text class='confirm-btn' catchtap='confirm' hover-class="hoverBtn">完成</text>
+          </view>
+
+        </view>
+
+      </view>
+    </view>
+
+  </view>
+</view>

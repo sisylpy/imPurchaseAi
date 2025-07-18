@@ -1,0 +1,164 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex-column">
+
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="采购" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+  
+
+  <view class="flex-column-center border-bottom p-20 " >
+    <text class="" wx:if="{{type == 0}}">现金订货</text>
+    <text class="" wx:elif="{{type == 1}}">记账订货</text>
+    <text class="" wx:else="">市场采购</text>
+    <view>{{date}} {{value}}元</view>
+   
+  </view>
+
+  <block wx:if="{{type !== '2'}}">
+    <view class="flex-row-between border-bottom bg-white" wx:for="{{arr}}" wx:for-item="item" style="width: {{windowWidth}}rpx;">
+
+      <view class="flex-row-default p-20">
+        <view class="flex-column margin-right middleSmall" bind:tap="toJudhSupplier" data-id="{{item.gbDpbSupplierId}}" data-name="{{item.nxJrdhSupplierEntity.nxJrdhsSupplierName}}" data-item="{{item.nxJrdhSupplierEntity}}">
+          <text class="">{{item.nxJrdhSupplierEntity.nxJrdhsSupplierName}}</text>
+        </view>
+        <view class="flex-row-default">
+          <image src="{{url + item.nxJrdhSupplierEntity.gbDsuWxAvartraUrl}}" class="url margin-right"></image>
+
+        </view>
+      </view>
+
+      <view class="flex-row with-margin-right" bindtap="openBatchDetail" data-id="{{item.gbDistributerPurchaseBatchId}}">
+        <view class="flex-column">
+          <block wx:if="{{item.gbDpbUserAdminType == 7}}">
+            <view class="flex-row pink middleSmall">退货单</view>
+          </block>
+          <view></view>
+          <view class="flex-row">
+            <text class="big ">{{item.gbDpbSubtotal}}</text>
+            <text class="middleSmall">元</text>
+          </view>
+          <block wx:if="{{item.gbDpbPayType == 1}}">
+            <view class="flex-column">
+              <text wx:if="{{item.gbDpbStatus == 2}}" class=" font-xs red">待送货</text>
+              <text wx:elif="{{item.gbDpbStatus == 3}}" class="font-xs mainColor">待结账</text>
+              <text wx:elif="{{item.gbDpbStatus == 4}}" class="font-xs gray">完成结账</text>
+            </view>
+          </block>
+        </view>
+        <view>
+          <image src="/images/arrow-right-3.png" class="icon pl-20 pr-20"></image>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else="">
+
+
+    <scroll-view scroll-y="true" style="height: {{windowHeight - 320}}rpx; ">
+
+      <view class="" wx:for="{{purArr}}" wx:for-item="father" wx:for-index="fatherIndex" >
+        <view class="flex-column bg-white">
+          <view class="flex-row-between p-20 border-bottom" bindtap="openFather" data-fatherindex="{{fatherIndex}}" hover-class="hover">
+          <text class="normal">{{father.gbDfgFatherGoodsName}}</text>
+          <view class="pl-20 pr-20">
+            <image src="{{father.isSelected ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"></image>
+          </view>
+        </view>
+
+        <view view class="goodsList flex-column p-20 border-bottom middle {{father.isSelected ? 'is-active' : ''}}" wx:for="{{father.gbDistributerPurchaseGoodsEntities}}" wx:key="gbDistributerPurchaseGoodsId" wx:for-index="index" wx:for-item="item">
+
+          <view class="flex-column normal pt-10 pb-10" style="width: {{windowWidth - 40}}rpx;">
+            <view class="flex-row-between">
+              <text class="mr-20">{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+              <text class="" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && item.gbDistributerGoodsEntity.gbDgGoodsDetail !== 'null'}}">{{item.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
+              <text class="mainColor">¥{{item.gbDpgBuySubtotal}}</text>
+            </view>
+            <view class="flex-row pt-10 pb-10 middle">
+              <view class="half-row">
+                <text>数量:{{item.gbDpgBuyQuantity}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="half-row">
+                <text>单价:{{item.gbDpgBuyPrice}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+              </view>
+            </view>
+            <block wx:if="{{item.gbDistributerGoodsPriceEntity !== null}}">
+              <view class="flex-row font-xs red ">
+                <text>价格设置在{{item.gbDistributerGoodsPriceEntity.gbDgpGoodsLowestPrice}}至{{item.gbDistributerGoodsPriceEntity.gbDgpGoodsHighestPrice}}</text>
+                <text>{{item.gbDistributerGoodsPriceEntity.gbDgpPurWhat == 1 ? '高于' : '低于'}}</text>
+                <text>{{item.gbDistributerGoodsPriceEntity.gbDgpPurScale}}</text>
+                <text>{{item.gbDistributerGoodsPriceEntity.gbDgpPurWhatTotal}}元</text>
+              </view>
+              <view class="flex-row font-xs">
+                <text class="mr-10">原因:</text>
+                <text>{{item.gbDpgBuyPriceReason}}</text>
+              </view>
+            </block>
+
+
+            <view class="flex-column middle p-10" wx:for="{{item.gbDepartmentOrdersEntities}}" style="background-color:{{orders.gbDoStatus  < 4 ? '#f2f9fc' : 'rgb(237, 237, 237, 0.5)'}};" wx:for-item="orders">
+              <view class="flex-row-between">
+                <block wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
+                  <text class="mr-10">{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+                <block wx:else>
+                  <text class="mr-10 "> {{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+                </block>
+                <view class="mr-20">
+                  <text>{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+                  <block wx:if="{{orders.gbDoDsStandardScale !== null && orders.gbDoDsStandardScale.length > 0 && orders.gbDoDsStandardScale !== '-1'}}">
+                    <text class="small">({{orders.gbDoDsStandardScale}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}/{{orders.gbDoStandard}})</text>
+                  </block>
+                </view>
+              </view>
+              <view class="flex-row small">
+                <view class="half-row">
+                  <text class="mr-20">发货:</text>
+                  <text>{{orders.gbDoWeight}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                </view>
+
+                <view class="half-row">
+                  <text class="mr-20">小计:</text>
+                  <text>{{orders.gbDoSubtotal}}元</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- btn -->
+            <view class="flex-row-reverse" wx:if="{{item.gbDpgOrdersFinishAmount == 0 && item.gbDpgPurchaseType !== 9}}">
+              <view class="editBtn" style="width: {{(windowWidth - 200) / 4}}rpx; margin-left: 40rpx;margin-top: 10rpx;" bindtap="editPurGoods" data-item="{{item}}">
+                <text style="font-size: 24rpx;">修改采购</text>
+              </view>
+
+              <view class="delBtn" wx:if="{{item.gbDpgOrdersAmount == item.gbDepartmentOrdersEntities.length}}" style="width: {{(windowWidth - 200) / 4}}rpx; " bindtap="deletePurGoods" data-item="{{item}}">
+                <text style="font-size: 24rpx;">删除采购</text>
+              </view>
+            </view>
+        
+          </view>
+          
+        </view>
+       
+        
+        </view>
+
+       
+
+      </view>
+
+      <view class="flex-column-center gray small" style="height: 100rpx;">
+          没有数据了！
+      </view>
+
+    </scroll-view>
+
+
+  </block>
+
+
+
+
+
+
+
+</view>

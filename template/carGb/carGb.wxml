@@ -1,0 +1,29 @@
+<template name="car">
+  <view class="order_list {{lastInput ? 'is-active' : ''}}">
+    <view class="order_list_content">
+
+      <view class="car">
+        <view class="testtap flex-column" style="color:#fff; font-size: 38rpx;">
+          <!-- <view  class="dot">{{total}}</view> -->
+          <!-- <image class="gouwuche" src="/images/wupin.png"></image> -->
+          <!-- <text class="geshu">{{goodsCount}}个商品</text> -->
+          <!-- <text class="geshu" >: ¥{{totalGoodsPay}}</text> -->
+          <!-- <text class="yunfei">另加运费:¥{{totalYunfeiPay}}</text> -->
+        </view>
+      </view>
+
+<view class="flex-row">
+      <view class="flex-row order_send "  style="width: {{windowWidth / 4  - 20}}rpx; height: 80rpx; line-height: 80rpx; text-align: center; background-color: rebeccapurple; border-radius: 40rpx;padding:  10rpx 40rpx;" bindtap="showShareTishi" >
+      <text class="margin-l-right">完成备货</text>
+      <text>{{payTotal}}元</text>
+
+        <!-- <image src="../../../images/arrow-yellow.png" class="btn_img"></image> -->
+      </view>
+     </view>
+     <!-- <view class="flex-row">
+      <button class=" order_send " open-type="{{orderFinish ? 'share' : ''}}" bindtap="showShareTishi" style="width: 380rpx;">{{payTotal}}元</button>
+     </view> -->
+
+    </view>
+  </view>
+</template>

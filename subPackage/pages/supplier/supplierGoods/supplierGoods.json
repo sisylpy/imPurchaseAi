@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "editOrder": "/components/editOrder/editOrder",
+    "back-navbar": "/components/back-navbar/back-navbar"
+
+  }
+}

@@ -1,0 +1,1513 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex-row top_bar bg-white" style=" padding-top: {{statusBarHeight}}rpx;">
+  <image src="../../../../images/back.png" class="back_icon" bindtap="toBack"></image>
+  <view class="top_bar_title flex-column">
+    <view class="flex-row">
+      <text class="mr-10">{{fatherNeme}}</text>
+    </view>
+  </view>
+</view>
+
+<!--  top -->
+<view class=" flex-row-between pl-20 pr-20 border-bottom bg-white">
+  <view class="flex-row">
+    <view class="p-20" bindtap="toDatePage" data-type="stop">
+      <image src="../../../../images/calender.png" class="icon"></image>
+    </view>
+    <view class="flex-column">
+      <view wx:if="{{startDate == stopDate}}">
+        <view class=" small  {{startDate !== null ? 'is-active' : ''}} "> {{startDate !== '-1' ? tool.getAttrDate(startDate) : ''}}
+        </view>
+      </view>
+      <view class="flex-row" wx:else>
+        <view class=" small  {{startDate !== null ? 'is-active' : ''}} "> {{startDate !== '-1' ? tool.getAttrDate(startDate) : ''}}
+        </view>
+        <text class="with-s-padding" wx:if="{{startDate !== '-1'}}">-</text>
+        <view class=" small  {{stopDate !== null ? 'is-active' :''}}">{{stopDate !== null ? tool.getAttrDate(stopDate) : ''}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="flex-row p-20" bindtap="toFilter">
+    <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon mr-20"></image>
+  </view>
+</view>
+
+
+
+<block wx:if="{{searchDepIds == -1}}">
+
+<view class='navbar bg-white  p-20'>
+
+  <view class="navbar-item   {{tab1Index==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" data-type="profit" style="width: {{(windowWidth- 40) / 4}}rpx; ">
+    <view class='flex-column'>
+      <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">总成本</text>
+      <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">总数量</text>
+      <text class="normal">{{oneTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+    </view>
+  </view>
+  <view class="navbar-item {{tab1Index==1?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover" data-type="sales">
+    <view class='flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+      <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">售出成本</text>
+      <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">售出数量</text>
+      <view class="flex-row">
+        <text class="normal">{{salesTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="navbar-item {{tab1Index==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" data-type="loss">
+    <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+      <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">损耗成本</text>
+      <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">损耗数量</text>
+      <text class="normal">{{lossTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+    </view>
+  </view>
+  <view class="navbar-item {{tab1Index==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1Click' hover-class="hover" data-type="waste">
+    <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+      <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">废弃成本</text>
+      <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">废弃数量</text>
+      <text class="normal">{{wasteTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+    </view>
+  </view>
+
+  <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 40)/ 4  }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+  </view>
+</view>
+
+<view class="flex-column" id="mjltest">
+  <swiper class="swiper-box" style="height: {{windowHeight - 400}}rpx;  " duration="300" bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+
+    <!-- profit -->
+    <swiper-item>
+      <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+        <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+          <view class="flex-column picture_border ">
+          
+
+            <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex" bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+              <view class="flex-column border-bottom-back ">
+                <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                  <view class="flex-row">
+                    <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                    <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                  </view>
+                  <block wx:if="{{fenxiType == 'costEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                      <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                    </view>
+                  </block>
+                  <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                      <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                    </view>
+                  </block>
+                </view>
+
+                <view class="flex-row-between">
+                  <text></text>
+
+                  <view class="flex-row with-tbl-padding small ">
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">售:</text>
+                      <view class="flex-column  {{type == 'produce' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">损:</text>
+                      <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">废:</text>
+                      <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+
+
+              </view>
+
+              <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+            </view>
+          </view>
+        </view>
+        <view class="margin_bottom" style="height: 100rpx;"></view>
+      </scroll-view>
+      <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+        <view class="empty_View flex-column-center">
+          <image class="empty_image" src="../../../../images/file-empty.png"></image>
+          <text class="big">暂无数据</text>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- sales -->
+    <swiper-item style="height: 100%;">
+
+      <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+        <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+          <view class="flex-column picture_border ">
+            <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+              <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                  <view class="flex-row">
+                    <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                    <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                  </view>
+                  <block wx:if="{{fenxiType == 'costEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                      <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                    </view>
+                  </block>
+                  <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                      <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                    </view>
+                  </block>
+                </view>
+
+                <view class="flex-row-between">
+                  <text></text>
+
+                  <view class="flex-row with-tbl-padding small ">
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">售:</text>
+                      <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">损:</text>
+                      <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">废:</text>
+                      <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+
+              <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+            </view>
+
+          </view>
+
+        </view>
+        <view class="margin_bottom" style="height: 100rpx;"></view>
+      </scroll-view>
+      <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+        <view class="empty_View flex-column-center">
+          <image class="empty_image" src="../../../../images/file-empty.png"></image>
+          <text class="big">暂无数据</text>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- loss -->
+    <swiper-item style="height: 100%;">
+
+      <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+        <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+          <view class="flex-column picture_border ">
+
+            <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+              <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                  <view class="flex-row">
+                    <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                    <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                  </view>
+                  <block wx:if="{{fenxiType == 'costEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                      <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                    </view>
+                  </block>
+                  <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                      <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                    </view>
+                  </block>
+                </view>
+
+                <view class="flex-row-between">
+                  <text></text>
+                  <view class="flex-row with-tbl-padding small ">
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">售:</text>
+                      <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">损:</text>
+                      <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">废:</text>
+                      <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+
+              <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+            </view>
+
+          </view>
+
+        </view>
+        <view class="margin_bottom" style="height: 100rpx;"></view>
+      </scroll-view>
+      <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+        <view class="empty_View flex-column-center">
+          <image class="empty_image" src="../../../../images/file-empty.png"></image>
+          <text class="big">暂无数据</text>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- waste -->
+    <swiper-item style="height: 100%;">
+
+      <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+
+        <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+          <view class="flex-column picture_border ">
+
+            <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+              <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                  <view class="flex-row">
+                    <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                    <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                  </view>
+                  <block wx:if="{{fenxiType == 'costEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                      <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                    </view>
+                  </block>
+                  <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                    <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                      <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                      <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                    </view>
+                  </block>
+                </view>
+
+                <view class="flex-row-between">
+                  <text></text>
+                  <view class="flex-row with-tbl-padding small ">
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">售:</text>
+                      <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">损:</text>
+                      <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+
+                    </view>
+                    <view class="flex-row-default mr-10">
+                      <text class="mr-10 gray">废:</text>
+                      <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                        <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                        <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+
+              <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+            </view>
+
+          </view>
+
+        </view>
+        <view class="margin_bottom" style="height: 100rpx;"></view>
+      </scroll-view>
+      <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+        <view class="empty_View flex-column-center">
+          <image class="empty_image" src="../../../../images/file-empty.png"></image>
+          <text class="big">暂无数据</text>
+        </view>
+      </view>
+
+    </swiper-item>
+
+  </swiper>
+</view>
+</block>
+
+
+
+<block wx:else="">
+
+<block wx:if="{{resultDepList.length == 1}}">
+
+  <view class="flex-row border-bottom">
+    <scroll-view scroll-x="true" show-scrollbar="false" enhanced="true" class="nav_dep" scroll-with-animation="{{true}}" scroll-left="{{leftWidthDep}}" style="width: {{windowWidth - 40 }}rpx; ">
+
+      <text id="type_dep_fixed" data-id="-1" class="dep_item  {{itemIndexDep == 0 ? 'is-active' : ''}}" data-index='0' data-total="{{whichTotalDep}}" bindtap="onTab1ClickDepTypeOfFenxi" data-item="all">{{resultDepList[0].gbDepartmentAttrName}}({{resultDepList[0].depCostGoodsTotalString}}{{fenxiType == 'costEcharts' ? '元' : ''}})</text>
+    </scroll-view>
+
+  </view>
+
+  <scroll-view scroll-y style="height:{{ windowHeight - 280 - statusBarHeight}}rpx;">
+    <view class="flex-column">
+
+      <view class='navbar bg-white  p-20'>
+
+        <view class="navbar-item   {{tab1Index==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" data-type="profit" style="width: {{(windowWidth- 40) / 4}}rpx; ">
+          <view class='flex-column'>
+            <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">总成本</text>
+            <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">总数量</text>
+            <text class="normal">{{oneTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+          </view>
+        </view>
+        <view class="navbar-item {{tab1Index==1?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover" data-type="sales">
+          <view class='flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+            <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">售出成本</text>
+            <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">售出数量</text>
+            <view class="flex-row">
+              <text class="normal">{{salesTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="navbar-item {{tab1Index==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" data-type="loss">
+          <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+            <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">损耗成本</text>
+            <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">损耗数量</text>
+            <text class="normal">{{lossTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+          </view>
+        </view>
+        <view class="navbar-item {{tab1Index==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1Click' hover-class="hover" data-type="waste">
+          <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+            <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">废弃成本</text>
+            <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">废弃数量</text>
+            <text class="normal">{{wasteTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+          </view>
+        </view>
+
+        <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 40)/ 4  }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+        </view>
+      </view>
+
+      <view class="flex-column" id="mjltestOne">
+        <swiper class="swiper-box" style="height: {{windowHeight - 400}}rpx;  " duration="300" bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+
+          <!-- profit -->
+          <swiper-item>
+            <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+              <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                <view class="flex-column picture_border ">
+
+                  <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex" bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                    <view class="flex-column border-bottom-back ">
+                      <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                        <view class="flex-row">
+                          <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                          <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                        </view>
+                        <block wx:if="{{fenxiType == 'costEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                            <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                          </view>
+                        </block>
+
+                      </view>
+
+                      <view class="flex-row-between">
+                        <text></text>
+
+                        <view class="flex-row with-tbl-padding small ">
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">售:</text>
+                            <view class="flex-column  {{type == 'produce' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">损:</text>
+                            <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">废:</text>
+                            <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+                    </view>
+
+                    <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                  </view>
+                </view>
+              </view>
+              <view class="margin_bottom" style="height: 100rpx;"></view>
+            </scroll-view>
+            <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+              <view class="empty_View flex-column-center">
+                <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                <text class="big">暂无数据</text>
+              </view>
+            </view>
+          </swiper-item>
+
+          <!-- sales -->
+          <swiper-item style="height: 100%;">
+
+            <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+              <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                <view class="flex-column picture_border ">
+
+                  <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                    <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                      <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                        <view class="flex-row">
+                          <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                          <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                        </view>
+                        <block wx:if="{{fenxiType == 'costEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                            <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                          </view>
+                        </block>
+                      </view>
+
+                      <view class="flex-row-between">
+                        <text></text>
+
+                        <view class="flex-row with-tbl-padding small ">
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">售:</text>
+                            <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">损:</text>
+                            <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">废:</text>
+                            <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+                    </view>
+
+                    <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                  </view>
+
+                </view>
+
+              </view>
+              <view class="margin_bottom" style="height: 100rpx;"></view>
+            </scroll-view>
+            <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+              <view class="empty_View flex-column-center">
+                <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                <text class="big">暂无数据</text>
+              </view>
+            </view>
+          </swiper-item>
+
+          <!-- loss -->
+          <swiper-item style="height: 100%;">
+
+            <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+              <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                <view class="flex-column picture_border ">
+
+                  <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                    <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                      <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                        <view class="flex-row">
+                          <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                          <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                        </view>
+                        <block wx:if="{{fenxiType == 'costEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                            <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                          </view>
+                        </block>
+                      </view>
+
+                      <view class="flex-row-between">
+                        <text></text>
+                        <view class="flex-row with-tbl-padding small ">
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">售:</text>
+                            <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">损:</text>
+                            <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">废:</text>
+                            <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+                    </view>
+
+                    <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                  </view>
+
+                </view>
+
+              </view>
+              <view class="margin_bottom" style="height: 100rpx;"></view>
+            </scroll-view>
+            <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+              <view class="empty_View flex-column-center">
+                <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                <text class="big">暂无数据</text>
+              </view>
+            </view>
+          </swiper-item>
+
+          <!-- waste -->
+          <swiper-item style="height: 100%;">
+
+            <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+
+              <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                <view class="flex-column picture_border ">
+
+                  <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                    <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                      <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                        <view class="flex-row">
+                          <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                          <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                        </view>
+                        <block wx:if="{{fenxiType == 'costEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                          <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                            <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                            <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                          </view>
+                        </block>
+                      </view>
+
+                      <view class="flex-row-between">
+                        <text></text>
+                        <view class="flex-row with-tbl-padding small ">
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">售:</text>
+                            <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">损:</text>
+                            <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+
+                          </view>
+                          <view class="flex-row-default mr-10">
+                            <text class="mr-10 gray">废:</text>
+                            <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                              <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                              <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+                    </view>
+
+                    <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                  </view>
+
+                </view>
+
+              </view>
+              <view class="margin_bottom" style="height: 100rpx;"></view>
+            </scroll-view>
+            <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+              <view class="empty_View flex-column-center">
+                <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                <text class="big">暂无数据</text>
+              </view>
+            </view>
+
+          </swiper-item>
+
+        </swiper>
+      </view>
+    </view>
+  </scroll-view>
+
+
+</block>
+
+<block wx:else="">
+
+  <view class="flex-row border-bottom">
+    <scroll-view scroll-x="true" show-scrollbar="false" enhanced="true" class="nav_dep" scroll-with-animation="{{true}}" scroll-left="{{leftWidthDep}}" style="width: {{windowWidth - 40 }}rpx; ">
+
+      <text id="type_dep_fixed" data-id="-1" class="dep_item  {{itemIndexDep == 0 ? 'is-active' : ''}}" data-index='0' data-total="{{whichTotalDep}}" bindtap="onTab1ClickDepTypeOfFenxi" data-item="all">{{resultDepList.length}}个门店({{searchTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}})</text>
+
+      <text id="type_dep_{{dep.gbDepartmentId}}" data-id="{{dep.gbDepartmentId}}" class="dep_item {{itemIndexDep == depIndex + 1 ? 'is-active' : ''}}" data-index='{{depIndex + 1}}' bindtap="onTab1ClickDepTypeOfFenxi" data-item="{{dep}}" wx:for="{{resultDepList}}" wx:for-item="dep" wx:for-index="depIndex" data-name="{{dep.gbDepartmentName}}">{{dep.gbDepartmentName}}({{dep.depCostGoodsTotalString}}{{fenxiType == 'costEcharts' ? '元' : ''}})</text>
+    </scroll-view>
+
+  </view>
+
+  <!-- depSwiper -->
+  <swiper duration="300" bindanimationfinish="animationfinishDepType" current="{{itemIndexDep}}" data-index='{{itemIndexDep}}' style="height: {{windowHeight - 280 - statusBarHeight}}rpx; " wx:if="{{resultDepList.length > 0}}">
+
+    <!-- all Dep -->
+    <swiper-item style="height: {{windowHeight - 280 - statusBarHeight}}rpx; ">
+      <scroll-view scroll-y style="height:{{ windowHeight - 280 - statusBarHeight}}rpx;">
+        <view class="flex-column">
+
+          <view class='navbar bg-white  p-20'>
+
+            <view class="navbar-item   {{tab1Index==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" data-type="profit" style="width: {{(windowWidth- 40) / 4}}rpx; ">
+              <view class='flex-column'>
+                <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">总成本</text>
+                <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">总数量</text>
+                <text class="normal">{{oneTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+              </view>
+            </view>
+            <view class="navbar-item {{tab1Index==1?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover" data-type="sales">
+              <view class='flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+                <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">售出成本</text>
+                <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">售出数量</text>
+                <view class="flex-row">
+                  <text class="normal">{{salesTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+                </view>
+              </view>
+            </view>
+            <view class="navbar-item {{tab1Index==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" data-type="loss">
+              <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+                <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">损耗成本</text>
+                <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">损耗数量</text>
+                <text class="normal">{{lossTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+              </view>
+            </view>
+            <view class="navbar-item {{tab1Index==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1Click' hover-class="hover" data-type="waste">
+              <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+                <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">废弃成本</text>
+                <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">废弃数量</text>
+                <text class="normal">{{wasteTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+              </view>
+            </view>
+
+            <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 40)/ 4  }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+            </view>
+          </view>
+
+          <view class="flex-column" id="mjltestOne">
+            <swiper class="swiper-box" style="height: {{windowHeight - 400}}rpx;  " duration="300" bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+
+              <!-- profit -->
+              <swiper-item>
+                <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+                  <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                    <view class="flex-column picture_border ">
+                    
+                      <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex" bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                        <view class="flex-column border-bottom-back ">
+                          <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                            <view class="flex-row">
+                              <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                              <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                            </view>
+                            <block wx:if="{{fenxiType == 'costEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                                <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                              </view>
+                            </block>
+                            <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                                <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              </view>
+                            </block>
+
+                          </view>
+
+                          <view class="flex-row-between">
+                            <text></text>
+
+                            <view class="flex-row with-tbl-padding small ">
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">售:</text>
+                                <view class="flex-column  {{type == 'produce' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">损:</text>
+                                <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">废:</text>
+                                <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+
+                        <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                      </view>
+                    </view>
+                  </view>
+                  <view class="margin_bottom" style="height: 100rpx;"></view>
+                </scroll-view>
+                <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                  <view class="empty_View flex-column-center">
+                    <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                    <text class="big">暂无数据</text>
+                  </view>
+                </view>
+              </swiper-item>
+
+              <!-- sales -->
+              <swiper-item style="height: 100%;">
+
+                <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+                  <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                    <view class="flex-column picture_border ">
+                    
+
+                      <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                        <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                          <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                            <view class="flex-row">
+                              <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                              <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                            </view>
+                            <block wx:if="{{fenxiType == 'costEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                                <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                              </view>
+                            </block>
+                            <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                                <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              </view>
+                            </block>
+                          </view>
+
+                          <view class="flex-row-between">
+                            <text></text>
+
+                            <view class="flex-row with-tbl-padding small ">
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">售:</text>
+                                <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">损:</text>
+                                <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">废:</text>
+                                <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+
+                        <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                      </view>
+
+                    </view>
+
+                  </view>
+                  <view class="margin_bottom" style="height: 100rpx;"></view>
+                </scroll-view>
+                <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                  <view class="empty_View flex-column-center">
+                    <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                    <text class="big">暂无数据</text>
+                  </view>
+                </view>
+              </swiper-item>
+
+              <!-- loss -->
+              <swiper-item style="height: 100%;">
+
+                <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+                  <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                    <view class="flex-column picture_border ">
+                      
+
+                      <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                        <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                          <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                            <view class="flex-row">
+                              <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                              <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                            </view>
+                            <block wx:if="{{fenxiType == 'costEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                                <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                              </view>
+                            </block>
+                            <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                                <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              </view>
+                            </block>
+                          </view>
+
+                          <view class="flex-row-between">
+                            <text></text>
+                            <view class="flex-row with-tbl-padding small ">
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">售:</text>
+                                <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">损:</text>
+                                <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">废:</text>
+                                <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+
+                        <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                      </view>
+
+                    </view>
+
+                  </view>
+                  <view class="margin_bottom" style="height: 100rpx;"></view>
+                </scroll-view>
+                <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                  <view class="empty_View flex-column-center">
+                    <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                    <text class="big">暂无数据</text>
+                  </view>
+                </view>
+              </swiper-item>
+
+              <!-- waste -->
+              <swiper-item style="height: 100%;">
+
+                <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+
+                  <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                    <view class="flex-column picture_border ">
+                     
+
+                      <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                        <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                          <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                            <view class="flex-row">
+                              <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                              <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                            </view>
+                            <block wx:if="{{fenxiType == 'costEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                                <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                              </view>
+                            </block>
+                            <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                              <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                                <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                                <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              </view>
+                            </block>
+                          </view>
+
+                          <view class="flex-row-between">
+                            <text></text>
+                            <view class="flex-row with-tbl-padding small ">
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">售:</text>
+                                <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">损:</text>
+                                <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+
+                              </view>
+                              <view class="flex-row-default mr-10">
+                                <text class="mr-10 gray">废:</text>
+                                <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                  <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                  <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                                </view>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+
+                        <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                      </view>
+
+                    </view>
+
+                  </view>
+                  <view class="margin_bottom" style="height: 100rpx;"></view>
+                </scroll-view>
+                <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                  <view class="empty_View flex-column-center">
+                    <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                    <text class="big">暂无数据</text>
+                  </view>
+                </view>
+
+              </swiper-item>
+
+            </swiper>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+
+
+    <swiper-item style="height: {{windowHeight - 280 - statusBarHeight}}rpx; " wx:for="{{searchDepList}}" wx:for-index="depIndexSwiper">
+      <scroll-view scroll-y style="height:{{ windowHeight - 280 - statusBarHeight}}rpx;">
+
+        <view class='navbar bg-white  p-20'>
+
+          <view class="navbar-item   {{tab1Index==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" data-type="profit" style="width: {{(windowWidth- 40) / 4}}rpx; ">
+            <view class='flex-column'>
+              <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">总成本</text>
+              <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">总数量</text>
+              <text class="normal">{{oneTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+            </view>
+          </view>
+          <view class="navbar-item {{tab1Index==1?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover" data-type="sales">
+            <view class='flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+              <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">售出成本</text>
+              <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">售出数量</text>
+              <view class="flex-row">
+                <text class="normal">{{salesTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="navbar-item {{tab1Index==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" data-type="loss">
+            <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+              <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">损耗成本</text>
+              <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">损耗数量</text>
+              <text class="normal">{{lossTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+            </view>
+          </view>
+          <view class="navbar-item {{tab1Index==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1Click' hover-class="hover" data-type="waste">
+            <view class='flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+              <text class="middle" wx:if="{{fenxiType == 'costEcharts'}}">废弃成本</text>
+              <text class="middle" wx:elif="{{fenxiType == 'weightEcharts'}}">废弃数量</text>
+              <text class="normal">{{wasteTotal}}{{fenxiType == 'costEcharts' ? '元' : ''}}</text>
+            </view>
+          </view>
+
+          <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 40)/ 4  }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+          </view>
+        </view>
+
+        <view class="flex-column" id="mjltestDep">
+          <swiper class="swiper-box" style="height: {{windowHeight - 400}}rpx;  " duration="300" bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+
+            <!-- profit -->
+            <swiper-item>
+              <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+                <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                  <view class="flex-column picture_border ">
+                   
+
+                    <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex" bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                      <view class="flex-column border-bottom-back ">
+                        <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                          <view class="flex-row">
+                            <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                            <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                          </view>
+                          <block wx:if="{{fenxiType == 'costEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                            </view>
+                          </block>
+                          <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                              <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            </view>
+                          </block>
+                        </view>
+
+                        <view class="flex-row-between">
+                          <text></text>
+
+                          <view class="flex-row with-tbl-padding small ">
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">售:</text>
+                              <view class="flex-column  {{type == 'produce' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">损:</text>
+                              <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">废:</text>
+                              <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+
+
+                      </view>
+
+                      <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                    </view>
+                  </view>
+                </view>
+                <view class="margin_bottom" style="height: 100rpx;"></view>
+              </scroll-view>
+              <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                <view class="empty_View flex-column-center">
+                  <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                  <text class="big">暂无数据</text>
+                </view>
+              </view>
+            </swiper-item>
+
+            <!-- sales -->
+            <swiper-item style="height: 100%;">
+
+              <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+
+                <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                  <view class="flex-column picture_border ">
+                   
+
+                    <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                      <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                        <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx;">
+                          <view class="flex-row">
+                            <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                            <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                          </view>
+                          <block wx:if="{{fenxiType == 'costEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                            </view>
+                          </block>
+                          <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                              <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            </view>
+                          </block>
+                        </view>
+
+                        <view class="flex-row-between">
+                          <text></text>
+
+                          <view class="flex-row with-tbl-padding small ">
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">售:</text>
+                              <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">损:</text>
+                              <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">废:</text>
+                              <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+
+                      <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                    </view>
+
+                  </view>
+
+                </view>
+                <view class="margin_bottom" style="height: 100rpx;"></view>
+              </scroll-view>
+              <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                <view class="empty_View flex-column-center">
+                  <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                  <text class="big">暂无数据</text>
+                </view>
+              </view>
+            </swiper-item>
+
+            <!-- loss -->
+            <swiper-item style="height: 100%;">
+
+              <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+                <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+                  <view class="flex-column picture_border ">
+                  
+
+                    <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                      <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                        <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                          <view class="flex-row">
+                            <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                            <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                          </view>
+                          <block wx:if="{{fenxiType == 'costEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                            </view>
+                          </block>
+                          <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                              <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            </view>
+                          </block>
+                        </view>
+
+                        <view class="flex-row-between">
+                          <text></text>
+                          <view class="flex-row with-tbl-padding small ">
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">售:</text>
+                              <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">损:</text>
+                              <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">废:</text>
+                              <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+
+                      <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                    </view>
+
+                  </view>
+
+                </view>
+                <view class="margin_bottom" style="height: 100rpx;"></view>
+              </scroll-view>
+              <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                <view class="empty_View flex-column-center">
+                  <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                  <text class="big">暂无数据</text>
+                </view>
+              </view>
+            </swiper-item>
+
+            <!-- waste -->
+            <swiper-item style="height: 100%;">
+
+              <scroll-view wx:if="{{produceArr.length > 0}}" scroll-y style="height:{{windowHeight - 420 }}rpx;">
+
+
+                <view class="flex-column p-20 bg-white " wx:if="{{produceArr.length > 0}}">
+
+                  <view class="flex-column picture_border ">
+                  
+
+                    <view class="flex-column   p-20 " wx:for="{{produceArr}}" wx:for-index="goodsIndex">
+                      <view class="flex-column border-bottom-back " bind:tap="toStatistics" data-item="{{item}}" hover-class="hover">
+                        <view class="flex-row-between middle" style="width: {{windowWidth - 80}}rpx; ">
+                          <view class="flex-row">
+                            <text class="mr-10 normal">{{item.gbDgGoodsName}}</text>
+                            <text class="mr-10" wx:if="{{item.gbDgGoodsDetail !==  null && item.gbDgGoodsDetail.length > 0}}">{{item.gbDgGoodsDetail}}</text>
+                          </view>
+                          <block wx:if="{{fenxiType == 'costEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                              <text class="mr-10">{{item.goodsCostTotalString}}元</text>
+                            </view>
+                          </block>
+                          <block wx:if="{{fenxiType == 'weightEcharts'}}">
+                            <view class="flex-row {{type == 'total' ? 'mainColor' :''}}">
+                              <text class="extremeSmall gray ">{{item.goodsCostTotalString}}元</text>
+                              <text class="mr-10">({{item.goodsCostWeightTotalString}}{{item.gbDgGoodsStandardname}})</text>
+                            </view>
+                          </block>
+                        </view>
+
+                        <view class="flex-row-between">
+                          <text></text>
+                          <view class="flex-row with-tbl-padding small ">
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">售:</text>
+                              <view class="flex-column  {{type == 'sales' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsProduceTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsProduceWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">损:</text>
+                              <view class="flex-column   {{type == 'loss' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsLossTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsLossWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+
+                            </view>
+                            <view class="flex-row-default mr-10">
+                              <text class="mr-10 gray">废:</text>
+                              <view class="flex-column {{type == 'waste' ? 'mainColor' :''}}">
+                                <text wx:if="{{fenxiType == 'costEcharts'}}">{{item.goodsWasteTotalString}}元</text>
+                                <text wx:elif="{{fenxiType == 'weightEcharts'}}">{{item.goodsWasteWeightTotalString}}{{item.gbDgGoodsStandardname}}</text>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+                      </view>
+
+                      <view class="line_father" wx:if="{{item.goodsCostTotalString > 0}}" style="width: {{item.goodsCostTotalString /oneTotal * (windowWidth- 100)}}rpx; height: 2rpx;"></view>
+
+                    </view>
+
+                  </view>
+
+                </view>
+                <view class="margin_bottom" style="height: 100rpx;"></view>
+              </scroll-view>
+              <view class="emptyView {{produceArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+                <view class="empty_View flex-column-center">
+                  <image class="empty_image" src="../../../../images/file-empty.png"></image>
+                  <text class="big">暂无数据</text>
+                </view>
+              </view>
+
+            </swiper-item>
+
+          </swiper>
+        </view>
+
+      </scroll-view>
+    </swiper-item>
+
+  </swiper>
+
+
+</block>
+
+
+
+
+</block>
+
+<!-- goodsType -->
+
+<view class='mask {{showOperation ? "is-active" : ""}}' catchtouchmove='ture' catchtap="hideMask" style="height:{{maskHeight > windowHeight ? maskHeight + 200 : windowHeight  + 200}}rpx;">
+  <view class="flex-column nnn bg-white" wx:if="{{chooseSize}}" animation='{{animationData}}'>
+
+    <view class="p-20  flex-row" bindtap="changeType" data-type="costEcharts">
+      <image src="../../../images/goods-3.png" class="icon icon_operation"></image>
+      <text class="text_operation {{fenxiType == 'costEcharts' ? 'gray' : ''}}">按成本显示</text>
+    </view>
+    <view class="p-20  flex-row" bindtap="changeType" data-type="weightEcharts">
+      <image src="../../../images/goods-3.png" class="icon icon_operation"></image>
+      <text class="text_operation {{fenxiType == 'weightEcharts' ? 'gray' :''}}">按数量显示</text>
+    </view>
+
+
+  </view>
+</view>

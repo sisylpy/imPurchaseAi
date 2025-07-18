@@ -1,0 +1,119 @@
+<view class="flex-row top_bar"  style=" padding-top: {{statusBarHeight}}rpx;">
+  <image src="../../../../images/back.png" class="back_icon" bindtap="toBack"></image>
+  <view class="flex-column">
+    <text class="top_bar_title" >添加付款</text>
+  </view>
+</view>
+
+
+<view class="flex-column ">
+
+  <block wx:if="{{purDepArr.length > 0}}">
+    <view class="p-20">集采</view>
+    <view class="border-bottom flex-row bg-white p-20" wx:for="{{purDepArr}}" wx:for-item="dep" bindtap="toNext" data-type="supplier" data-id="{{dep.gbDepartmentId}}" hover-class="hover" data-item="{{dep}}">
+      <!-- <text class="mr-20">{{index + 1}}.</text> -->
+      <view class="flex-column">
+        <text class=' normal'>{{dep.gbDepartmentName}}</text>
+          <view class="flex-row" style="width: {{windowWidth - 100}}rpx;">
+            <view class="flex-row half-row">
+             <text class="mr-10 gray">供货商数量:</text>
+              <text class=' '>{{dep.depCostGoodsTotalString}}个</text>
+            </view>
+            <view class="flex-row half-row">
+              <text class="mr-10 gray">记账总额:</text>
+              <text class=' normal'>{{dep.depStockSubtotalString}}元</text>
+            </view>
+          </view>
+
+      </view>
+      <view >
+      <image src="../../../../images/arrow-right-3.png" mode="aspectFill" class="icon"/>
+      </view>
+    </view>
+   </block>
+  
+   
+   <block wx:if="{{stockDepArr.length > 0}}">
+    <view class="p-20">库房</view>
+    <view class="border-bottom flex-row bg-white p-20" wx:for="{{stockDepArr}}" wx:for-item="dep" bindtap="toNext" data-type="supplier" data-id="{{dep.gbDepartmentId}}" hover-class="hover" data-item="{{dep}}">
+      <!-- <text class="mr-20">{{index + 1}}.</text> -->
+      <view class="flex-column">
+        <text class=' normal'>{{dep.gbDepartmentName}}</text>
+          <view class="flex-row" style="width: {{windowWidth - 100}}rpx;">
+            <view class="flex-row half-row">
+             <text class="mr-10 gray">供货商数量:</text>
+              <text class=' '>{{dep.depCostGoodsTotalString}}个</text>
+            </view>
+            <view class="flex-row half-row">
+              <text class="mr-10 gray">记账总额:</text>
+              <text class=' normal'>{{dep.depStockSubtotalString}}元</text>
+            </view>
+          </view>
+
+      </view>
+      <view >
+      <image src="../../../../images/arrow-right-3.png" mode="aspectFill" class="icon"/>
+      </view>
+    </view>
+   </block>
+
+    
+   <block wx:if="{{kitchenDepArr.length > 0}}">
+    <view class="p-20">中央厨房</view>
+    <view class="border-bottom flex-row bg-white p-20" wx:for="{{kitchenDepArr}}" wx:for-item="dep" bindtap="toNext" data-type="supplier" data-id="{{dep.gbDepartmentId}}" hover-class="hover" data-item="{{dep}}">
+      <!-- <text class="mr-20">{{index + 1}}.</text> -->
+      <view class="flex-column">
+        <text class=' normal'>{{dep.gbDepartmentName}}</text>
+          <view class="flex-row" style="width: {{windowWidth - 100}}rpx;">
+            <view class="flex-row half-row">
+             <text class="mr-10 gray">供货商数量:</text>
+              <text class=' '>{{dep.depCostGoodsTotalString}}个</text>
+            </view>
+            <view class="flex-row half-row">
+              <text class="mr-10 gray">记账总额:</text>
+              <text class=' normal'>{{dep.depStockSubtotalString}}元</text>
+            </view>
+          </view>
+
+      </view>
+      <view >
+      <image src="../../../../images/arrow-right-3.png" mode="aspectFill" class="icon"/>
+      </view>
+    </view>
+   </block>
+   <block wx:if="{{mendianArr.length > 0}}">
+    <view class="p-20">门店</view>
+    <view class="border-bottom flex-row bg-white p-20" wx:for="{{mendianArr}}" wx:for-item="dep" bindtap="toNext" data-type="supplier" data-id="{{dep.gbDepartmentId}}" hover-class="hover" data-item="{{dep}}">
+      <!-- <text class="mr-20">{{index + 1}}.</text> -->
+      <view class="flex-column">
+        <text class=' normal'>{{dep.gbDepartmentName}}</text>
+          <view class="flex-row" style="width: {{windowWidth - 100}}rpx;">
+            <view class="flex-row half-row">
+             <text class="mr-10 gray">供货商数量:</text>
+              <text class=' '>{{dep.depCostGoodsTotalString}}个</text>
+            </view>
+            <view class="flex-row half-row">
+              <text class="mr-10 gray">记账总额:</text>
+              <text class=' normal'>{{dep.depStockSubtotalString}}元</text>
+            </view>
+          </view>
+
+      </view>
+      <view >
+      <image src="../../../../images/arrow-right-3.png" mode="aspectFill" class="icon"/>
+      </view>
+    </view>
+   </block>
+
+  
+   <block wx:if="{{peisongDepArr.length > 0}}" wx:if="{{type == 'supplier'}}">
+    <view class="p-20">特鲜配App配送商</view>
+    <view class="border-bottom flex-row bg-white p-20" wx:for="{{peisongDepArr}}" wx:for-item="dep" bindtap="myNxDistributerBillPay" data-type="dep" data-id="{{dep.nxDistributerEntity.nxDistributerId}}" hover-class="hover" data-item="{{dep}}" data-name="{{dep.nxDistributerEntity.nxDistributerName}}">
+      <!-- <text class="mr-20">{{index + 1}}.</text> -->
+      <text class=' normal'>{{dep.nxDistributerEntity.nxDistributerName}}</text>
+    </view>
+    <view class="p-20"></view>
+   </block>
+ 
+    
+  </view>

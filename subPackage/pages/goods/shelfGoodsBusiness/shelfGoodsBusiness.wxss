@@ -1,0 +1,17 @@
+
+
+
+.del_btn{
+  background-color: rgb(197, 197, 197);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  padding: 14rpx 40rpx;
+  color: gray;
+}
+
+.del_btn.is-active{
+  background-color: aqua;
+  color: #000;
+
+
+}

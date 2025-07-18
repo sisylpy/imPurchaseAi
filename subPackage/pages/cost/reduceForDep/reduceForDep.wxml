@@ -1,0 +1,297 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+
+
+<view class="flex flex-column">
+
+<back-navbar style="height: {{navBarHeight}}rpx;" title="{{disGoods.gbDgGoodsName}}" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+
+<!--  top -->
+<view class=" flex-row-between pl-20 pr-20 border-bottom bg-white">
+  <view class="flex-row">
+    <view class="p-20" bindtap="toDatePage" data-type="stop">
+      <image src="../../../../images/calender.png" class="icon"></image>
+    </view>
+    <view class="flex-column">
+      <view wx:if="{{startDate == stopDate}}">
+        <view class=" small  {{startDate !== null ? 'is-active' : ''}} "> {{startDate !== '-1' ? tool.getAttrDate(startDate) : ''}}
+        </view>
+      </view>
+      <view class="flex-row" wx:else>
+        <view class=" small  {{startDate !== null ? 'is-active' : ''}} "> {{startDate !== '-1' ? tool.getAttrDate(startDate) : ''}}
+        </view>
+        <text class="with-s-padding" wx:if="{{startDate !== '-1'}}">-</text>
+        <view class=" small  {{stopDate !== null ? 'is-active' :''}}">{{stopDate !== null ? tool.getAttrDate(stopDate) : ''}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="flex-row p-20" bindtap="toFilter">
+    <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon margin-right"></image>
+  </view>
+</view>
+
+
+
+<block wx:if="{{searchDepIds !== -1}}">
+
+  <view class="flex-column-center  ">
+    <view class="flex-row filterMy">
+      <text class=" margin-right">{{searchDepName}}</text>
+      <!-- <image src="/images/del-2.png" mode="aspectFill" class="icon" bindtap="delSearch" /> -->
+    </view>
+  </view>
+
+</block>
+
+<view class="flex-column ">
+
+  <!-- 数据详情列表 -->
+  <scroll-view class="details-section" style="max-height: {{windowHeight - 300}}rpx; " scroll-x="true" scroll-y="true" bindscroll="onScroll">
+    <!-- 列表头部 -->
+    <view class="details-header with-tbl-padding">
+      <view class="details-cell fixed-cell-date">日期</view>
+      <view class="details-cell fixed-cell-store {{shadowClass}}">门店</view>
+      <view class="details-cell fix_width_one">制作数量</view>
+      <view class="details-cell fix_width_one">制作成本</view>
+      <view class="details-cell fix_width_one">损耗数量</view>
+      <view class="details-cell fix_width_one">损耗成本</view>
+      <view class="details-cell fix_width_one">废弃数量</view>
+      <view class="details-cell fix_width_one">废弃成本</view>
+    </view>
+    <!-- 列表内容 -->
+    <view class="flex-column">
+      <view class="details-row with-tbl-padding " wx:for="{{arr}}" wx:key="index" wx:for-item="everyday">
+        <view class="details-cell fixed-cell-date">{{tool.getAttrDateString(everyday.date)}}</view>
+        <view    wx:for="{{everyday.arr}}" wx:for-item="item" >
+
+          <view class="flex-row" wx:for="{{item.produceDepartmentEntities}}"  wx:for-item="dep">
+          <view class="details-cell fixed-cell-store {{shadowClass}}">{{dep.gbDepartmentAttrName}}</view>
+          <view class="details-cell fix_width_one">{{dep.departmentGoodsDailyEntity.gbDgdProduceWeight}}</view>
+          <view class="details-cell fix_width_one">¥{{dep.departmentGoodsDailyEntity.gbDgdProduceSubtotal}}</view>
+          <view class="details-cell fix_width_one">{{dep.departmentGoodsDailyEntity.gbDgdLossWeight}}</view>
+          <view class="details-cell fix_width_one">¥{{dep.departmentGoodsDailyEntity.gbDgdLossSubtotal}}</view>
+          <view class="details-cell fix_width_one">{{dep.departmentGoodsDailyEntity.gbDgdWasteWeight}}</view>
+          <view class="details-cell fix_width_one">¥{{dep.departmentGoodsDailyEntity.gbDgdWasteSubtotal}}</view>
+        </view>
+        </view>
+       
+
+      </view>
+    </view>
+
+  </scroll-view>
+</view>
+
+</view>
+
+<!-- goodsType -->
+
+<view class='overlay {{showOperation ? "show" : "hide"}}' catchtouchmove='ture' catchtap="hideMask" style="height:{{windowHeight}}rpx;">
+  <view class="flex-column nnn1 bg-white" style="margin-top: {{windowHeight / 6}}rpx;">
+    <view class="flex-column margin_bottom p-20">
+      <view hover-class="hover" style="position: relative; width: 100rpx;height: 100rpx; margin-bottom: -100rpx; margin-left: {{windowWidth - 100}}rpx; " bindtap="hideMask">
+        <!-- <image src="images/del-2.png" mode="aspectFill" class="icon" /> -->
+      </view>
+      <view class="big bg-white border-bottom p-20 flex-column-center">
+        <view class="flex-row">
+          <text>{{disGoods.gbDgGoodsName}}</text>
+          <text>({{disGoods.gbDgGoodsStandardname}})</text>
+        </view>
+
+      </view>
+
+
+      <view class="flex-column form_sub_stock ">
+
+        <view class="flex-row xia_soild" wx:if="{{item.nxDistributerEntity !== null}}">
+          <view class="flex-row half-row form_header_out">
+            <text class="">配送商</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">京京送货</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild" wx:elif="{{item.nxJrdhSupplierEntity !== null}}">
+          <view class="flex-row half-row form_header_out">
+            <text class="">订货商</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{item.nxJrdhSupplierEntity.nxJrdhsSupplierName}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild" wx:else>
+          <view class="flex-row half-row form_header_out">
+            <text class="">自采</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{disInfo.purDepartmentList[0].gbDepartmentName}}</text>
+          </view>
+        </view>
+
+        
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">时间</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{tool.getAttrDateString(item.gbDgsDate)}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">进货</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right">
+            <text>{{item.gbDgsWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">单价</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text>{{item.gbDgsPrice}}元/{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">总计</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right">
+            <text>{{item.gbDgsSubtotal}}元</text>
+          </view>
+        </view>
+
+
+        <view class="flex-row-default extreamSmall" style="width: {{windowWidth - 40}}rpx;height: 83rpx;margin-bottom: 20rpx; ">
+          <block wx:if="{{item.gbDgsProduceWeight > 0}}">
+            <view class="flex-row line_father flex-row" style="width: {{item.gbDgsProduceWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+              <view class="aaa " style="width: {{(reduce.gbDgsrProduceWeight / item.gbDgsProduceWeight) *  item.gbDgsProduceWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; " wx:for="{{item.goodsStockReduceEntityList}}" wx:if="{{reduce.gbDgsrType == 1}}" wx:for-item="reduce">
+                {{reduce.gbDgsrProduceWeight}}
+              </view>
+
+            </view>
+          </block>
+
+
+
+          <block wx:if="{{item.gbDgsLossWeight > 0}}">
+            <view class="flex-row line_father_loss" style="width: {{item.gbDgsLossWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrLossWeight / item.gbDgsLossWeight) *  item.gbDgsLossWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:if="{{reduce.gbDgsrType == 3}}" wx:for-item="reduce">
+                {{reduce.gbDgsrLossWeight}}
+              </view>
+            </view>
+          </block>
+
+          <block wx:if="{{item.gbDgsWasteWeight > 0}}">
+            <view class="flex-row line_father_waste" style="width: {{item.gbDgsWasteWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrWasteWeight / item.gbDgsWasteWeight) *  item.gbDgsWasteWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:if="{{reduce.gbDgsrType == 2}}" wx:for-item="reduce">
+                {{reduce.gbDgsrWasteWeight}}
+              </view>
+            </view>
+          </block>
+          <block wx:if="{{item.gbDgsReturnWeight > 0}}">
+
+            <view class="flex-row line_father_return" style="width: {{item.gbDgsReturnWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrReturnWeight / item.gbDgsReturnWeight) *  item.gbDgsReturnWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:if="{{reduce.gbDgsrType == 4}}" wx:for-item="reduce">
+                {{reduce.gbDgsrReturnWeight}}
+              </view>
+            </view>
+          </block>
+          <block wx:if="{{item.gbDgsRestWeight > 0}}">
+            <view class="line_father_rest flex-row " style="width: {{item.gbDgsRestWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+              <view style="width: {{item.gbDgsRestWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">{{item.gbDgsRestWeight}}</view>
+
+            </view>
+          </block>
+
+        </view>
+
+
+        <view class="flex-column middle" style="width: {{windowWidth - 40}}rpx; ; ">
+          <view class="flex-row with-s-padding">
+            <text class="line_father_rest icon margin-right"></text>
+            <text class="mr-10 ">剩余</text>
+            <text>{{item.gbDgsRestWeight}}{{standard}} </text>
+          </view>
+          <view class="flex-row with-s-padding">
+            <view class="flex-row shrink_fix">
+              <text class="line_father icon margin-right"></text>
+              <text class="mr-10 ">销售</text>
+            </view>
+
+            <view class="flex-row-wrap extremeSmall">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 1}}">
+                <view class="flex-row  line_father twenty_radius with-s-padding mr-10">
+                  <text>{{reduce.gbDgsrProduceWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+
+          <view class="flex-row with-s-padding">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_loss icon margin-right"></text>
+              <text class="mr-10 ">损耗</text>
+            </view>
+            <view class="flex-row-wrap extremeSmall">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 3}}">
+                <view class="flex-row  line_father_loss twenty_radius with-s-padding mr-10">
+                  <text>{{reduce.gbDgsrLossWeight}}{{standard}}</text>
+                </view>
+
+              </view>
+            </view>
+          </view>
+          <view class="flex-row with-s-padding">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_waste icon margin-right"></text>
+              <text class="mr-10">废弃</text>
+            </view>
+
+            <view class="flex-row-wrap extremeSmall">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 2}}">
+                <view class="flex-row line_father_waste mr-10 twenty_radius with-s-padding ">
+                  <text>{{reduce.gbDgsrWasteWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+          <view class="flex-row with-s-padding">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_return icon margin-right"></text>
+              <text class="mr-10 shrink_fix ">退货</text>
+            </view>
+
+            <view class="flex-row-wrap extremeSmall">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 4}}">
+                <view class="flex-row line_father_return mr-10 twenty_radius with-s-padding ">
+                  <text>{{reduce.gbDgsrReturnWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+
+        </view>
+
+
+      </view>
+
+    </view>
+
+
+
+
+  </view>
+</view>
+

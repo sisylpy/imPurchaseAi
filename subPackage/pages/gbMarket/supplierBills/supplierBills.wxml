@@ -1,0 +1,105 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+<view class="whiteBack">
+
+  <view class="flex-column">
+      <view class="top_img_fixed flex-row" style="width: 100%; height: 110rpx; line-height: 110rpx; padding-top: {{statusBarHeight}}rpx; ">
+        <image src="../../../../images/back-4.png" class="back_icon" bindtap="toLogin"></image>
+        <view class="flex-column ">
+          <text class="top_bar_title">{{gbDis.gbDistributerName}}</text>
+        </view>
+      </view>
+      <image src="../../../../images/top.png" style="width: 100%; height:  {{110 + statusBarHeight}}rpx;"></image>
+    </view>
+
+    <view class="flex-column">
+      <view class="">
+        <!-- <text class="small p-20">未结账款</text> -->
+        <view class="flex-column liziBack big_full_padding ">
+          <text class="small gray">未结金额</text>
+          <view class="flex-row-between" >
+            <view class="flex-row">
+              <text class="excreambig margin-right">{{unSettleSubtotal}}</text> <text class="small">元</text>
+            </view>
+            <!-- <view class="mainBack settleBtn" bindtap="downLoadExcel">下载账单</view> -->
+          </view>
+        </view>
+      </view>
+
+      <view class="flex-column p-20 middle " wx:for="{{billArr}}" wx:for-item="month" wx:if="{{month.arr.length > 0}}">
+        <view class="flex-column border-bottom p-20 ">
+          <text class="normal">{{month.month}}月</text>
+          <view class="flex-row gray small">
+            <text class="mr-10">订单</text>
+            <text class="mr-10">{{month.arr.length}}个</text>
+            <!-- <text class="mr-10">金额</text>
+						<text>{{month.total}}元</text> -->
+          </view>
+        </view>
+
+        <view class="flex-column p-20 border-bottom" wx:for="{{month.arr}}" wx:for-item="item" style="width: {{windowWidth - 80}}rpx; " hover-class="hover" bindtap="toGbOrderBatch" data-id="{{item.gbDistributerPurchaseBatchId}}" data-status="{{item.gbDpbStatus}}" data-item="{{item}}">
+          <view class="flex-row-between" >
+            <view class="flex-column">
+              <view class="flex-row " style="width: {{windowWidth - 140}}rpx; ">
+                <view class="flex-row half-row">
+                  <text class="mr-10">日期:</text>
+                  <text class="margin-right">{{item.gbDpbDate}}</text>
+                </view>
+
+                <view class="flex-row half-row">
+                  <text class="mr-10">状态:</text>
+                  <text wx:if="{{item.gbDpbStatus == -1}}" class="red">未读</text>
+                  <text wx:if="{{item.gbDpbStatus == 0}}" class="red">待出货</text>
+                  <text wx:if="{{item.gbDpbStatus == 1}}" class="mainColor">待收货</text>
+                  <text class="red" wx:if="{{item.gbDpbStatus == 2 || item.gbDpbStatus == 3}}" >未结账</text>
+                  <text wx:elif="{{item.gbDpbStatus == 4}}" class="gray">已结账</text>
+                </view>
+                
+              </view>
+
+              <!-- <view class="flex-row">
+                <view class="flex-row half-row">
+                  <text class="mr-10">采购员:</text>
+                  <text> {{tool.getAttrName(item.nxJrdhPurEntity.gbDuWxNickName)}}</text>
+                </view>
+
+
+                <view class="flex-row half-row">
+                  <text class="mr-10">卖方:</text>
+                  <text> {{tool.getAttrName(item.nxJrdhSellerEntity.nxJrdhWxNickName)}}</text>
+                </view>
+              </view> -->
+
+              <view class="flex-row">
+                <view class="flex-row half-row" wx:if="{{item.gbDpbStatus > 1}}">
+                  <text class="mr-10">付款:</text>
+                  <text>{{item.gbDpbPayType == 0 ? '现金' :'记账'}}</text>
+                </view>
+                <view class="flex-row half-row" wx:else>
+                  <text class="mr-10">付款:</text>
+                  <text></text>
+                </view>
+
+                <view class="flex-row half-row">
+                  <text class="mr-10">金额:</text>
+                  <text  wx:if="{{item.gbDpbStatus > 1}}" > {{item.gbDpbSubtotal !== null ? item.gbDpbSubtotal : '0'}}元</text>
+                </view>
+               
+              </view>
+
+            </view>
+
+            <view>
+              <image src="../../../../images/arrow-right-3.png" class="iconsmall with-lr-padding"></image>
+            </view>
+          </view>
+
+
+
+
+        </view>
+
+      </view>
+    </view>
+  
+</view>

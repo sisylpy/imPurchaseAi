@@ -1,0 +1,133 @@
+
+
+page{
+  background: #f2f6f7;
+}
+.body{
+  border: 1px solid lightgray;
+  border-radius: 20rpx;
+  background: #f8f8f8;
+  padding: 0 20rpx;
+}
+
+.form_top{
+  margin-top: 20rpx;
+}
+
+.retName{
+  position: absolute;
+  left: 20rpx;
+  top: 70rpx;
+  color:#fff;
+  font-size: 40rpx;
+  font-weight: 500;
+}
+.face_view{
+  position: absolute;
+  left: 40rpx;
+  top: 180rpx;
+  width: 220rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  /* background: blue; */
+}
+
+.share_face_view{
+  position: absolute;
+  right: 40rpx;
+  top: 180rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  /* background: blue; */
+}
+
+
+.face_img{
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+
+  /* background: yellow; */
+}
+.form_body{
+  border: 1px solid rgb(184, 184, 184);
+  margin-top: 10rpx;
+
+}
+
+.submitBtn{
+  
+}
+
+/*  */
+
+
+
+
+
+
+.share_btn{
+  font-size: 32rpx;
+
+}
+
+button.share_btn {
+  background: none;
+  font-weight: 400;
+  border: none;
+  background-color:none;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  padding: 15rpx 0;
+  text-align: center;
+  border-radius: 40rpx;
+  border: 5rpx solid gray;
+  background-color: #0d7aa5;
+  color: #fff;
+
+}
+.fixed{
+  position: fixed;
+  bottom: 40rpx;
+}
+
+.three_btn{
+  font-size: 32rpx;
+
+  text-align: center;
+  border-radius: 40rpx;
+  border: 5rpx solid gray;
+  margin-right: 20rpx;
+}
+.cancleBtn{
+  border-color: rgb(189, 189, 189);
+  background-color: rgb(235, 235, 235);
+  color: #6f7070;
+  padding: 15rpx 0;
+
+
+
+}
+
+
+
+.tishiView{
+  background: rgb(230, 228, 228);
+}
+
+
+.iknow{
+  padding: 10rpx 40rpx;
+  border-radius: 40rpx;
+  margin-bottom: 40rpx; 
+}
+
+.notSend{
+  background-color: #6f7070;
+  padding: 10rpx 40rpx;
+  border-radius: 40rpx;
+  margin-bottom: 40rpx; 
+  color: #fff;
+}

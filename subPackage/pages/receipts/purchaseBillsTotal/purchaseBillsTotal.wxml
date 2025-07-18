@@ -1,0 +1,165 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+<view class="flex flex-column">
+  
+
+  <back-navbar title="采购金额" style="height: {{navBarHeight}}rpx;" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+  <!--  top-->
+  <view class=" flex-row-between pl-20 pr-20 border-bottom bg-white">
+    <view class="flex-row">
+      <view class="p-20" bindtap="toDatePage">
+        <image src="/images/calender.png" class="icon"></image>
+      </view>
+      <view class="flex-column">
+        <view class="flex-row" wx:if="{{startDate == stopDate}}">
+          <view class=" small"> {{tool.transferDateString(startDate)}}</view>
+        </view>
+        <view class="flex-row" wx:else>
+          <view class=" small" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+          <text class="p-10">-</text>
+          <view class=" small" wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="flex-row p-20" bindtap="toFilter">
+      <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon margin-right"></image>
+    </view>
+
+  </view>
+
+
+  <!-- <block wx:if="{{searchDepList.length == 0}}"> -->
+ 
+    <view class='navbar' wx:if="{{disInfo.nxDistributerEntity !== null}}">
+
+      <view id="0" class=" navbar-item {{tab1Index== 0 ? 'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" >
+        <view class='flex-column' style="width: {{(windowWidth - 60) / 3}}rpx; padding: 0 20rpx; ">  
+          <view class="navbar-title" >自采</view>
+          <view class="font-lg">{{purchaseTotal}}元</view>
+        </view>
+      </view>
+      <view id="1" class="navbar-item {{tab1Index == 1 ?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover">
+        <view class='flex-column ' style="width: {{(windowWidth  - 60) / 3}}rpx;">
+          <view class="navbar-title">供货商</view>
+          <view class="font-lg">{{orderTotal}}元</view>
+        </view>
+      </view>
+
+
+      <view id="2" class="navbar-item {{tab1Index == 2 ?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" >
+        <view class='flex-column' style="width: {{(windowWidth - 60) / 3}}rpx;padding: 0 20rpx;  ">
+          <view class="navbar-title">京京送货</view>
+          <view class="font-lg">{{appTotal}}元</view>
+        </view>
+      </view>
+
+      <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 40) / 3 }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+      </view>
+    </view>
+    <view   class='navbar'  wx:else="">
+      <view id="0" class=" navbar-item {{tab1Index== 0 ? 'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" >
+        <view class='flex-column center-content' style="width: {{(windowWidth- 40) / 2}}rpx; ">
+        
+          <view class="navbar-title" >自采</view>
+          <view class="">{{purchaseTotal}}元</view>
+        </view>
+      </view>
+      <view id="1" class="navbar-item {{tab1Index == 1 ?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover">
+        <view class='flex-column center-content' style="width: {{(windowWidth- 40) / 2}}rpx;">
+          <view class="navbar-title">供货商</view>
+          <view class="">{{orderTotal}}元</view>
+        </view>
+      </view>
+
+
+      <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 80) / 2}}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+      </view>
+    
+    </view>
+    <!-- subPackage/pages/receipts/purchaseBillDeatilTotal/purchaseBillDeatilTotal-->
+
+    <!--  -->
+    <swiper style="height: {{windowHeight - 240 - navBarHeight}}rpx; " bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+      <!--1 billCash -->
+      <swiper-item>
+
+        <scroll-view scroll-y style="height:{{windowHeight - 240 - navBarHeight}}rpx;" >
+          <view class="flex-column">
+            <view class="flex-column   bg-white" wx:if="{{arr.length > 0}}">
+
+              <view class="flex-column-center  ">
+                <view class="flex-row-between  border-bottom p-20" wx:for="{{arr}}" 
+                wx:key="day" style="width: {{windowWidth - 80}}rpx;" bindtap="toDetailPage" data-date="{{item.day}}" data-value="{{item.value}}" hover-class="hover">
+                  <text class="mr-10">{{tool.getAttrDateString(item.day)}}</text>
+                  <text class="">{{item.value}}元</text>
+                </view>
+              </view>
+            </view>
+             <view class="text-secondary font-xs flex-column center-content"  style="height: 200rpx;">没有数据了！</view>
+          </view>
+        </scroll-view>
+
+      </swiper-item>
+      <!-- ../bill -->
+
+
+      <!--2 bill -->
+      <swiper-item>
+
+        <scroll-view scroll-y style="height:{{windowHeight - 240 - navBarHeight}}rpx;">
+          <view class="flex-column p-20">
+            <view class="flex-column  margin_bottom bg-white" wx:if="{{arr.length > 0}}">
+
+              <view class="flex-column-center  ">
+                <view class="flex-row-between  border-bottom p-20" wx:for="{{arr}}" 
+                wx:key="day" style="width: {{windowWidth - 80}}rpx;" bindtap="toDetailPage" data-date="{{item.day}}" data-value="{{item.value}}" hover-class="hover">
+                <text class="mr-10">{{tool.getAttrDateString(item.day)}}</text>
+                  <text class="">{{item.value}}元</text>
+                </view>
+              </view>
+            </view>
+            <view class="text-secondary font-xs flex-column center-content"  style="height: 200rpx;">没有数据了！</view>
+          </view>
+        </scroll-view>
+
+      </swiper-item>
+      <!-- ../bill -->
+
+
+      <!--3 purGoods -->
+      <swiper-item  wx:if="{{disInfo.nxDistributerEntity !== null}}">
+
+        <scroll-view scroll-y style="height:{{windowHeight - 240 - navBarHeight}}rpx;">
+          <view class="flex-column p-20">
+            <view class="flex-column  margin_bottom bg-white" wx:if="{{arr.length > 0}}">
+
+              <view class="flex-column-center  ">
+                <view class="flex-row-between  border-bottom p-20" wx:for="{{arr}}" 
+               wx:key="day" style="width: {{windowWidth - 80}}rpx;" bindtap="toDetailPage" data-date="{{item.day}}" data-value="{{item.value}}" hover-class="hover">
+               <text class="mr-10">{{tool.getAttrDateString(item.day)}}</text>
+                  <text class="">{{item.value}}元</text>
+                </view>
+              </view>
+            </view>
+          </view>
+           <view class="text-secondary font-xs flex-column center-content"  style="height: 200rpx;">没有数据了！</view>
+        </scroll-view>
+
+      </swiper-item>
+      <!-- ../bill -->
+
+
+    </swiper>
+
+  <!-- </block> -->
+
+
+
+
+
+
+
+
+</view>

@@ -1,0 +1,180 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+<view class="flex flex-column">
+
+<market-navbar style="height: {{navBarHeight}}rpx;" title="{{fatherNeme}}" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></market-navbar>
+
+  <!--  -->
+  <view class="" style="padding-left:10rpx; padding-right:10rpx;padding-top: 10rpx; ">
+
+    <view class="body" style="height:{{windowHeight - bottomHeight - 80}}rpx; ">
+
+      <view class="flex-row with-tb-padding">
+        <view class="third-row flex-column-center" >
+          <image src="{{url + userInfo.nxJrdhWxAvartraUrl}}" class="face_img">
+          </image>
+          <view class="extreamSmall flex-row">
+            <text class="mr-10">买家:</text>
+            <text >{{tool.getAttrName(userInfo.nxJrdhWxNickName)}}
+            </text>
+          </view>
+          <!--  -->
+        </view>
+
+        <view class="flex-column-center third-row">
+          <image src="../../../../images/order_icon.png" class="icon"></image>
+          <view class="middle">
+            <text>订货</text>
+          </view>
+        </view>
+
+        <view class="third-row flex-column-center" bindtap="toEdit" hover-class="hover">
+          <image src="../../../../images/user.png" class="face_img"> </image>
+          <view class="extreamSmall username">卖方</view>
+        </view>
+
+      </view>
+
+      <view class="flex-column form_body wordsColor" style="height:{{windowHeight - formHeight}}rpx;">
+        <view class="flex-row small p-20 with-dashed-bottom">
+          <view class="" style="width:{{(windowWidth - 100 ) / 2 }}rpx;margin-left: 40rpx;">
+            <text>商品</text>
+          </view>
+          <view class="  " style="width:{{(windowWidth - 100 ) / 2  }}rpx;">
+            <text>进货</text>
+          </view>
+        </view>
+
+        <scroll-view class="tui-city-scroll-y" scroll-y="true" style="height: {{windowHeight - formHeight - headerHeight}}rpx;">
+          <view class="flex-column with-dashed-bottom " wx:for="{{batch.gbDPGEntities}}" wx:key="gbDistributerPurchaseGoodsId">
+            <view class="flex-row-between normal  ">
+              <view class="flex-row with-s-padding" >
+                <text class="mr-10">{{index + 1}}.</text>
+                <text class="margin-right">{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+              </view>
+              <view class="flex-row with-s-padding half-row "  wx:if="{{item.gbDpgPurchaseType == 0}}" >
+              <text class="mr-10 empty">{{index + 1}}.</text>
+               <view class="flex-row ">
+                <text>{{item.gbDpgQuantity}}</text>
+               </view>
+             
+              </view>
+            </view>
+           
+            <!-- <block wx:if="{{item.gbDpgPurchaseType == 1}}"> -->
+              <view class="flex-row middle">
+                <text class="mr-10 empty">{{index + 1}}.</text>
+                 <view class="flex-row">
+                  <text class="gray shrink_fix">订单:</text>
+                  <view class="flex-row-wrap" >
+                  <view class="flex-row margin-right with-s-padding" 
+                  wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="purGoodsOrders">
+                  <text class="circle"></text>
+                    <view class="mr-10">
+                      <text wx:if="{{purGoodsOrders.gbDepartmentEntity.gbDepartmentFatherId > 0}}">{{purGoodsOrders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.{{purGoodsOrders.gbDepartmentEntity.gbDepartmentName}}</text>
+                      <text wx:else>{{purGoodsOrders.gbDepartmentEntity.gbDepartmentName}}</text>
+                    </view>
+                  <text>{{purGoodsOrders.gbDoQuantity}}{{purGoodsOrders.gbDoStandard}}</text>
+                </view>
+                </view>
+               
+                 </view>
+              
+              </view>
+            <!-- </block> -->
+
+          </view>
+        </scroll-view>
+      </view>
+      <view class="flex-column small darkGray with-tbl-padding">
+        <view class="flex-row">
+          <view class="flex-row half-row">
+            <text class="mr-10">订货时间:</text>
+            <text>{{orderTime}}</text>
+          </view>
+
+          <view class="flex-row half-row">
+            <text class="mr-10">订货商品:</text>
+            <text>{{batch.gbDPGEntities.length}}个</text>
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <view class="flex-row-between with-margin-top p-20" wx:if="{{batchStatus == -2}}">
+       <text></text>
+      <button class=" share_btn three_btn" open-type="share" bindtap="showShareTishi" data-show="1" style="width: {{windowWidth / 2}}rpx;">
+        向卖方发送订货
+      </button>
+     
+    </view>
+  </view>
+
+</view>
+
+
+
+<view class="overlay {{isTishi ? 'show' : 'hide'}}">
+  <view class="whiteBack" style="margin-top:{{(windowHeight - 440)/2 }}rpx;margin-left: 50rpx; width:{{windowWidth - 100}}rpx;">
+    <view class="margin_bottom  flex-column-center">
+      <view class="tishiView" style="width:{{windowWidth/5}}rpx; height:{{windowWidth/5}}rpx; margin-top:-{{windowWidth/10 + 10}}rpx; z-index: 9999;border-radius: 50%;">
+        <image src="../../../../images/SEND.png" class="tishi_icon" style="width:{{windowWidth/5 -80}}rpx; height:{{windowWidth/5 - 80}}rpx;  border-radius: 50%; margin-top:40rpx; margin-left: 40rpx;">
+        </image>
+      </view>
+
+      <view class="flex-column-center sentence">
+        <text class="small p-20">好友将在微信收到订单</text>
+        <text class="normal ">请确认是否发给好友？</text>
+      </view>
+      <view class="p-20 flex-row-between with-margin-top">
+
+        <view class="notSend  p-20" bindtap="cancelDisBatch" style=" text-align: center;" hover-class="hover" >
+            没有发送
+          </view>
+
+          <view class="iknow mainBack p-20" style=" text-align: center;"  bindtap="out" hover-class="hover" >
+            成功发送
+          </view>
+       
+      </view>
+    </view>
+
+  </view>
+</view>
+
+
+<view class="overlay {{isSellRegiste ? 'show' : 'hide'}}">
+  <view class="whiteBack" style="margin-top:{{(windowHeight - 440)/2 }}rpx;margin-left: 50rpx; width:{{windowWidth - 100}}rpx;">
+    <view class="margin_bottom  flex-column-center">
+
+      <view class="tishiView" style="width:{{windowWidth/5}}rpx; height:{{windowWidth/5}}rpx; margin-top:-{{windowWidth/10 + 10}}rpx; z-index: 9999;border-radius: 50%;">
+        <image src="../../../../images/aixin.png" class="tishi_icon" style="width:{{windowWidth/5 -80}}rpx; height:{{windowWidth/5 - 80}}rpx;  border-radius: 50%; margin-top:40rpx; margin-left: 40rpx;">
+        </image>
+      </view>
+
+      <view class="flex-column-center sentence">
+        <view class="flex-row">
+          <text class="small p-20">注册今日订货小程序</text>
+        </view>
+        <text class="normal "></text>
+      </view>
+      <view class="flex-column">
+       
+       <view class="flex-row p-20">
+         <text class="margin-right shrink_fix">用户名:</text>
+         <input type="text" value="{{nickName}}" bindinput="getNickName" class="input" style="border-bottom: 1px solid gray;"/>
+       </view>
+       </view>
+       <!-- <view class="flex-row">
+         disid=={{disId}} , disUserId=={{purUserId}}
+       </view> -->
+       
+      <view class="p-20 flex-row">
+        <button class="iknow mainBack p-20"  open-type="chooseAvatar"   bind:chooseavatar="onChooseAvatar" bindtap="sellRegiste" style="width:{{windowWidth / 3}}rpx; text-align: center;" hover-class="hover">
+          选择头像！
+        </button>
+      </view>
+    </view>
+
+  </view>
+</view>

@@ -1,0 +1,6 @@
+{
+   "navigationBarTitleText": "订货",
+  "usingComponents": {
+    "payType": "/components/payType/payType"
+  }
+}

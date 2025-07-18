@@ -1,0 +1,91 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+<import src='../../../../template/dailyFenxi/dailyFenxi.wxml' />
+
+
+<view class="flex-row top_bar bg-white" style=" padding-top: {{statusBarHeight}}rpx;">
+  <image src="../../../../images/back.png" class="back_icon" bindtap="toBack"></image>
+  <view class="flex-row">
+    <view wx:if="{{fenxiType == 'profitEcharts'}}">
+      <text class="top_bar_title" wx:if="{{type == 'sales'}}">销售利润</text>
+    <text class="top_bar_title" wx:elif="{{type == 'loss'}}">损耗成本</text>
+    <text class="top_bar_title" wx:elif="{{type == 'waste'}}">废弃成本</text> 
+    </view>
+    <view wx:if="{{fenxiType == 'weightEcharts'}}">
+      <text class="top_bar_title" wx:if="{{type == 'sales'}}">出库数量</text>
+    <text class="top_bar_title" wx:elif="{{type == 'loss'}}">损耗数量</text>
+    <text class="top_bar_title" wx:elif="{{type == 'waste'}}">废弃数量</text> 
+    </view>
+    <view wx:if="{{fenxiType == 'costEcharts'}}">
+      <text class="top_bar_title" wx:if="{{type == 'total'}}">成本</text>
+      <text class="top_bar_title" wx:if="{{type == 'sales'}}">出库成本</text>
+    <text class="top_bar_title" wx:elif="{{type == 'loss'}}">损耗成本</text>
+    <text class="top_bar_title" wx:elif="{{type == 'waste'}}">废弃成本</text> 
+    </view>
+    
+     </view>
+</view>
+
+
+
+
+
+<!--  top -->
+<view class=" flex-row-between pl-20 pr-20 border-bottom bg-white margin_bottom" >
+      <view class="flex-row">
+        <view class="p-20" bindtap="toDatePage" >
+          <image src="../../../../images/calender.png" class="icon"></image>
+        </view>
+        <view class="flex-column">
+          <view class="flex-row"  wx:if="{{startDate == stopDate}}">
+            <view class=" small" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+           
+          </view>
+          <view class="flex-row" wx:else>
+            <view class=" small" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+            <text class="with-s-padding" >-</text>
+            <view class=" small"  wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="flex-row p-20" bindtap="toFilter">
+        <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon mr-20"></image>
+      </view>
+    </view>
+
+
+    <block wx:if="{{searchDepIds !== -1}}">
+  <view class="flex-column-center  ">
+   <view class="flex-row filterMy" >
+    <text class=" mr-20">{{searchDepName}}</text>
+    <!-- <image src="/images/del-2.png"  mode="aspectFill" class="icon"  bindtap="delSearch" /> -->
+   </view>
+</view>
+</block>
+
+
+    <scroll-view scroll-y style="height:{{windowHeight - 200 - statusBarHeight}}rpx; " wx:if="{{outArr.length > 0}}">
+      <view class="flex-column">
+       <block  wx:if="{{outArr.length > 0}}">
+        <template is="dailyFenxi"
+			data="{{outArr:outArr,windowWidth:windowWidth, windowHeight: windowHeight,total:total,salesTotal:salesTotal,lossTotal: lossTotal,  wasteTotal:wasteTotal,statusBarHeight:statusBarHeight, type:type, fenxiType: fenxiType,monthlyData:monthlyData}}"  ></template>
+       </block>
+       <view wx:else>
+        <view class="emptyView {{outArr.length == 0  ? 'is-active' : ''}}"
+					style="height: {{windowHeight - 760}}rpx; text-align:center;">
+					<view class="empty_View flex-column-center">
+						<image class="empty_image" src="../../../../images/cg.png"></image>
+						<text class="big">无数据</text>
+					</view>
+				</view>
+       </view>
+     </view>
+    </scroll-view>
+    
+    <view class="emptyView {{outArr.length == 0  ? 'is-active' : ''}}" style="height: {{windowHeight - 760}}rpx; text-align:center;">
+          <view class="empty_View flex-column-center">
+            <image class="empty_image" src="../../../../images/file-empty.png"></image>
+            <text class="big">暂无数据</text>
+          </view>
+        </view>
+    
+    

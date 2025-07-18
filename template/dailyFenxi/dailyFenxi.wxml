@@ -1,0 +1,316 @@
+<wxs src="../../utils/fn.wxs" module="tool" />
+
+
+
+<template name="dailyFenxi">
+
+  <block wx:if="{{fenxiType == 'profitEcharts' }}">
+
+    <view class="flex-column pl-20 pr-20">
+      <!-- one echarts -->
+
+      <view class="flex-column echarts_back  p-20 margin_bottom" style="height: {{windowHeight / 4}}rpx;">
+        <view class="flex-column pt-10 pb-10">
+          <block wx:if="{{type == 'profit'}}">
+            <text>利润</text>
+            <text class="big">{{total}}元</text>
+          </block>
+          <block wx:if="{{type == 'sales'}}">
+            <text>销售利润</text>
+            <text class="big">{{salesTotal}}元</text>
+          </block>
+          <block wx:if="{{type == 'loss'}}">
+            <text>损耗成本</text>
+            <text class="big">{{lossTotal}}元</text>
+          </block>
+          <block wx:if="{{type == 'waste'}}">
+            <text>废弃成本</text>
+            <text class="big">{{wasteTotal}}元</text>
+          </block>
+        </view>
+        <ec-canvas id="mychartProfitIndex" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+
+      </view>
+      <!-- ../echarts -->
+
+      <view class="flex-column " wx:for="{{outArr}}" wx:for-item="father" wx:for-index="fatherIndex">
+        <view class="flex-column picture_body bg-white p-20 {{fatherIndex == outArr.length - 1 ? 'is-last' : ''}}" wx:for-item="subFather" wx:for="{{father.fatherGoodsEntities}}" wx:key="gbDistributerGoodsFatherId">
+          <view class="flex-column  pt-20 pb-20">
+            <text class="mr-20 font-xs text-secondary">{{subFather.gbDfgFatherGoodsName}}</text>
+            <text class="normal" wx:if="{{type == 'profit'}}">{{subFather.fatherProfitTotalString}}元</text>
+            <text class="normal" wx:if="{{type == 'sales'}}">{{subFather.fatherSellingSubtotalString}}元</text>
+            <text class="normal" wx:if="{{type == 'loss'}}">{{subFather.fatherLossTotalString}}元</text>
+            <text class="normal" wx:if="{{type == 'waste'}}">{{subFather.fatherWasteTotalString}}元</text>
+
+          </view>
+          <view class="flex-column border-bottom" wx:for="{{subFather.fatherGoodsEntities}}" wx:for-item="childrenSubFather" wx:for-index="subIndex" wx:key="gbDistributerGoodsFatherId" bindtap="toSalesPage" data-id="{{childrenSubFather.gbDistributerFatherGoodsId}}" data-name="{{childrenSubFather.gbDfgFatherGoodsName}}" data-total="{{childrenSubFather.fatherProfitTotalString}}">
+            <view class="flex-row-between   pt-20 pb-20  " style="width: {{windowWidth - 120}}rpx;">
+              <text>{{childrenSubFather.gbDfgFatherGoodsName}}</text>
+              <view class="flex-column">
+                <text class="normal" wx:if="{{type == 'profit'}}">{{childrenSubFather.fatherProfitTotalString}}元</text>
+                <text class="normal" wx:if="{{type == 'sales'}}">{{childrenSubFather.fatherSellingSubtotalString}}元</text>
+                <text class="normal" wx:if="{{type == 'loss'}}">{{childrenSubFather.fatherLossTotalString}}元</text>
+                <text class="normal" wx:if="{{type == 'waste'}}">{{childrenSubFather.fatherWasteTotalString}}元</text>
+              </view>
+            </view>
+
+            <block wx:if="{{subFather.fatherProfitTotalString !== '0.0' && type == 'profit'}}">
+              <view class="line_father" style="width: {{childrenSubFather.fatherProfitTotalString /subFather.fatherProfitTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+            </block>
+            <block wx:elif="{{subFather.fatherSellingSubtotalString !== '0.0' && type == 'sales'}}">
+              <view class="line_father" style="width: {{childrenSubFather.fatherSellingSubtotalString /subFather.fatherSellingSubtotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+            </block>
+
+            <block wx:elif="{{subFather.fatherLossTotalString !== '0.0' && type == 'loss'}}">
+              <view class="line_father" style="width: {{childrenSubFather.fatherLossTotalString /subFather.fatherLossTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+            </block>
+
+            <block wx:elif="{{subFather.fatherWasteTotalString !== '0.0' && type == 'waste'}}">
+              <view class="line_father" style="width: {{childrenSubFather.fatherWasteTotalString /subFather.fatherWasteTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+            </block>
+
+          </view>
+        </view>
+
+
+      </view>
+
+      <view style="height: 140rpx;"></view>
+    </view>
+  </block>
+  <block wx:if="{{fenxiType == 'weightEcharts'}}">
+
+    <view class="flex-column pl-20 pr-20">
+
+      <!-- <view class="flex-column echarts_back margin_bottom  p-20" style="height: {{windowHeight / 4}}rpx;">
+        <view class="flex-column pt-10 pb-10" wx:if="{{type == 'cost'}}">
+          <text>总数量</text>
+          <text class="big">{{total}}</text>
+        </view>
+        <view class="flex-column pt-10 pb-10" wx:if="{{type == 'sales'}}">
+          <text>售出数量</text>
+          <text class="big">{{salesTotal}}</text>
+        </view>
+        <view class="flex-column pt-10 pb-10" wx:if="{{type == 'loss'}}">
+          <text>损耗数量</text>
+          <text class="big">{{lossTotal}}</text>
+        </view>
+        <view class="flex-column pt-10 pb-10" wx:if="{{type == 'waste'}}">
+          <text>废弃数量</text>
+          <text class="big">{{wasteTotal}}</text>
+        </view>
+        <ec-canvas id="mychartProfitIndex" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+
+      </view> -->
+     
+
+      <view class="flex-column ">
+
+        <view class="flex-column middle   margin_bottom " wx:for="{{outArr}}" wx:for-item="great" wx:for-index="greatIndex" wx:key="gbDistributerGoodsFatherId">
+          <view class="flex-row-default abc customerPage">
+            <view class="flex-column  p-20  " style="width: {{windowWidth - 40}}rpx;">
+              <text class="big ">{{great.gbDfgFatherGoodsName}}</text>
+              <view class="flex-row">
+                
+                <text class="normal" wx:if="{{type == 'cost'}}">{{great.fatherCostWeightString}}</text>
+                <text class="normal" wx:if="{{type == 'sales'}}">{{great.fatherSellingSubtotalString}}</text>
+                <text class="normal" wx:if="{{type == 'loss'}}">{{great.fatherLossTotalString}}</text>
+                <text class="normal" wx:if="{{type == 'waste'}}">{{great.fatherWasteTotalString}}</text>
+              </view>
+            </view>
+
+          </view>
+
+
+          <view class="flex-column bg-white  " wx:for="{{great.fatherGoodsEntities}}" wx:for-item="grand" wx:key="gbDistributerGoodsFatherId">
+
+            <view class="flex-column  p-20  " style="width: {{windowWidth - 120}}rpx;">
+              <view class="flex-row">
+                <!-- <text class="font-xs">{{great.gbDfgFatherGoodsName}}</text>
+                <image src="../../../images/yuandian-3.png" class="" style="width: 20rpx; height: 20rpx;"></image> -->
+                <text class="font-xs">{{grand.gbDfgFatherGoodsName}}</text>
+              </view>
+              <view class="flex-row">
+                <text class="normal" wx:if="{{type == 'cost'}}">{{grand.fatherCostWeightString}}</text>
+                <text class="normal" wx:if="{{type == 'sales'}}">{{grand.fatherSellingSubtotalString}}</text>
+                <text class="normal" wx:if="{{type == 'loss'}}">{{grand.fatherLossTotalString}}</text>
+                <text class="normal" wx:if="{{type == 'waste'}}">{{grand.fatherWasteTotalString}}</text>
+              </view>
+            </view>
+
+            <view class="flex-column p-20" wx:for="{{grand.fatherGoodsEntities}}" wx:for-item="father" wx:for-index="subIndex" wx:key="gbDistributerGoodsFatherId" bindtap="toSalesPage" data-id="{{father.gbDistributerFatherGoodsId}}" data-name="{{father.gbDfgFatherGoodsName}}" data-dateduring="99" data-days="全部" data-color="{{father.gbDfgFatherGoodsColor}}" data-total="{{father.fatherStockTotalString}}">
+              <view class="flex-row-between  pt-10 pb-10 border-bottom " style="width: {{windowWidth - 80}}rpx;">
+                <view class="flex-row-default">
+                  <text class="margin-right">{{father.gbDfgFatherGoodsName}}</text>
+          
+                </view>
+                <view class="flex-row">
+                  <view class="flex-row mr-20">
+                    <text class="normal" wx:if="{{type == 'cost'}}">{{father.fatherCostWeightString}}</text>
+                    <text class="normal" wx:if="{{type == 'sales'}}">{{father.fatherSellingSubtotalString}}</text>
+                    <text class="normal" wx:if="{{type == 'loss'}}">{{father.fatherLossTotalString}}</text>
+                    <text class="normal" wx:if="{{type == 'waste'}}">{{father.fatherWasteTotalString}}</text>
+                  </view>
+                  <!-- <image src="/images/arrow-right-3.png" mode="aspectFill" class="icon" /> -->
+                </view>
+
+              </view>
+              <!-- <view class="line_father"  wx:if="{{father.fatherCostWeight > 0}}" style="width: {{father.fatherCostWeightString / grand.fatherCostWeightString * (windowWidth- 80)}}rpx; height: 2rpx;"></view> -->
+            </view>
+
+          </view>
+        </view>
+        <!-- <view class="flex-column " wx:for="{{outArr}}" wx:for-item="father">
+
+          <view class="picture_body bg-white p-20 margin_bottom" wx:for="{{father.fatherGoodsEntities}}" wx:for-item="subFather">
+            <view class="flex-column  pt-20 pb-20">
+              <text class="mr-20 font-xs text-secondary">sss{{subFather.gbDfgFatherGoodsName}}</text>
+              <text class="normal" wx:if="{{type == 'cost'}}">{{subFather.fatherCostWeightString}}</text>
+              <text class="normal" wx:if="{{type == 'sales'}}">{{subFather.fatherSellingSubtotalString}}</text>
+              <text class="normal" wx:if="{{type == 'loss'}}">{{subFather.fatherLossTotalString}}</text>
+              <text class="normal" wx:if="{{type == 'waste'}}">{{subFather.fatherWasteTotalString}}</text>
+
+            </view>
+            <view class="flex-column border-bottom" wx:for="{{subFather.fatherGoodsEntities}}" wx:for-item="childrenSubFather" wx:for-index="subIndex" bindtap="toSalesPage" data-id="{{childrenSubFather.gbDistributerFatherGoodsId}}" data-name="{{childrenSubFather.gbDfgFatherGoodsName}}" >
+              <view class="flex-row-between   pt-20 pb-20  " style="width: {{windowWidth - 120}}rpx;">
+                <text>{{childrenSubFather.gbDfgFatherGoodsName}}</text>
+                <view class="flex-column">
+                  <text class="normal" wx:if="{{type == 'cost'}}">{{childrenSubFather.fatherCostWeightString}}</text>
+                  <text class="normal" wx:if="{{type == 'sales'}}">{{childrenSubFather.fatherSellingSubtotalString}}</text>
+                  <text class="normal" wx:if="{{type == 'loss'}}">{{childrenSubFather.fatherLossTotalString}}</text>
+                  <text class="normal" wx:if="{{type == 'waste'}}">{{childrenSubFather.fatherWasteTotalString}}</text>
+
+                </view>
+              </view>
+
+              <block wx:if="{{childrenSubFather.fatherCostWeightString !== '0.0' && type == 'cost'}}">
+
+                <view class="line_father" style="width: {{childrenSubFather.fatherCostWeightString /subFather.fatherCostWeightString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+              </block>
+              <block wx:if="{{childrenSubFather.fatherSellingSubtotalString !== '0.0' && type == 'sales'}}">
+                <view class="line_father" style="width: {{childrenSubFather.fatherSellingSubtotalString /subFather.fatherSellingSubtotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+              </block>
+              <block wx:if="{{childrenSubFather.fatherLossTotalString !== '0.0' && type == 'loss'}}">
+                <view class="line_father" style="width: {{childrenSubFather.fatherLossTotalString /subFather.fatherLossTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+              </block>
+              <block wx:if="{{childrenSubFather.fatherWasteTotalString !== '0.0' && type == 'waste'}}">
+                <view class="line_father" style="width: {{childrenSubFather.fatherWasteTotalString /subFather.fatherWasteTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+              </block>
+
+            </view>
+          </view>
+
+        </view> -->
+      </view>
+
+
+      <view style="height: 140rpx;"></view>
+
+    </view>
+  </block>
+  <block wx:if="{{fenxiType == 'costEcharts' }}">
+
+    <view class="flex-column p-20">
+
+      <view class="flex-column echarts_back  p-20 " style="height: {{windowHeight / 3}}rpx; padding-bottom: 60rpx;" wx:if="{{outArr.length > 0}}">
+        <view class="flex-column pt-10 pb-10">
+          <block wx:if="{{type == 'profit'}}">
+         
+              <view>利润</view>
+            <view class="big">{{total}}元</view>
+           
+          </block>
+          <block wx:if="{{type == 'total'}}">
+         
+              <view class="text-secondary">全部成本</view>
+             <view class="big">{{total}}元</view>
+         
+            
+           </block>
+          <block wx:if="{{type == 'sales'}}">
+             
+            <view>售出成本</view>
+            <view class="big">{{salesTotal}}元</view>
+          </block>
+          <block wx:if="{{type == 'loss'}}">
+            <view>损耗成本</view>
+            <view class="big">{{lossTotal}}元</view>
+          </block>
+          <block wx:if="{{type == 'waste'}}">
+            <view>废弃成本</view>
+            <view class="big">{{wasteTotal}}元</view>
+          </block>
+        </view>
+        <ec-canvas id="mychartProfitIndex" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+
+      </view>
+    
+      <view class="flex-column bg-white  radius-20 mt-20" wx:for="{{outArr}}" wx:for-item="great" wx:for-index="greatIndex" wx:key="gbDistributerGoodsFatherId">
+     
+        <view class="flex-row-default  customerPage">
+          <view class="flex-column  p-20  " style="width: {{windowWidth - 40}}rpx;">
+            <text class="font-md font-bold ">{{great.gbDfgFatherGoodsName}}</text>
+          </view>
+        </view>
+
+
+        <view class="flex-column  " wx:for="{{great.fatherGoodsEntities}}" wx:for-item="grand" wx:key="gbDistributerGoodsFatherId">
+          <view class="flex-row-between  p-20  border-bottom"  
+          bindtap="toSalesPage" data-id="{{grand.gbDistributerFatherGoodsId}}" data-name="{{grand.gbDfgFatherGoodsName}}" data-dateduring="99" data-days="所有库存" data-color="{{grand.gbDfgFatherGoodsColor}}" data-total="{{grand.fatherStockTotalString}}"
+          style="width: {{windowWidth - 80}}rpx;" hover-class="hover">
+                    <view class="flex-row ">
+                      <text class="font-md">{{grand.gbDfgFatherGoodsName}}</text>
+                    </view>
+                    <view class="flex-column" >
+                      <text class="normal margin-right">{{grand.fatherStockTotalString}}元</text>
+                      <view class="flex-column font-xs">                      
+                        <text class="text-secondary" wx:if="{{great.fatherStockTotalString > 0}}">{{tool.getProducePercent(grand.fatherStockTotalString,great.fatherStockTotalString)}}%</text>
+                        <text wx:else=""  class="font-xs text-secondary">0%</text>
+                      </view>
+                    </view>
+                  </view>
+                 
+                  <view class="line_father" style="width: {{grand.fatherStockTotalString / great.fatherStockTotalString * (windowWidth- 40)}}rpx; height: 3rpx;"></view>
+
+          <!-- <view class="flex-column  p-20  " style="width: {{windowWidth - 120}}rpx;">
+            <view class="flex-row">
+               <view class="flex-column">
+                <text class="mr-20">{{grand.gbDfgFatherGoodsName}}</text>
+                <view class="flex-row border-bottom pt-10 pb-10" style="width: {{windowWidth - 80}}rpx;" >
+                  <text class="mr-20">{{grand.fatherStockTotalString}}元</text>
+                  <text class="font-xs text-secondary">占{{great.gbDfgFatherGoodsName}}</text>
+              <text class="font-xs text-secondary" wx:if="{{great.fatherStockTotalString > 0}}">{{tool.getProducePercent(grand.fatherStockTotalString,great.fatherStockTotalString)}}%</text>
+
+              <text wx:else=""  class="font-xs text-secondary">0%</text>
+                </view>
+
+               </view>
+             
+            </view>
+           
+          </view>
+
+          <view class="flex-column p-20" wx:for="{{grand.fatherGoodsEntities}}" wx:for-item="father" wx:for-index="subIndex" wx:for-index="subIndex" bindtap="toSalesPage" data-id="{{father.gbDistributerFatherGoodsId}}" data-name="{{father.gbDfgFatherGoodsName}}" data-dateduring="99" data-days="全部" data-color="{{father.gbDfgFatherGoodsColor}}" data-total="{{father.fatherStockTotalString}}" hover-class="hover">
+            <view class="flex-row-between  pt-10 pb-10 border-bottom " style="width: {{windowWidth - 80}}rpx;">
+              <view class="flex-row-default">
+                <text class="margin-right">{{father.gbDfgFatherGoodsName}}</text>
+              </view>
+              <view class="flex-row">
+                <text class="margin-right">{{father.fatherStockTotalString}}元</text>
+               
+              </view>
+
+            </view>
+            <view class="line_father" wx:if="{{father.fatherStockTotal > 0}}" style="width: {{father.fatherStockTotalString / grand.fatherStockTotalString * (windowWidth- 80)}}rpx; height: 2rpx;"></view>
+          </view> -->
+
+        </view>
+      </view>
+
+      <view style="height: 140rpx;"></view>
+    </view>
+  </block>
+
+</template>
+
+<!--  -->

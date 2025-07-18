@@ -1,0 +1,20 @@
+
+.member_url{
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+}
+
+
+
+
+
+button{
+  background: none;
+  border: none;
+  background-color: none;
+  line-height: 50rpx;
+  border-radius: 40rpx;
+
+}
+button::after { border: none; }

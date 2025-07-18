@@ -1,0 +1,75 @@
+
+ <view class="flex flex-column ">
+
+ <back-navbar style="height: {{navBarHeight}}rpx;" title="采购组" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+  <view class="flex-column" >
+   <view class="flex-row-between p-20 flex" >
+    <text class="p-20 font-md" style="width: {{windowWidth - 200}}rpx;">采购员用户</text>
+    <button class="big mainBack_new_btn " open-type="share" bindtap="toShareAdmin">+</button>
+   </view>
+   <view class="flex-row-between border-bottom bg-white p-20" wx:for="{{userArr}}" wx:key="gbDepartmentUserId">
+    
+      <view class="flex-row">
+        <image src='{{url + item.gbDuWxAvartraUrl }}' class="member_url mr-20"></image>
+
+          <view class="flex-column">
+            <view class="flex-row">
+          <text class="font-md">{{item.gbDuWxNickName}}</text>
+          <text wx:if="{{item.gbDepartmentUserId == userInfo.gbDepartmentUserId}}">(你自己)</text>
+        </view>
+       
+        </view>
+       
+      </view>
+
+      <view class="btnClick plr-20" bindtap="openOperation" data-id="{{item.gbDepartmentUserId}}" hover-class="hover" data-type="dis">
+        <image src="../../../../images/points.png" class="icon"></image>
+      </view>
+
+    </view>
+  </view>
+
+
+</view>
+
+
+<view class='overlay {{showOperation ? "show" : ""}}' catchtouchmove='ture' catchtap="hideMask">
+  <view class="flex-column nnn bg-white ">
+
+    <view wx:if="{{selectUserId == userInfo.gbDepartmentUserId}}" class="flex-row p-30" bindtap="editUser">
+      <image src="../../../../images/edit.png" class="icon mr-20"></image>
+      <text class=" mr-20">修改用户信息</text>
+    </view>
+
+    <view wx:else class="flex-row p-30" bindtap="delUser">
+      <image src="../../../../images/del.png" class="icon  mr-20"></image>
+      <text class=" mr-20">删除用户</text>
+    </view>
+    <view style="height: 40rpx;"></view>
+  </view>
+</view>
+
+
+<view class="overlay {{isTishi ? 'show' : ''}}">
+
+<view class=" bg-white" style="margin-top:{{(windowHeight - 440)/2 }}rpx;margin-left: 50rpx; width:{{windowWidth - 100}}rpx;">
+  <view class="mb-20  center-content">
+
+    <view class="tishiView" style="width:{{windowWidth/5}}rpx; height:{{windowWidth/5}}rpx; margin-top:-{{windowWidth/10 + 10}}rpx; z-index: 9999;border-radius: 50%;">
+      <image src="../../../images/aixin.png" class="tishi_icon" style="width:{{windowWidth/5 -80}}rpx; height:{{windowWidth/5 - 80}}rpx;  border-radius: 50%; margin-top:40rpx; margin-left: 40rpx;">
+      </image>
+    </view>
+
+    <view class="flex-row sentence">
+      注册成功的用户，将显示在“管理员列表”
+    </view>
+    <view class="p-20 flex-row">
+      <view class="iknow mainBack p-20" bindtap="closeMask" style="width:{{windowWidth / 3}}rpx; text-align: center;" hover-class="hover">
+        我知道了
+      </view>
+    </view>
+  </view>
+</view>
+</view>

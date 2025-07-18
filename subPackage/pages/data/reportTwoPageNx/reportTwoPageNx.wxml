@@ -1,0 +1,61 @@
+
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex flex-column">
+
+<back-navbar style="height: {{navBarHeight}}rpx;" title="{{name}}" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+<!--  top -->
+<view class=" flex-row-between p-20 border-bottom-shadow bg-white">
+  <view class="flex-row pl-20 pr-20">
+    <!-- <view class="p-20" bindtap="toDatePage">
+      <image src="../../../../images/calender.png" class="icon"></image>
+    </view> -->
+    <view class="flex-column">
+      <view class="flex-row" wx:if="{{startDate == stopDate}}">
+        <view class=" font-sm"> {{tool.transferDateString(startDate)}}</view>
+
+      </view>
+      <view class="flex-row" wx:else>
+        <view class=" font-sm" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+        <text class="p-10">-</text>
+        <view class=" font-sm" wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+      </view>
+    </view>
+  </view>
+  <!-- <view class="flex-row p-20" bindtap="toMyDate">
+    <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon margin-right"></image>
+  </view> -->
+</view>
+
+
+
+<view class="flex-column font-md">
+  <view class="flex-row-between p-30"  bindtap="openList" data-index="0" hover-class="hover">
+  <text>配送</text>
+  <image src="{{openIndex == 0 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
+  </view>
+  <view class="sub_list flex-column  pl-20 pr-20  {{openIndex == 0 ? 'is-active' : ''}}">
+   <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="nxDisOutWeightAndSubtotal">数量和金额统计</view>
+   <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="nxDisStock">库存统计</view>
+   <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="nxDisOutGoodsFresh">保鲜商品</view>
+  </view>
+</view>
+<view class="flex-column">
+  <view class="flex-row-between p-30"  bindtap="openList" data-index="1" hover-class="hover">
+  <text>采购</text>
+  <image src="{{openIndex == 1 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
+  </view>
+  <view class="sub_list flex-column  pl-20 pr-20  {{openIndex == 1 ? 'is-active' : ''}}">
+   <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="nxDisPurchaseCost">采购数量和成本</view>
+   <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="nxDisControlPrice">采购价格</view>
+   
+  </view>
+</view>
+</view>
+
+
+
+
+

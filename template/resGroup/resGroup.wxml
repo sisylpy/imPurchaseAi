@@ -1,0 +1,94 @@
+<template name="resGroup">
+  <block wx:if="{{userArr.length > 0}}">
+    <view class="flex-row-between border-bottom  p-20 bg-white" wx:for="{{userArr}}">
+      <view class="flex-row p-20  " style="width:{{windowWidth - 80}}rpx;">
+        <view class="flex-column">
+
+          <view class="flex-row">
+
+            <view class="flex-column center-content">
+              <block wx:if="{{item.gbDuAdmin == 11}}">
+                <image src="/images/tie.png" class=" dep_img"></image>
+              </block>
+              <block wx:elif="{{item.gbDuAdmin == 12}}">
+                <image src="/images/dh.png" class=" dep_img"></image>
+              </block>
+              <block wx:elif="{{item.gbDuAdmin == 3}}">
+                <image src="/images/cg.png" class=" dep_img"></image>
+              </block>
+              <block wx:elif="{{item.gbDuAdmin == 4}}">
+                <image src="/images/cg.png" class=" dep_img"></image>
+              </block>
+              <block wx:elif="{{item.gbDuAdmin == 3}}">
+                <image src="/images/stock.png" class=" dep_img"></image>
+              </block>
+              <block wx:elif="{{item.gbDuAdmin == 31}}">
+                <image src="/images/cg.png" class=" dep_img"></image>
+              </block>
+              <!-- ../ -->
+              <view class="flex-row font-xs">
+                <block wx:if="{{item.gbDuAdmin == 11}}">
+                  <text class="gray shrink_fix mr-10">门店经理</text>
+                </block>
+                <block wx:elif="{{item.gbDuAdmin == 12}}">
+                  <text class="gray shrink_fix mr-10">门店订货员</text>
+                </block>
+                <block wx:elif="{{item.gbDuAdmin == 1}}">
+                  <text class="gray shrink_fix mr-10">超级管理员</text>
+                </block>
+                <block wx:elif="{{item.gbDuAdmin == 4}}">
+                  <text class="gray shrink_fix mr-10">集采采购员</text>
+                </block>
+                <block wx:elif="{{item.gbDuAdmin == 3}}">
+                  <text class="gray shrink_fix mr-10">库房管理员</text>
+                </block>
+                <block wx:elif="{{item.gbDuAdmin == 31}}">
+                  <text class="gray shrink_fix mr-10">库房采购员</text>
+                </block>
+              </view>
+            </view>
+
+            <view class="flex-row-default">
+              <image src='{{url + item.gbDuWxAvartraUrl}}' class="userFaceUrl"></image>
+              <view class="flex-column">
+                <view class="flex-row">
+                  <text class="font-sl">{{item.gbDuWxNickName}}</text>
+                </view>
+                <view class="flex-row font-xs gray pt-20 pb-20" >
+                  <text>{{item.gbDuJoinDate}}</text>
+                </view>
+              </view>
+            </view>
+
+
+
+          </view>
+
+
+
+        </view>
+      </view>
+
+
+    <view class="bg-white p-20 flex-column small">
+          <view class="btnClick" bindtap="openOperationUser" data-id="{{item.gbDepartmentUserId}}" hover-class="hover" >
+            <image src="/images/points.png" class="icon"></image>
+          </view>
+        </view>
+
+  </view> 
+  </block>
+
+  <view wx:else="">
+    <view class="flex-column " style="height:{{windowHeight - 810}}rpx;  ">
+        <view class="flex-column center-content">
+          <image class="empty_image_2" src="../../../images/file-empty.png"></image>
+          <text class="font-lg">暂无用户</text>
+        </view>
+      </view>
+  </view>
+ 
+
+
+
+</template>

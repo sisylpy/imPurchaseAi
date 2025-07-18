@@ -1,0 +1,214 @@
+
+ <view class="flex flex-column">
+
+  <customer-navbar style="height: {{navBarHeight}}rpx;" title="{{depInfo.gbDepartmentName}}" avatar="{{userInfo !== null ? url + userInfo.gbDuWxAvartraUrl : ''}}" button-text="设置" bindnavbuttontap="editUser"></customer-navbar>
+
+<view class="flex-column" style="padding: 10rpx 10rpx;">
+
+  <view class="body">
+
+    <view class="flex-column-center pt-10">
+      <image src="../../images/order_icon.png" class="icon"></image>
+      <text ># {{depInfo.gbDepartmentName}}</text>
+    </view>
+
+
+    <!-- empty -->
+    <view wx:if="{{applyArr.length  == 0}}" class="flex-column-center" style="height: {{windowHeight - navBarHeight - 140}}rpx;  ">
+      <view class="flex-column-center" style="padding-top: 300rpx;">
+        <view class="flex-row  p-20" style="text-align:center; font-size: 44rpx;">暂无订单</view>
+
+        <view class="flex-row-wrap" bindtap="toResGoods">
+          <text>打开商品</text>
+          <view class="samllbtn margin-l-right">
+            <image class="icon_order_sentence" src="../../images/add-4.png"></image>
+          </view>
+          <text>选择要订货商品和订货数量!</text>
+        </view>
+      </view>
+    </view>
+    <!-- ./empty -->
+
+    <scroll-view scroll-y="true" class="flex-column " style="height: {{windowHeight - navBarHeight - 140}}rpx; margin-top: 20rpx;" wx:else>
+      <view class="flex-column pt-10 pb-10" style="height: {{windowHeight - navBarHeight -  160}}rpx; ">
+        <!-- 订单数据 -->
+        <view class="flex-row-between  border-bottom  bg-white font-md"  wx:for="{{applyArr}}" wx:for-item="apply" wx:key="gbDepartmentOrdersId" wx:for-index="applyIndex" >
+
+          <view class="flex-column" >
+
+            <view class="flex-row font-lg p-20" >
+              <text class="margin-l-right font-sl">{{applyIndex + 1}}. </text>
+              <view class="flex-row-between">
+                <view class="flex-row-wrap " style="width: {{windowWidth - 320}}rpx;">
+                  <text class="brand" wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsBrand.length > 0 && apply.gbDistributerGoodsEntity.gbDgGoodsBrand !==  'null'}}">{{apply.gbDistributerGoodsEntity.gbDgGoodsBrand}}</text>
+                  <text class="margin-l-right">{{apply.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+                 
+                  <text class="" wx:if="{{apply.gbDistributerGoodsEntity.gbDistributerAliasEntities.length > 0}}" wx:for="{{apply.gbDistributerGoodsEntity.gbDistributerAliasEntities}}" wx:for-item="alias" wx:key="gbDistributerAliasId">={{alias.gbDaAliasName}}</text>
+
+                  <block wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsStandardWeight !== 'null'  && apply.gbDistributerGoodsEntity.gbDgGoodsStandardWeight.length > 0}}">
+                    <text class=" margin-l-right" wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{apply.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}}/{{apply.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+                  </block>
+
+                  <block wx:else>
+                    <text class=" margin-l-right" wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{apply.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+                  </block>
+                  <text class="small margin-l-right gray" wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsPlace !== 'null' && apply.gbDistributerGoodsEntity.gbDgGoodsPlace.length > 0}}">产地:{{apply.gbDistributerGoodsEntity.gbDgGoodsPlace}}</text>
+                  <text class="small gray margin-l-right" wx:if="{{apply.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && apply.gbDistributerGoodsEntity.gbDgGoodsDetail !==  'null'}}">{{apply.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
+                  <block wx:if="{{apply.gbDoNxGoodsId == null}}">
+                  <text class="red font-sx">[临时商品]</text>
+                  </block>
+                </view>
+               
+              </view>
+            </view>
+
+           <block wx:if="{{depInfo.gbDepartmentSettleType == 0 }}">
+            <view class="flex-row" >
+              <text class="margin-l-right white small">{{applyIndex + 1}}. </text>
+              <view class="flex-row font-sx" style="width: {{windowWidth - 200}}rpx; ">
+                <view class="third-row">
+                  <text class="margin-l-right gray">订货:</text>
+                  <text class="">{{apply.gbDoQuantity}}{{apply.gbDoStandard}}</text>
+                </view>
+                <view class="third-row">
+                  <text class="margin-l-right  gray">单价:</text>
+                  <text class="">{{apply.gbDoPrice}}/{{apply.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                </view>
+                <view class="third-row">
+                  <text class="margin-l-right  gray">小计:</text>
+                  <text class="" wx:if="{{apply.gbDoSubtotal !== null}}">{{apply.gbDoSubtotal}}</text>
+                  <text wx:else="">暂无</text>
+                </view>
+
+              </view>
+            </view>
+            
+            <view class="flex-row" style="margin-left: {{(windowWidth / 2) - 80}}rpx;" wx:if="{{apply.gbDoPriceDifferent !== '0.0' &&  item.gbDoPriceDifferent !== nll}}" class="flex-row">
+              <image class="icon-md" src="{{apply.gbDoPriceDifferent > 0 ? '/images/arrow_up_right_square_fill-2.png' : '/images/arrow_down_right_square_fill.png'}}">
+              </image>
+              <text class="{{apply.gbDoPriceDifferent > 0 ? 'red' : 'greenText'}}  changeNumber">{{apply.gbDoPriceDifferent}}元</text>
+            </view>
+           </block>
+           
+
+            <view class="flex-row" wx:if="{{apply.gbDoRemark !== null && apply.gbDoRemark.length > 0}}">
+              <text class="empty margin-right">{{applyIndex + 1}}. </text>
+              <view class="flex-row-default">
+                <text class="margin-l-right small gray">备注:</text>
+                <text class="small" style="word-break:break-all">{{apply.gbDoRemark}}</text>
+              </view>
+            </view>
+
+          </view>
+
+          <!-- 订单状态和按钮 -->
+          <view class="flex-row p-10">
+                  <view class="flex-row" >
+                      <text class="mainColor">{{apply.gbDoQuantity}}{{apply.gbDoStandard}}</text>
+                    </view>
+                
+                <block wx:if="{{apply.gbDoOrderType !== 9}}">
+                  <view class="btnClick flex-column-center p-20" bindtap="editApply" data-item="{{apply}}" hover-class="hover" wx:if="{{apply.gbDoBuyStatus < 2}}" >
+              <image src="../../images/edit.png" class="icon" ></image>
+            </view>
+            <view class="btnClick flex-column-center p-20" bindtap="showTishi" hover-class="hover" wx:else="">
+              <image src="../../images/ok.png" class="icon"></image>
+            </view>
+                </block>
+                <block wx:else="">
+                 <view class="flex-row red margin-left">[退货]</view>
+                    
+                </block>
+           
+          </view>
+
+          <!-- ./订单状态和按钮 -->
+        </view>
+        <!-- ./订单数据 -->
+        <view class="gray font-sx text_center flex-column-center" >
+         <view class="flex-row">
+          <image src="/images/daodile3.png" mode="aspectFill" class="icon-lg mr-10" />
+
+         <view style="line-height: 200rpx;">没有数据啦!</view>
+         </view>
+       
+        </view>
+
+      </view>
+
+
+    </scroll-view>
+
+  </view>
+</view>
+
+<!-- +按钮 -->
+<view class='plusBtn' style="left:{{windowWidth - 140}}rpx">
+  <view class="order_btn" bindtap="toResGoods" hover-class="hoverBtn">
+    <image class="icon_order" src="../../images/add-3.png"></image>
+  </view>
+
+</view>
+
+</view>
+
+
+<view class='overlay {{showOperation ? "show" : "hide"}}' catchtap="hideMask" >
+
+  <!-- delete apply -->
+  <view class=" bg-white" wx:if="{{deleteShow}}" style="margin-top:{{windowHeight / 4}}rpx;margin-left: 50rpx; width:{{windowWidth - 100}}rpx;">
+    <view class="flex-cloumn">
+      <view class="weight_five normal p-20 delBack" style="text-align: center;">删除订货</view>
+      <view class="flex-row p-20 normal">
+        <view class="p-20 ">{{applyItem.gbDistributerGoodsEntity.gbDgGoodsName}}</view>
+        <view>{{applyItem.gbDoQuantity}}{{applyItem.gbDoStandard}}</view>
+      </view>
+    </view>
+
+    <view class="flex-row" style="padding-bottom: 40rpx; margin-top: 20rpx;" >
+      <view class="p-20 half-row cancel-btn" style="margin-left: 5%; " bindtap="deleteNo" hover-class="hover">取消</view>
+      <view class="p-20 half-row confirm-btn" bindtap="deleteYes" hover-class="hover" style="margin-left: 10%; ">确定</view>
+    </view>
+
+  </view>
+
+  
+</view>
+
+<!-- top:{{(windowHeight - payHeight - 330) > 0  ? (windowHeight - payHeight - 110)  : 200}}rpx; -->
+
+
+<!-- <block wx:if="{{depInfo.gbDepartmentSettleType == 0}}">
+<myDismodalCashSingle show="{{show}}" bindconfirm="confirm" bindcancle="cancle" binddelApply="delApply" bindconfirmStandard="confirmStandard" applyStandardName="{{applyStandardName}}" applyNumber="{{applyNumber}}" applySubtotal="{{applySubtotal}}" applyRemark="{{applyRemark}}" editApply="{{editApply}}"  expectPrice="{{expectPrice}}"  windowWidth="{{windowWidth}}" windowHeight="{{windowHeight}}" bindchangeStandard="changeStandard" applyGoodsName="{{applyGoodsName}}" applyGoodsId="{{applyGoodsId}}" item="{{itemDis}}"  applyStandardName="{{applyStandardName}}"  windowWidth="{{windowWidth}}" windowHeight="{{windowHeight}}"  statusBarHeight="{{statusBarHeight}}"/>
+
+</block>
+
+
+<block wx:else="">
+  
+<myDismodal show="{{show}}" bindconfirm="confirm"  bindconfirmStandard="confirmStandard"   bindcancle="cancle" applySubtotal="{{applySubtotal}}" binddelApply="delApply" applyStandardName="{{applyStandardName}}" applyNumber="{{applyNumber}}" applyRemark="{{applyRemark}}" editApply="{{editApply}}" maskHeight="{{maskHeight}}" bindchangeStandard="changeStandard" applyGoodsName="{{applyGoodsName}}" applyGoodsId="{{applyGoodsId}}" item="{{itemDis}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" applyStandardName="{{applyStandardName}}" arriveDate="{{arriveDate}}" windowWidth="{{windowWidth}}" windowHeight="{{windowHeight}}" statusBarHeight="{{statusBarHeight}}" />
+</block> -->
+
+
+<myDismodal show="{{show}}" bindconfirm="confirm"  bindconfirmStandard="confirmStandard"   bindcancle="cancle" applySubtotal="{{applySubtotal}}" binddelApply="delApply" applyStandardName="{{applyStandardName}}" applyNumber="{{applyNumber}}" applyRemark="{{applyRemark}}" editApply="{{editApply}}" maskHeight="{{maskHeight}}" bindchangeStandard="changeStandard" applyGoodsName="{{applyGoodsName}}" applyGoodsId="{{applyGoodsId}}" item="{{itemDis}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" applyStandardName="{{applyStandardName}}" arriveDate="{{arriveDate}}" windowWidth="{{windowWidth}}" windowHeight="{{windowHeight}}" statusBarHeight="{{statusBarHeight}}" />
+
+
+
+
+
+<!-- 采购员链接打开页面之前判断是否有子部门 -->
+<view class='mask {{showChoice ? "is-active" : ""}}'>
+  <view class='main' style="width:{{windowWidth/3 * 2}}rpx; ">
+    <!-- 分店列表 -->
+    <view class=" p-20 whiteBack">
+      <view class="p-20 with-border-bottom {{subArr.length -1 == index ? 'is-last' : ''}} flex-row-default" wx:for="{{subArr}}" wx:key="gbDepartmentId" wx:for-item="dep" bindtap="selectDepartment" data-id="{{dep.gbDepartmentId}}" data-index="{{index}}" data-name="{{dep.gbDepartmentName}}" hover-class="hover">
+        <text class='normal'>{{dep.gbDepartmentName}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+
+
+

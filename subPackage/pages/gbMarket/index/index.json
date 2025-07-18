@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "isPurchase": "/components/isPurchase/isPurchase",
+    "purchaseOrder": "/components/purchaseOrder/purchaseOrder",
+    "disEditPurchase": "/components/disEditPurchase/disEditPurchase",
+    "payType": "/components/payType/payType",
+    "returnType": "/components/returnType/returnType"
+
+
+  }
+  
+}

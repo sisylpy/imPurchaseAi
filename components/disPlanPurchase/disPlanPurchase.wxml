@@ -1,0 +1,57 @@
+<view class='aaa' wx:if='{{show}}' catchtouchmove='ture' style="height:{{modalHeight + 160}}rpx; top:-{{scrollViewTop}}rpx;">
+
+
+<view class='body bg-white' style=" margin-top:{{scrollViewTop + 560}}rpx; ">
+  <view class='flex-row goodsTitle p-20' >
+    <text class="brand" wx:if="{{item.nxDgGoodsBrand !== 'null' && item.nxDgGoodsBrand.length > 0}}">{{item.nxDgGoodsBrand}}</text>
+    <text class="mr-20">{{item.nxDgGoodsName}}</text>
+    <text wx:if="{{item.nxDgGoodsStandardname !== '斤'}}">({{item.nxDgGoodsStandardname}}/{{item.nxDgGoodsStandardWeight}})</text>
+      <text class="" wx:if="{{item.nxAliasEntities.length > 0}}"
+                  wx:for="{{item.nxAliasEntities}}" wx:for-item="alias"
+                  wx:key="gbDistributerAliasId">@{{alias.nxDaAliasName}}</text>
+      <text wx:if="{{item.nxDgGoodsStandardname !== '斤'}}" >({{item.nxDgGoodsStandardname}})</text>
+  </view>
+
+
+  <view class='p-20 flex-column'>
+
+    <block wx:if="{{item.nxDgBuyingPriceIsGrade == 1}}">
+      <view class="flex-column" style="margin-top: 40rpx;">
+        <view class="flex-row p-20">
+          <radio-group class="radio_group" bindchange="radioChange">
+            <label class="mr-20">
+              <text class="mr-10">精选:</text>
+              <checkbox value="1" />
+            </label>
+            <label class="mr-20">
+              <text class="mr-10">优选:</text>
+              <checkbox value="2" />
+            </label>
+            <label class="">
+              <text class="mr-10">普通:</text>
+              <checkbox value="3" />
+            </label>
+          </radio-group>
+        </view>
+      </view>
+
+    </block>
+
+        <view class="flex-row p-20">
+          <text class="explain">库存进货数量:</text>
+        <input class='numberInput' bindinput="getPlan" focus="true" bindfocus="numberFocuse"></input>
+        </view>		
+  </view>
+ 
+
+  <view class="flex-row  p-20 margin-top">
+    <view class='btn'>
+      <text class="cancleBtn" bindtap="cancle" hover-class="hover">取消</text>
+    </view>
+    <view class='btn'>
+      <text class="sureBtn {{priceLevel !== '-1' && planOrder.length > 0? 'is-active' : ''}}" catchtap='confirm' hover-class="hover" >确定</text>
+    </view>
+  </view>
+</view>
+
+</view>

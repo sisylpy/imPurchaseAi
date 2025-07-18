@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "customer-navbar": "/components/custom-navbar/custom-navbar",
+    "payType": "/components/payType/payType",
+    "payTypeAuto": "/components/payTypeAuto/payTypeAuto",
+    "returnType": "/components/returnType/returnType"
+  },
+  
+  "enablePullDownRefresh": true
+  
+}

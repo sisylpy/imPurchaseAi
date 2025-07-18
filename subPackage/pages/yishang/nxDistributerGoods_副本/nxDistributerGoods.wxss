@@ -1,0 +1,171 @@
+
+page{
+  background-color: #ecebeb;
+}
+
+.add_btn{
+  background-color: #1abba3;
+  color: #FFF;
+  border-radius: 50%;
+  width: 45rpx;
+  height: 45rpx;
+  text-align: center;
+}
+
+.btn_img{
+  width: 22rpx;
+  height: 22rpx;
+  /* margin-top: 12rpx; */
+}
+
+
+button{
+  background: none;
+  border: none;
+  background-color: none;
+  padding: 0 6rpx ;
+  width: 70rpx;
+  height: 70rpx;
+  margin-left: 20rpx;
+  /* opacity: 0; */
+}
+button::after { border: none; }
+
+.search_bar{
+  background: #ecebeb;
+  /* position: fixed; */
+  /* top: 100rpx; */
+  /* line-height: 0; */
+}
+
+/*  */
+.searchInput{
+  line-height: 80rpx;
+  height: 80rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  padding-left: 20rpx;
+
+}
+
+
+.smallDot{
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  margin-bottom: 40rpx;
+  margin-left: -30rpx;
+  border-radius: 50%;
+  background-color: rgb(185, 9, 9);
+  color: #fff;
+  font-size: 24rpx;
+  text-align: center;
+  z-index: 99999;
+  visibility: hidden;
+}
+
+.smallDot.is-active{
+  visibility: visible;
+}
+
+.whole{
+  display: flex;
+  flex-flow: row wrap;
+  /* padding: 2.5%; */
+  justify-content: space-between;
+
+}
+
+
+.goods_name{
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+
+
+
+
+.hideView{
+  display: none;
+}
+.hideView.is-active{
+  display: block;
+}
+
+
+ 
+.nav {
+  width: 100%;
+  overflow: hidden;
+  padding: 20rpx;
+  background: #fff;
+  white-space: nowrap;
+}
+.nav scroll-view{
+  height: 100%;
+  width: auto;
+  overflow:hidden;
+}
+
+
+scroll-view {
+	white-space: nowrap;
+}
+
+.itemPic{
+  width: 60rpx;
+  height: 60rpx;
+}
+.picView.is-active{
+  border: 1px solid #167063;
+}
+
+/* /////// */
+
+.left {
+  width: 25vw;
+}
+
+
+.left-item {
+  padding: 30rpx 10rpx;
+  background-color: #eee;
+}
+
+.left-active {
+  background-color: #fff;
+  border-left: 6rpx solid #187e6e;
+}
+
+.searchList{
+  display: none;
+}
+.searchList.is-active{
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+
+  background: rgb(250, 249, 249);
+}
+
+
+.fatherGoods{
+  border: 1px solid #a5a5a5;
+  font-size: 26rpx;
+  line-height: 40rpx;
+  text-align: center;
+  margin-right:20rpx;
+  margin-bottom: 10rpx;
+  border-radius: 4rpx;
+  /* padding: 6rpx 10rpx; */
+  
+}
+
+.fatherGoods.is-active{
+  background-color: #20afb8;
+  color: #fff;
+  
+}

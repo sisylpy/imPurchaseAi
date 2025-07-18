@@ -1,0 +1,474 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+<!-- 
+<view class="flex-row top_bar bg-white border-bottom" style=" padding-top: {{statusBarHeight}}rpx;  ">
+  <image src="../../../../images/back.png" class="back_icon" bindtap="toBack"></image>
+  <view class="flex-row top_bar_title">
+    <text class="mr-10">{{goodsName}}</text>
+  </view>
+</view> -->
+
+
+<view class="flex flex-column">
+
+<back-navbar title="{{goodsName}}" style="height: {{navBarHeight}}rpx;" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+<block wx:if="{{searchDepIds !== '-1' }}">
+  <view class="flex-column-center  ">
+    <view class="flex-row filterMy">
+      <text class=" margin-right">{{searchDepName}}</text>
+      <!-- <image src="/images/del-2.png" mode="aspectFill" class="icon" bindtap="delSearch" /> -->
+    </view>
+  </view>
+</block>
+
+
+<view class="flex-column middle">
+  <view class="">
+    <view class="flex-row stock_header xia_soild five_bottome_line small">
+      <view class="stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+        a
+      </view>
+      <view class="stock_dep you_soild   p-10 pt-20 pb-20 five-weight">
+        门店
+      </view>
+
+      <view class=" stock_dep  p-10 pt-20 pb-20 five-weight" style="text-align: right;">
+        库存
+      </view>
+    </view>
+
+
+    <!-- in -->
+    <view class="flex-column  ">
+      <view class="flex-row stock_header xia_soild">
+        <view class="flex-row stock_dep you_soild p-10 pt-20 pb-20" bindtap="open" data-type="openin">
+          <image src="{{openin || openall  ? '/images/arrow-down-3.png' :'/images/arrow-right-3.png'}}" mode="aspectFill" class="icon" />
+          <text class="five-weight {{openin || openall  ? 'stockColor' : ''}} ">今天</text>
+        </view>
+
+        <view class="flex-column  stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+          <view style="text-align: right;">
+            {{in.totalWeight}}{{standard}}
+          </view>
+        </view>
+        <view class="flex-column  stock_dep  p-10 pt-20 pb-20 five-weight">
+          <view class=" {{openin || openall  ? 'stockColor' : ''}} " style="text-align: right;">
+            {{in.totalWeight}}{{standard}}
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{in.total > 0}}" class="stockList {{openin || openall  ? 'is-active' : ''}}">
+        <view class="flex-row  stock_header xia_soild  {{openin || openall  ? 'stockColor' : ''}} " wx:for="{{in.arr}}" wx:for-item="stock" wx:key="gbDepartmentGoodsStockId"  bindtap="showStock" data-item="{{stock}}" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType !== 9}}">
+          <view class="stock_dep you_soild hidden_stock_header p-10 pt-20 pb-20">
+            a
+          </view>
+          <view class="stock_dep you_soild   bg-white p-10 pt-20 pb-20">
+            <text wx:if="{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName !== stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}">{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
+            <text>{{stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}</text>
+            <text class="gray font-xs" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType ==9}}">(退货)</text>
+          </view>
+
+          <view class="stock_dep  bg-white p-10 pt-20 pb-20" style="text-align: right; ">
+            <view class="">{{stock.gbDgsRestWeight}}{{standard}}</view>
+            <view class="font-xs text-danger" wx:if="{{stock.gbDgsWarnTimeQuantumName !== null && tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime) > -1}}">已过{{tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime)}}h  </view>
+
+          </view>
+        </view>
+      </view>
+<!--  -->
+    </view>
+    <!-- ../in -->
+
+
+
+    <!-- one -->
+    <view class="flex-column  ">
+      <view class="flex-row stock_header xia_soild ">
+        <view class="flex-row stock_dep you_soild p-10 pt-20 pb-20" bindtap="open" data-type="openone">
+          <image src="{{openone || openall  ? '/images/arrow-down-3.png' :'/images/arrow-right-3.png'}}" mode="aspectFill" class="icon" />
+          <text class="five-weight  {{openone || openall  ? 'stockColor' : ''}} ">1天</text>
+        </view>
+
+        <view class="flex-column  stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+          <view style="text-align: right;">
+            {{one.totalWeight}}{{standard}}
+          </view>
+        </view>
+        <view class="flex-column  stock_dep  p-10 pt-20 pb-20 five-weight  {{openone || openall  ? 'stockColor' : ''}} ">
+
+          <view style="text-align: right;">
+            {{one.totalWeight}}{{standard}}
+          </view>
+
+        </view>
+      </view>
+
+      <view wx:if="{{one.total > 0}}" class="stockList {{openone || openall  ? 'is-active' : ''}}">
+        <view class="flex-row  stock_header xia_soild  {{openone || openall  ? 'stockColor' : ''}} " wx:for="{{one.arr}}" wx:for-item="stock" wx:key="gbDepartmentGoodsStockId" bindtap="showStock" data-item="{{stock}}">
+          <view class="stock_dep you_soild hidden_stock_header p-10 pt-20 pb-20">
+            a
+          </view>
+          <view class="stock_dep you_soild   bg-white p-10 pt-20 pb-20">
+            <text wx:if="{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName !== stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}">{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
+            <text>{{stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}</text>
+            <text class="gray font-xs" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType ==9}}">(退货)</text>
+          </view>
+
+          <view class="stock_dep  bg-white p-10 pt-20 pb-20" style="text-align: right; " >
+            <view class="">{{stock.gbDgsRestWeight}}{{standard}}</view>
+            <view class="small red" wx:if="{{stock.gbDgsWarnTimeQuantumName !== null && tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime) > 0}}">已过{{tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime)}}h</view>
+
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <!-- ../one -->
+
+    <!-- two -->
+    <view class="flex-column  ">
+      <view class="flex-row stock_header xia_soild">
+        <view class="flex-row stock_dep you_soild p-10 pt-20 pb-20" bindtap="open" data-type="opentwo">
+          <image src="{{opentwo || openall  ? '/images/arrow-down-3.png' :'/images/arrow-right-3.png'}}" mode="aspectFill" class="icon" />
+          <text class="five-weight  {{opentwo || openall  ? 'stockColor' : ''}} ">2天</text>
+        </view>
+
+        <view class="flex-column  stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+          <view style="text-align: right;">
+            {{two.totalWeight}}{{standard}}
+          </view>
+        </view>
+        <view class="flex-column  stock_dep  p-10 pt-20 pb-20 five-weight  {{opentwo || openall  ? 'stockColor' : ''}} ">
+
+          <view style="text-align: right;">
+            {{two.totalWeight}}{{standard}}
+          </view>
+
+        </view>
+      </view>
+
+      <view wx:if="{{two.total > 0}}" class="stockList {{opentwo || openall  ? 'is-active' : ''}}">
+        <view class="flex-row  stock_header xia_soild  {{opentwo || openall  ? 'stockColor' : ''}} " wx:for="{{two.arr}}" wx:for-item="stock" wx:key="gbDepartmentGoodsStockId" bindtap="showStock" data-item="{{stock}}">
+          <view class="stock_dep you_soild hidden_stock_header p-10 pt-20 pb-20">
+            a
+          </view>
+          <view class="stock_dep you_soild   bg-white p-10 pt-20 pb-20">
+            <text wx:if="{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName !== stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}">{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
+            <text>{{stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}</text>
+            <text class="gray font-xs" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType ==9}}">(退货)</text>
+          </view>
+
+          <view class="stock_dep  bg-white p-10 pt-20 pb-20" style="text-align: right; ">
+            <view class="">{{stock.gbDgsRestWeight}}{{standard}}</view>
+            <view class="small red" wx:if="{{stock.gbDgsWarnTimeQuantumName !== null && tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime) > 0}}">已过{{tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime)}}h</view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <!-- ../two -->
+
+    <!-- three -->
+    <view class="flex-column  ">
+      <view class="flex-row stock_header xia_soild">
+        <view class="flex-row stock_dep you_soild p-10 pt-20 pb-20" bindtap="open" data-type="openthree">
+          <image src="{{openthree || openall  ? '/images/arrow-down-3.png' :'/images/arrow-right-3.png'}}" mode="aspectFill" class="icon" />
+          <text class="five-weight  {{openthree || openall  ? 'stockColor' : ''}} ">3天</text>
+        </view>
+
+        <view class="flex-column  stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+          <view style="text-align: right;">
+            {{three.totalWeight}}{{standard}}
+          </view>
+        </view>
+        <view class="flex-column  stock_dep  p-10 pt-20 pb-20 five-weight  {{openthree || openall  ? 'stockColor' : ''}} ">
+
+          <view style="text-align: right;">
+            {{three.totalWeight}}{{standard}}
+          </view>
+
+        </view>
+      </view>
+
+      <view wx:if="{{three.total > 0}}" class="stockList {{openthree || openall  ? 'is-active' : ''}}">
+        <view class="flex-row  stock_header xia_soild  {{openthree || openall  ? 'stockColor' : ''}} " wx:for="{{three.arr}}" wx:for-item="stock" wx:key="gbDepartmentGoodsStockId" bindtap="showStock" data-item="{{stock}}">
+          <view class="stock_dep you_soild hidden_stock_header p-10 pt-20 pb-20">
+            a
+          </view>
+          <view class="stock_dep you_soild   bg-white p-10 pt-20 pb-20">
+            <text wx:if="{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName !== stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}">{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
+            <text>{{stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}</text>
+            <text class="gray font-xs" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType ==9}}">(退货)</text>
+          </view>
+
+          <view class="stock_dep  bg-white p-10 pt-20 pb-20" style="text-align: right; ">
+            <view class="">{{stock.gbDgsRestWeight}}{{standard}}</view>
+            <view class="small red" wx:if="{{stock.gbDgsWarnTimeQuantumName !== null && tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime) > 0}}">已过{{tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime)}}h</view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <!-- ../three -->
+
+
+    <!-- four -->
+    <view class="flex-column  ">
+      <view class="flex-row stock_header xia_soild">
+        <view class="flex-row stock_dep you_soild p-10 pt-20 pb-20" bindtap="open" data-type="openfour">
+          <image src="{{openfour || openall  ? '/images/arrow-down-3.png' :'/images/arrow-right-3.png'}}" mode="aspectFill" class="icon" />
+          <text class="five-weight  {{openfour || openall  ? 'stockColor' : ''}} ">3天以上</text>
+        </view>
+
+        <view class="flex-column  stock_dep you_soild p-10 pt-20 pb-20 hidden_stock_header">
+          <view style="text-align: right;">
+            {{exceedThree.totalWeight}}{{standard}}
+          </view>
+        </view>
+        <view class="flex-column  stock_dep  p-10 pt-20 pb-20 five-weight  {{openfour || openall  ? 'stockColor' : ''}} ">
+
+          <view style="text-align: right;">
+            {{exceedThree.totalWeight}}{{standard}}
+          </view>
+
+        </view>
+      </view>
+
+      <view wx:if="{{exceedThree.total > 0}}" class="stockList {{openfour || openall  ? 'is-active' : ''}}">
+        <view class="flex-row  stock_header xia_soild  {{openfour || openall  ? 'stockColor' : ''}} " wx:for="{{exceedThree.arr}}" wx:for-item="stock" wx:key="gbDepartmentGoodsStockId" bindtap="showStock" data-item="{{stock}}">
+          <view class="stock_dep you_soild hidden_stock_header p-10 pt-20 pb-20">
+            a
+          </view>
+          <view class="stock_dep you_soild   bg-white p-10 pt-20 pb-20">
+            <text wx:if="{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName !== stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}">{{stock.gbDepartmentOrdersEntity.orderDepartment.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
+            <text>{{stock.gbDepartmentOrdersEntity.orderDepartment.gbDepartmentName}}</text>
+            <text class="gray font-xs" wx:if="{{stock.gbDepartmentOrdersEntity.gbDoOrderType ==9}}">(退货)</text>
+          </view>
+
+          <view class="stock_dep  bg-white p-10 pt-20 pb-20" style="text-align: right; ">
+            <view class="">{{stock.gbDgsRestWeight}}{{standard}}</view>
+            <view class="small red" wx:if="{{stock.gbDgsWarnTimeQuantumName !== null && tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime) > 0}}">已过{{tool.getCompareTime(stock.gbDgsWasteFullTime, nowTime)}}h</view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <!-- ../four -->
+
+  </view>
+
+
+</view>
+
+
+<!-- goodsType -->
+
+<view class='overlay {{showOperation ? "show" : "hide"}}' catchtouchmove='ture' catchtap="hideMask" style="height:{{windowHeight}}rpx;">
+  <view class="flex-column nnn1 bg-white" style="margin-top: {{windowHeight / 6}}rpx;">
+    <view class="flex-column margin_bottom p-20">
+      <view hover-class="hover" style="position: relative; width: 100rpx;height: 100rpx; margin-bottom: -100rpx; margin-left: {{windowWidth - 100}}rpx; " bindtap="hideMask">
+        <!-- <image src="images/del-2.png" mode="aspectFill" class="icon" /> -->
+      </view>
+      <view class="big bg-white border-bottom-shadow p-20 flex-column-center">
+        <view class="flex-row">
+          <text>{{disGoods.gbDgGoodsName}}</text>
+          <text>({{disGoods.gbDgGoodsStandardname}})</text>
+        </view>
+
+      </view>
+
+
+      <view class="flex-column form_sub_stock ">
+
+        <view class="flex-row xia_soild" wx:if="{{item.nxDistributerEntity !== null}}">
+          <view class="flex-row half-row form_header_out">
+            <text class="">配送商</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">京京送货</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild" wx:elif="{{item.nxJrdhSupplierEntity !== null}}">
+          <view class="flex-row half-row form_header_out">
+            <text class="">订货商</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{item.nxJrdhSupplierEntity.nxJrdhsSupplierName}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild" wx:else>
+          <view class="flex-row half-row form_header_out">
+            <text class="">自采</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{disInfo.purDepartmentList[0].gbDepartmentName}}</text>
+          </view>
+        </view>
+
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">时间</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text class="">{{tool.getAttrDateString(item.gbDgsDate)}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">进货</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right">
+            <text>{{item.gbDgsWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">单价</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right_double">
+            <text>{{item.gbDgsPrice}}元/{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view class="flex-row xia_soild">
+          <view class="flex-row half-row form_header_out">
+            <text class="">总计</text>
+          </view>
+          <view class="flex-row half-row form_header_reduce_right">
+            <text>{{item.gbDgsSubtotal}}元</text>
+          </view>
+        </view>
+
+
+        <view class="flex-row-default extreamSmall" style="width: {{windowWidth - 40}}rpx;height: 83rpx;margin-bottom: 20rpx; ">
+          <block wx:if="{{item.gbDgsProduceWeight > 0}}">
+            <view class="flex-row line_father flex-row" style="width: {{item.gbDgsProduceWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+              <view class="aaa " style="width: {{(reduce.gbDgsrProduceWeight / item.gbDgsProduceWeight) *  item.gbDgsProduceWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; " wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:if="{{reduce.gbDgsrType == 1}}" wx:for-item="reduce">
+                {{reduce.gbDgsrProduceWeight}}
+              </view>
+
+            </view>
+          </block>
+
+
+
+          <block wx:if="{{item.gbDgsLossWeight > 0}}">
+            <view class="flex-row line_father_loss" style="width: {{item.gbDgsLossWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrLossWeight / item.gbDgsLossWeight) *  item.gbDgsLossWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:if="{{reduce.gbDgsrType == 3}}" wx:for-item="reduce">
+               {{reduce.gbDgsrLossWeight}}
+              </view>
+            </view>
+          </block>
+
+          <block wx:if="{{item.gbDgsWasteWeight > 0}}">
+            <view class="flex-row line_father_waste" style="width: {{item.gbDgsWasteWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrWasteWeight / item.gbDgsWasteWeight) *  item.gbDgsWasteWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:if="{{reduce.gbDgsrType == 2}}" wx:for-item="reduce">
+                {{reduce.gbDgsrWasteWeight}}
+              </view>
+            </view>
+          </block>
+          <block wx:if="{{item.gbDgsReturnWeight > 0}}">
+
+            <view class="flex-row line_father_return" style="width: {{item.gbDgsReturnWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+
+              <view class="aaa " style="width: {{(reduce.gbDgsrReturnWeight / item.gbDgsReturnWeight) *  item.gbDgsReturnWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx; ;" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:if="{{reduce.gbDgsrType == 4}}" wx:for-item="reduce">
+                {{reduce.gbDgsrReturnWeight}}
+              </view>
+            </view>
+          </block>
+          <block wx:if="{{item.gbDgsRestWeight > 0}}">
+            <view class="line_father_rest flex-row " style="width: {{item.gbDgsRestWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">
+              <view style="width: {{item.gbDgsRestWeight /item.gbDgsWeight * (windowWidth- 40)}}rpx; height: 80rpx;line-height: 80rpx;">{{item.gbDgsRestWeight}}</view>
+
+            </view>
+          </block>
+
+        </view>
+
+
+        <view class="flex-column middle" style="width: {{windowWidth - 40}}rpx; ; ">
+          <view class="flex-row p-10">
+            <text class="line_father_rest icon margin-right"></text>
+            <text class="mr-10 ">剩余</text>
+            <text>{{item.gbDgsRestWeight}}{{standard}} </text>
+          </view>
+          <view class="flex-row p-10">
+             <view class="flex-row shrink_fix">
+              <text class="line_father icon margin-right"></text>
+            <text class="mr-10 ">销售</text>
+             </view>
+           
+            <view class="flex-row-wrap font-xs">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:for-item="reduce" wx:key="gbDepartmentGoodsStockId" wx:if="{{reduce.gbDgsrType == 1}}">
+                <view class="flex-row  line_father twenty_radius p-10 mr-10">
+                  <text>{{reduce.gbDgsrProduceWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+
+          <view class="flex-row p-10">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_loss icon margin-right"></text>
+            <text class="mr-10 ">损耗</text>
+            </view>
+            <view class="flex-row-wrap font-xs">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 3}}">
+                <view class="flex-row  line_father_loss twenty_radius p-10 mr-10">
+                  <text>{{reduce.gbDgsrLossWeight}}{{standard}}</text>
+                </view>
+                
+              </view>
+            </view>
+          </view>
+          <view class="flex-row p-10">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_waste icon margin-right"></text>
+            <text class="mr-10">废弃</text>
+            </view>
+           
+            <view class="flex-row-wrap font-xs">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 2}}">
+                <view class="flex-row line_father_waste mr-10 twenty_radius p-10 ">
+                  <text>{{reduce.gbDgsrWasteWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+          <view class="flex-row p-10">
+            <view class="flex-row shrink_fix">
+              <text class="line_father_return icon margin-right"></text>
+            <text class="mr-10 shrink_fix ">退货</text>
+            </view>
+          
+            <view class="flex-row-wrap font-xs">
+              <view class="margin-right flex-row margin_bottom" wx:for="{{item.goodsStockReduceEntityList}}" wx:key="gbDepartmentGoodsStockReduceId"  wx:for-item="reduce" wx:if="{{reduce.gbDgsrType == 4}}">
+                <view class="flex-row line_father_return mr-10 twenty_radius p-10 ">
+                  <text>{{reduce.gbDgsrReturnWeight}}{{standard}}</text>
+                </view>
+              </view>
+            </view>
+
+          </view>
+
+        </view>
+
+
+      </view>
+
+    </view>
+
+
+
+
+  </view>
+</view>
+
+
+</view>

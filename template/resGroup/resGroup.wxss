@@ -1,0 +1,17 @@
+
+
+.dep_icon{
+  margin-left: 30rpx;
+}
+.dep_img{
+  width: 50rpx;
+  height: 50rpx;
+  margin-right:40rpx;
+
+}
+
+.userFaceUrl{
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}

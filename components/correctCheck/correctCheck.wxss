@@ -1,0 +1,116 @@
+
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  /* top: 0; */
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+
+.img{
+  width: 100rpx;
+  height: 100rpx;
+  padding: 40rpx 0 ;
+  
+}
+
+
+.flex-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex-row-wrap{
+  display: flex;
+  flex-flow: row wrap;
+}
+
+
+.flex-row-between {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.p-20{
+ 
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  padding-top: 20rpx;
+  padding-bottom: 20rpx;
+}
+
+.flex-row-default {
+  display: flex;
+  flex-flow: row nowrap;
+  /* justify-items: flex-end; */
+  /* justify-content: flex-end; */
+  /* align-items: flex-end; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+
+.flex_row_between {
+  /* background: green; */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+
+
+.flex-column {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  /* align-items: center; */
+}
+
+
+
+.center-content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+.btn{
+  width: 50%;
+  display: flex;
+  /* flex-flow: row nowrap;
+  align-items: center;
+  align-content: center; */
+ 
+
+}
+.sureBtn{
+  line-height: 70rpx;
+  border-radius: 20rpx;
+  width: 60%;
+  text-align: center;
+  margin-left: 20%;
+  background: #187e6e;
+  color: #fff;
+
+}
+
+.cancleBtn {
+  line-height: 70rpx;
+  border: 1px solid gray;
+  border-radius: 20rpx;
+  width: 60%;
+  text-align: center;
+  margin-left: 20%;
+
+}

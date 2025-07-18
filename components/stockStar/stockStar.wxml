@@ -1,0 +1,97 @@
+<wxs src="../../utils/fn.wxs" module="tool" />
+
+
+<view class='ccc' wx:if='{{show}}' catchtouchmove='ture' style="height:{{windowHeight}}rpx;">
+  <view class='body bg-white flex-column' style=" margin-top:{{scrollViewTop + windowHeight/3}}rpx; z-index: 9999999999; ">
+
+    <view class="flex-column">
+      <view class="flex-row-between" style="background-color: #0cb47c; color: #fff;">
+        <view class='flex-row goodsTitle'>
+          <text class="mr-10 p-20">{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+          <block wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight !== 'null' && item.gbDgGoodsStandardWeight.length > 0}}">
+            <text wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}})</text>
+          </block>
+          <block wx:else>
+            <text>({{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+          </block>
+        </view>
+      </view>
+    </view>
+
+   
+
+    <view class='flex-column '>
+     
+      <view class="flex-column p-20">
+      
+          <view class="flex-row  p-20 ">
+            <text class="mr-10">新鲜度:</text>
+            <view class=" mr-10">
+              <image wx:for="{{greenStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index}}" src="/images/starGreen.png" class="starIcon" />
+              <!-- 渲染灰色星星 -->
+              <image wx:for="{{grayStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index + greenStars.length}}" src="/images/starGray.png" class="starIcon" />
+
+            </view>
+          </view>
+          <block wx:if="{{item.starReduce.length > 0}}">
+            <view class="flex-row p-20" style="height: 90rpx;">
+            <text class="mr-10">照片:</text>
+            <view class="flex-column" style="margin-left: 10rpx; margin-right: 40rpx;">
+              <image class='class_img' src="{{url + item.starReduce[0].gbDeGoodsStockReduceAttachmentEntity.gbDgsraFilePath}}" bindtap='choiceImg'></image>
+            </view>
+          </view>
+          <view class="flex-row  p-20">
+            <text class="mr-10">说明:</text>
+            <view class="out">
+              <input class="mainColor orderInput" value="{{item.starReduce[0].gbDeGoodsStockReduceAttachmentEntity.gbDgsraContent}}" />
+            </view>
+          </view>
+          </block>
+          <block wx:else="">
+            <view class="flex-row p-20" style="height: 90rpx;">
+            <text class="mr-10">照片:</text>
+            <view class="flex-column" style="margin-left: 10rpx; margin-right: 40rpx;">
+              <image class='class_img' src="{{src.length > 0 ? src : '../../images/Photo.png' }}" bindtap='choiceImg'></image>
+              <view wx:if="{{src.length > 0}}" bindtap="delPic" style="margin-left: 100rpx;margin-top: -90rpx;">
+                <image src="../../images/del.png" mode="aspectFill" class="icon" />
+              </view>
+            </view>
+
+            <!-- <view class="flex-column" style="margin-left: 10rpx;">
+              <image class='class_img' src="{{srcLarge.length > 0 ? srcLarge: '../../images/Photo.png' }}" bindtap='choiceImgLarge'></image>
+              <view wx:if="{{srcLarge.length > 0}}" bindtap="delPicLarge" style="margin-left: 100rpx;margin-top: -90rpx;">
+                <image src="../../images/del.png" mode="aspectFill" class="icon" />
+              </view>
+            </view> -->
+
+          </view>
+          <view class="flex-row  p-20">
+            <text class="mr-10">说明:</text>
+            <view class="out">
+              <input class="mainColor orderInput" value="{{reason}}" bindinput="getStarsReason" />
+            </view>
+          </view>
+          </block>
+
+        <!-- </view> -->
+      </view>
+
+    </view>
+
+    <view class="flex-row  p-20 margin-top">
+
+      <view class='btn' wx:if="{{item.starReduce.length > 0}}">
+        <text class="cancleBtn red" bindtap="del" hover-class="hover">删除</text>
+      </view>
+      <view class='btn'>
+        <text class="cancleBtn" bindtap="cancle" hover-class="hover">取消</text>
+      </view>
+      <view class='btn'>
+        <text class="sureBtn {{canSure ? 'is-active' : ''}}" catchtap='confirm' hover-class="hover">确定</text>
+      </view>
+
+    </view>
+
+  </view>
+
+</view>

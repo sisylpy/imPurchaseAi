@@ -1,0 +1,9 @@
+{
+ 
+
+  "usingComponents": {
+    "customer-navbar": "/components/custom-navbar/custom-navbar",
+    "myDismodal": "/components/myDismodal/myDismodal"
+
+  }
+}

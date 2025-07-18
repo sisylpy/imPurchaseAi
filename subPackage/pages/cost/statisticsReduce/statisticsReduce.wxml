@@ -1,0 +1,286 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="top_bar flex-row bg-white" hidden="{{hide}}" style=" padding-top: {{statusBarHeight}}rpx;">
+  <image src="../../../../images/back.png" class="back_icon" bindtap="toBack"></image>
+  <view class="flex-row">
+    <text class="top_bar_title margin-right" wx:if="{{disGoods !== null}}">{{disGoods.gbDgGoodsName}}</text>
+    <text wx:else>{{goodsName}}</text>
+    <text class="top_bar_title_small">{{disGoods.gbDgGoodsDetail !== null ? disGoods.gbDgGoodsDetail: ''}}</text>
+  </view>
+
+</view>
+
+
+<!--  top -->
+<view class=" flex-row-between pl-20 pr-20 border-bottom bg-white">
+  <view class="flex-row">
+    <view class="p-20" bindtap="toDatePage">
+      <image src="../../../../images/calender.png" class="icon"></image>
+    </view>
+    <view class="flex-column">
+      <view class="flex-row" wx:if="{{startDate && startDate == stopDate}}">
+        <view class=" small">{{tool.transferDateString(startDate)}}</view>
+      </view>
+      <view class="flex-row" wx:else>
+        <view class=" small" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+        <text class="with-s-padding">-</text>
+        <view class=" small" wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="flex-row p-20" bindtap="toFilter">
+    <image src="{{searchDepIds !== -1 ? '../../../../images/filter.png' : '../../../../images/filter-3-fill.png'}}" class="icon margin-right"></image>
+  </view>
+</view>
+
+
+
+<view class="flex-column p-20">
+
+
+  <!-- <view class="flex-column-center margin_bottom">
+    <text class="filterMy ">{{depName}}</text>
+  </view> -->
+
+<block wx:if="{{searchDepIds !== -1 || comDepId > 0}}">
+  
+  <view class="flex-column-center  ">
+   <view class="flex-row filterMy" >
+    <text class=" margin-right" >{{searchDepIds !== -1 ? searchDepName : depName}}</text>
+    <image src="/images/del-2.png"  mode="aspectFill" class="icon"  bindtap="delSearch" />
+   </view>
+</view>
+
+</block>
+
+  <view wx:if="{{costTotal == 0}}" style="height:{{windowHeight - 400 - statusBarHeight}}rpx; ">
+    <view class="empty_View flex-column-center">
+      <image class="empty_image_2" src="../../../../images/file-empty.png"></image>
+      <text class="normal">暂无数据</text>
+    </view>
+  </view>
+
+ 
+  <scroll-view  wx:if="{{costTotal > 0}}" scroll-y style="height:{{windowHeight - 280 - statusBarHeight}}rpx; ">
+
+      <!-- <view class="with-tb-padding">
+        <view class=" form_data_border_reduce " >
+        <view class="flex-row">
+         <view class="flex-column half-row form_header_reduce_left ">
+              <text class="p-20 you_soild xia_soild">平均单价</text>
+              <text class="p-20 you_soild xia_soild">采购次数</text>   
+              <text class="p-20 you_soild xia_soild">库存金额</text>   
+              <text class="p-20 you_soild ">库存金额</text>                  
+          </view>
+
+          <view class="flex-column  half-row form_header_reduce_right" >
+              <text class="p-20  xia_soild">{{perPrice}}元/{{disGoods.gbDgGoodsStandardname}}</text>
+              <text class="p-20  xia_soild">{{stockCount}}次</text>
+              <text class="p-20  xia_soild">{{restWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+              <text class="p-20  ">{{restSubtotal}}元</text>
+         </view>
+         
+        </view>
+    
+      </view>
+      </view> -->
+  
+   
+
+
+
+
+    <view class="flex-column picture_body margin_bottom p-20 ">
+
+
+      <view class='navbar bg-white  p-20'>
+        <view id="0" class="navbar-item {{tab1Index==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1Click' hover-class="hover" data-type="cost">
+          <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+            <text>总数量</text>
+            <text class="bigWord">{{depCostTotal}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view id="1" class="navbar-item {{tab1Index==1?'bar-item-on':''}}" data-index='1' bindtap='onTab1Click' hover-class="hover" data-type="sales">
+          <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+            <text>售出数量</text>
+            <text class="bigWord">{{depSalesTotal}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view id="2" class="navbar-item {{tab1Index==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1Click' hover-class="hover" data-type="loss">
+          <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+            <text>损耗数量</text>
+            <text class="bigWord">{{depLossTotal}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+        <view id="3" class="navbar-item {{tab1Index==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1Click' hover-class="hover" data-type="waste">
+          <view class='navbar-title flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+            <text>废弃数量</text>
+            <text class="bigWord">{{depWasteTotal}}{{disGoods.gbDgGoodsStandardname}}</text>
+          </view>
+        </view>
+
+
+        <view class="navbar-slider" style="left: {{sliderLeft}}rpx; width:{{(windowWidth - 80)/ 4  }}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);">
+        </view>
+      </view>
+
+      <!-- s -->
+      <swiper class="swiper-box" style="height: {{windowHeight/ 4 + 40}}rpx; margin-top: 20rpx; " duration="300" bindanimationfinish="animationfinish" current="{{itemIndex}}" data-index='{{itemIndex}}'>
+        <!-- cost -->
+        <swiper-item>
+
+            <view class="flex-column echarts_back margin_bottom p-20 ">
+              <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight /4}}rpx; ">
+                <ec-canvas id="mychartCost" canvas-id="mychart-bar" ec="{{ ecc }}"></ec-canvas>
+              </view>
+            </view>
+        </swiper-item>
+
+        <!-- sales -->
+        <swiper-item style="height: 120%;">
+
+            <view class="flex-column echarts_back margin_bottom p-20">
+              <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+                <ec-canvas id="mychartSales" canvas-id="mychart-bar" ec="{{ ecs }}"></ec-canvas>
+              </view>
+            </view>
+
+        </swiper-item>
+
+
+        <!-- loss -->
+        <swiper-item style="height: 120%;">
+
+            <view class="flex-column echarts_back margin_bottom p-20">
+              <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+                <ec-canvas id="mychartLoss" canvas-id="mychart-bar" ec="{{ ecl }}"></ec-canvas>
+              </view>
+            </view>
+
+        </swiper-item>
+
+        <!-- waste -->
+        <swiper-item style="height: 120%;">
+
+            <view class="flex-column echarts_back margin_bottom p-20">
+              <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+                <ec-canvas id="mychartWaste" canvas-id="mychart-bar" ec="{{ ecw }}"></ec-canvas>
+              </view>
+            </view>
+        </swiper-item>
+
+      </swiper>
+    </view>
+
+<view class="flex-column picture_body margin_bottom p-20 ">
+<view class='navbar bg-white  p-20'>
+  <view id="0" class="navbar-item {{tab1Indexm ==0?'bar-item-on':''}}" data-index='0' bindtap='onTab1ClickM' hover-class="hover" data-type="cost">
+    <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+      <text>总成本</text>
+      <text class="bigWord">{{depCostTotalM}}元</text>
+    </view>
+  </view>
+  <view id="1" class="navbar-item {{tab1Indexm == 1?'bar-item-on':''}}" data-index='1' bindtap='onTab1ClickM' hover-class="hover" data-type="sales">
+    <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+      <text>售出成本</text>
+      <text class="bigWord">{{depSalesTotalM}}元</text>
+    </view>
+  </view>
+  <view id="2" class="navbar-item {{tab1Indexm ==2?'bar-item-on':''}}" data-index='2' bindtap='onTab1ClickM' hover-class="hover" data-type="loss">
+    <view class='navbar-title flex-column' style="width: {{(windowWidth- 40) / 4}}rpx;">
+      <text>损耗成本</text>
+      <text class="bigWord">{{depLossTotalM}}元</text>
+    </view>
+  </view>
+  <view id="3" class="navbar-item {{tab1Indexm ==3?'bar-item-on':''}}" data-index='3' bindtap='onTab1ClickM' hover-class="hover" data-type="waste">
+    <view class='navbar-title flex-column' style="width: {{(windowWidth- 40)  / 4}}rpx;">
+      <text>废弃成本</text>
+      <text class="bigWord">{{depWasteTotalM}}元</text>
+    </view>
+  </view>
+
+  <view class="navbar-slider" style="left: {{sliderLeftm}}rpx; width:{{(windowWidth - 80)/ 4  }}rpx; transform: translateX({{sliderOffsetm}}px); -webkit-transform: translateX({{sliderOffsetm}}px);">
+  </view>
+</view>
+
+<!-- s -->
+<swiper class="swiper-box" style="height: {{windowHeight/ 4 + 40}}rpx; margin-top: 20rpx; " duration="300" bindanimationfinish="animationfinishM" current="{{itemIndexm}}" data-index='{{itemIndexm}}'>
+  <!-- cost -->
+  <swiper-item>
+
+      <view class="flex-column echarts_back margin_bottom p-20 ">
+        <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight /4}}rpx; ">
+          <ec-canvas id="mychartCostMoney" canvas-id="mychart-bar" ec="{{ eccm }}"></ec-canvas>
+        </view>
+      </view>
+  </swiper-item>
+
+  <!-- sales -->
+  <swiper-item style="height: 120%;">
+
+      <view class="flex-column echarts_back margin_bottom p-20">
+        <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+          <ec-canvas id="mychartSalesMoney" canvas-id="mychart-bar" ec="{{ ecsm }}"></ec-canvas>
+        </view>
+      </view>
+
+  </swiper-item>
+
+
+  <!-- loss -->
+  <swiper-item style="height: 120%;">
+
+      <view class="flex-column echarts_back margin_bottom p-20">
+        <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+          <ec-canvas id="mychartLossMoney" canvas-id="mychart-bar" ec="{{ eclm }}"></ec-canvas>
+        </view>
+      </view>
+
+  </swiper-item>
+
+  <!-- waste -->
+  <swiper-item style="height: 120%;">
+
+      <view class="flex-column echarts_back margin_bottom p-20">
+        <view class="" style="width: {{windowWidth- 120}}rpx; height: {{windowHeight / 4}}rpx; ">
+          <ec-canvas id="mychartWasteMoney" canvas-id="mychart-bar" ec="{{ ecwm }}"></ec-canvas>
+        </view>
+      </view>
+  </swiper-item>
+
+</swiper>
+<!-- ../s -->
+</view>
+
+<!-- ../monty -->
+
+    <view class="flex-column echarts_back bg-white p-20 margin_bottom ">
+
+      <view class="" style="width: {{windowWidth - 120}}rpx; height: {{windowHeight / 4}}rpx;">
+        <ec-canvas id="mychartFinish" canvas-id="mychart-bar" ec="{{ ecf }}"></ec-canvas>
+      </view>
+    </view>
+
+
+    <view class="flex-column echarts_back bg-white p-20 margin_bottom ">
+
+      <view class="" style="width: {{windowWidth - 120}}rpx; height: {{windowHeight / 4}}rpx;">
+        <ec-canvas id="mychartRest" canvas-id="mychart-bar" ec="{{ ecr }}"></ec-canvas>
+      </view>
+    </view>
+
+    <view class="bootom_view">
+
+    </view>
+
+
+  </scroll-view>
+
+
+
+
+
+
+
+</view>

@@ -1,0 +1,109 @@
+.order_list {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: none;
+  z-index: 999999;
+  /* height: 120rpx; */
+  background: rgb(24, 150, 131);
+}
+
+.order_list.is-active {
+  display: block;
+}
+
+.order_list_content {
+  background: rgb(26, 25, 25);
+  color: #fff;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 40rpx;
+
+  
+}
+
+.car {
+  /* background: red; */
+  /* flex-basis: 80%; */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.gouwuche {
+  width: 50rpx;
+  height: 40rpx;
+}
+.dot{
+  position: absolute;
+  width: 50rpx;
+  height: 50rpx;
+  background: red;
+  border-radius: 50%;
+  margin-top: -26rpx;
+  margin-left: 80rpx;
+  text-align: center;
+}
+
+.aaa{
+  display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+.order_content {
+  font-size: 30rpx;
+  /* display: flex;
+  flex-flow: row wrap; */
+  flex-grow: 1;
+  position: relative;
+  /* margin-right: 40rpx; */
+}
+
+
+.order_send {
+  font-size: 36rpx;
+  color: #f7ca03;
+  padding: 20rpx 0;
+  /* background: gray; */
+}
+button.order_send {
+  background: none;
+  font-weight: 400;
+  border: none;
+  background-color:none;
+ 
+  padding: 0;
+  padding: 15rpx 0;
+  text-align: center;
+  border-radius: 40rpx;
+  font-size: 36rpx;
+  color: #f7ca03;
+  padding: 20rpx 0;
+  margin-right: 20rpx;
+  
+}
+
+.weighTime{
+  margin-left: 60rpx;
+  font-size: 26rpx;
+  color: rgb(218, 216, 216);
+}
+
+.testtap{
+  /* background: wheat; */
+  padding: 20rpx 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-items: flex-start;
+  /* align-content: center;  */
+  
+  
+}
+
+.yunfei{
+  font-size: 26rpx;
+}

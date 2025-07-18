@@ -1,0 +1,50 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex flex-column">
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="支付记录" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+
+  <!-- emptyView -->
+  <view class=" {{payDetailArr.length == 0   ? 'show' : 'hide'}}" style="height: {{windowHeight / 3}}rpx; text-align:center;">
+    <view class="font-lg  empty_view">
+      <view class="flex-column center-content">
+        <image class="empty_image" src="../../../../images/gouwucheicon-3.png"></image>
+        <text class="big">没有支付记录</text>
+      </view>
+    </view>
+  </view>
+  <!-- ./emptyView -->
+
+
+  <scroll-view class="  " scroll-y="true" wx:if="{{payDetailArr.length > 0}}" bindscrolltolower="onScrollToLower" style="height: {{windowHeight - navBarHeight}}rpx;">
+
+    <view class="flex-column twenty_radius bg-white p-20 mb-10 " wx:for="{{payDetailArr}}">
+      <view class="flex-row p-10">
+        <view class="flex-row half-row">
+          <text class="mr-10 text-secondary">支付时间</text>
+          <text>{{tool.getAttrFullTime(item.gbNdplPayTime)}}</text>
+        </view>
+        <view class="flex-row half-row">
+          <text class="mr-10 text-secondary">剩余点数:</text>
+          <text>{{item.gbNdplRestPoints}}点</text>
+        </view>
+
+      </view>
+      <view class="flex-row p-10 ">
+        <view class="half-row flex-row">
+          <text class="mr-10 text-secondary">支付点数量</text>
+          <text>{{item.gbNdplPaySubtotal}}点</text>
+        </view>
+        <view class="flex-row half-row">
+          <text class="mr-10 text-secondary">客户</text>
+          <text class="mr-10">{{item.nxJrdhSupplierEntity.jrdhUserEntity.nxJrdhWxNickName}}</text>
+        </view>
+      </view>
+    </view>
+
+
+  </scroll-view>
+
+</view>

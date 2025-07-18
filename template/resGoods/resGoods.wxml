@@ -1,0 +1,208 @@
+<template name="resGoods">
+
+
+	<scroll-view scroll-y style="height:{{windowHeight - 220}}rpx;">
+		<!-- empty -->
+
+		<view class="emptyView {{fatherDep.length == 0 ? 'is-active' : ''}}"
+			style="height: {{windowHeight - 360}}rpx; text-align:center;">
+			<view class="font-lg  empty_View">
+				<view class="center-content">
+
+					<!-- <image class="empty_image" src="/images/cart-Empty.png"></image> -->
+					<text class="big">暂时部门商品</text>
+					<view class="p-20 flex-row">
+						<!-- <image src="/images/atm-away.png" class="show_icon"></image> -->
+					</view>
+					<!-- <text class="small darkgray pb-20 pt-20">订购成功的商品将添加在这里！</text> -->
+				</view>
+			</view>
+		</view>
+		<!-- ./empty -->
+
+		<!-- hasSub > 0 -->
+		<block wx:if="{{depInfo.gbDepartmentSubAmount > 0}}">
+			<view class="p-20 flex-column  mb-20 font-lg bg-white" wx:for="{{fatherDep.gbSubDepartments}}"
+				wx:for-item="dep" wx:for-index="depIndex">
+				<view class="p-20 mainBack">
+					<text class=" white">{{dep.gbDepartmentName}}</text>
+				</view>
+				<!--  -->
+				<view class="item_father bg-white  flex-column" wx:for="{{dep.gbDepartmentDisGoodsEntities}}"
+					wx:key="gbDepartmentDisGoodsId" wx:for-item="goods" wx:for-index="goodsIndex">
+
+					<view class="item">
+						<!-- circle -->
+						<view class="circle" wx:if="{{goods.gbDepartmentOrdersEntity !== null}}"
+							style=" height: 60rpx; width: 100rpx;position: absolute; right: -30rpx; top: -30rpx;">
+							<view class="number">
+								{{goods.gbDepartmentOrdersEntity.gbDoQuantity}}{{goods.gbDepartmentOrdersEntity.gbDoStandard}}</view>
+						</view>
+						<!-- ./circle -->
+
+						<!-- item -->
+						<view class="history_item {{goods.gbDepartmentOrdersEntity !== null ? 'select_border' : 'font-lg_border'}}"
+							style="width:{{(windowWidth - 100)}}rpx;">
+							<view class="flex-column  font-lg " style="padding: 30rpx  30rpx 15rpx 15rpx; ">
+								<view class="flex-row-wrap p-20">
+									<text class="brand"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsBrand.length > 0 && goods.gbDistributerGoodsEntity.gbDgGoodsBrand !==  'null'}}">{{goods.gbDistributerGoodsEntity.gbDgGoodsBrand}}</text>
+									<text class="mr-10 gray"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDgPullOff == 1}}">(下架){{goods.gbDdgDepGoodsName}}</text>
+									<text class="mr-10 " wx:else>{{goods.gbDdgDepGoodsName}}</text>
+									<text class="mr-10"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDistributerAliasEntities.length > 0}}"
+										wx:for="{{goods.gbDistributerGoodsEntity.gbDistributerAliasEntities}}" wx:for-item="alias"
+										wx:key="gbDistributerAliasId">@{{alias.gbDaAliasName}}</text>
+
+									<text class="mr-10"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{goods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+									<text class="mr-10"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && goods.gbDistributerGoodsEntity.gbDgGoodsDetail !==  'null'}}">{{goods.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
+									<text class=" mr-10 gray"
+										wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsPlace !== null && goods.gbDistributerGoodsEntity.gbDgGoodsPlace.length > 0}}">产地:{{goods.gbDistributerGoodsEntity.gbDgGoodsPlace}}</text>
+								</view>
+
+								<view class="flex-row-default" wx:if="{{goods.gbDepartmentOrdersEntity == null}}"
+									style="width:{{windowWidth - 80}}rpx; padding: 8rpx 8rpx 30rpx 20rpx; ">
+									<text class="mr-10 flex-fixed">订货:</text>
+									<view class=" flex-row-wrap">
+										<view class="his_price" wx:for="{{goods.gbDepOrdersHistoryEntities}}" wx:for-item="history"
+											bindtap="applyHistory" data-item="{{goods.gbDistributerGoodsEntity}}" data-index="{{goodsIndex}}"
+											data-depid="{{dep.gbDepartmentId}}" data-depindex="{{depIndex}}"
+											data-hasquantity="{{history.gbDohQuantity}}" data-hasstandard="{{history.gbDohStandard}}"
+											hover-class="hoaverHistory">{{history.gbDohQuantity}}{{history.gbDohStandard}}</view>
+
+										<view class="his_price" data-pulloff="{{goods.gbDistributerGoodsEntity.gbDgPullOff}}"
+											bindtap="applyGoods" data-item="{{goods.gbDistributerGoodsEntity}}" data-index="{{goodsIndex}}"
+											data-depid="{{dep.gbDepartmentId}}" data-depindex="{{depIndex}}" hover-class="hoaverHistory">+
+										</view>
+									</view>
+								</view>
+							</view>
+							<view class="line"></view>
+
+							<view wx:if="{{goods.gbDepartmentOrdersEntity !== null}}">
+
+								<view class="flex-row" style="width: {{windowWidth - 80}}rpx;  ">
+									<view class="half-row center-content ninty_height btn_view_left" bindtap="deleteHistoryApply"
+										hover-class="hover" data-item="{{goods.gbDepartmentOrdersEntity}}"
+										data-disgoods="{{goods.gbDistributerGoodsEntity}}" data-depindex="{{depIndex}}"
+										data-index="{{goodsIndex}}">
+										<image class="btn_icon" src="/images/ashbin-7.png"></image>
+
+									</view>
+									<view class="column_line"></view>
+									<view class="half-row center-content ninty_height btn_view_right" bindtap="toEditApply"
+										data-item="{{goods.gbDepartmentOrdersEntity}}" data-disgoods="{{goods.gbDistributerGoodsEntity}}"
+										hover-class="hover" data-depindex="{{depIndex}}" data-index="{{goodsIndex}}">
+										<image class="btn_icon" src="/images/edit-3.png"></image>
+									</view>
+								</view>
+							</view>
+						</view>
+						<!-- ./item -->
+					</view>
+				</view>
+			</view>
+		</block>
+		<!-- ./hasSub > 0 -->
+
+
+		<!-- hasSub == 0 -->
+		<block wx:else>
+			<view class="mb-20 ">
+				<view class="flex-column border-bottom p-20 font-lg" wx:for="{{depGoodsArr}}"
+					wx:key="gbDepartmentDisGoodsId" wx:for-item="goods" wx:for-index="goodsIndex" bindtap="toDepGoods"
+					data-id="{{goods.gbDepartmentDisGoodsId}}">
+					<view class="flex-row">
+						<text class="mr-20">{{goodsIndex + 1}}.</text>
+						<text class="brand"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsBrand.length > 0 && goods.gbDistributerGoodsEntity.gbDgGoodsBrand !==  'null'}}">{{goods.gbDistributerGoodsEntity.gbDgGoodsBrand}}</text>
+						<text class="mr-10 gray"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDgPullOff == 1}}">(下架){{goods.gbDdgDepGoodsName}}</text>
+						<text class="mr-10" wx:else>{{goods.gbDdgDepGoodsName}}</text>
+						<text class="mr-10"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDistributerAliasEntities.length > 0}}"
+							wx:for="{{goods.gbDistributerGoodsEntity.gbDistributerAliasEntities}}" wx:for-item="alias"
+							wx:key="gbDistributerAliasId">@{{alias.gbDaAliasName}}</text>
+
+						<text class="mr-10"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsStandardname !== '斤'}}">({{goods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
+						<text class="mr-10"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && goods.gbDistributerGoodsEntity.gbDgGoodsDetail !==  'null'}}">{{goods.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
+						<text class=" mr-10 gray"
+							wx:if="{{goods.gbDistributerGoodsEntity.gbDgGoodsPlace !== null && goods.gbDistributerGoodsEntity.gbDgGoodsPlace.length > 0}}">产地:{{goods.gbDistributerGoodsEntity.gbDgGoodsPlace}}</text>
+					</view>
+
+					<view class="flex-row ">
+						<text class="mr-20 empty">{{goodsIndex}}.</text>
+						<text class="gray  mr-10">订货单位:</text>
+						<view class="flex-row-wrap">
+							<text class="standard gray">{{goods.gbDdgDepGoodsStandardname}}</text>
+							<block
+								wx:if="{{goods.gbDistributerStandardEntities !== null && goods.gbDistributerStandardEntities.length > 0}}">
+								<text class="standard gray" wx:for="{{goods.gbDistributerStandardEntities}}"
+									wx:for-item="standard">{{standard.gbDsStandardName}}</text>
+							</block>
+						</view>
+					</view>
+
+					<view class="flex-row">
+						<text class="mr-20 empty">{{goodsIndex}}.</text>
+						<view class="flex-row-between" style="width: {{windowWidth - 140}}rpx;;">
+							<view class="flex-row">
+								<text class="gray  mr-10">采购方式:</text>
+								<view class="flex-row">
+									<block wx:if="{{goods.gbDdgGoodsType == 1}}">
+										<text class="standard gray">月采</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 2}}">
+										<text class="standard gray">出库</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 3}}">
+										<text class="standard gray">中央厨房</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 4}}">
+										<text class="standard gray">供货商</text>
+									</block>
+								</view>
+							</view>
+							<view class="flex-row">
+								<view class="flex-row">
+									<block wx:if="{{goods.gbDdgGoodsType == 1}}">
+										<text class="gray  mr-10">采购方式:</text>
+										<text class="standard gray">月采</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 2}}">
+										<text class="gray  mr-10">库房:</text>
+										<text class="standard gray">{{goods.gbDepartmentEntity.gbDepartmentName}}</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 3}}">
+										<text class="gray  mr-10">采购方式:</text>
+										<text class="standard gray">中央厨房</text>
+									</block>
+									<block wx:if="{{goods.gbDdgGoodsType == 4}}">
+										<text class="gray  mr-10">采购方式:</text>
+										<text class="standard gray">京京送货 {{goods.nxDistributerGoodsEntity.nxDgGoodsName}}</text>
+									</block>
+								</view>
+							</view>
+
+
+						</view>
+
+					</view>
+				</view>
+			</view>
+		</block>
+		<!-- ./hasSub == 0 -->
+
+		<view class="center-content" wx:if="{{depGoodsArr.length > 0}}">
+			<view class="p-20 flex-row">
+				<!-- <image src="/images/atm-away.png" class="show_icon"></image> -->
+			</view>
+		</view>
+	</scroll-view>
+
+</template>
