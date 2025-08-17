@@ -46,7 +46,6 @@ Page({
     editNow: false,
     showName: false,
     showPhone: false,
-    showRecord: false,
 
   },
 
@@ -194,27 +193,11 @@ getName(e){
     })
   },
 
-
-  getRecord(e){
-    this.setData({
-      showRecord: true,
-      editNow: true
-    })
-  },
-
-  getRecordValue(e){
-    var data = "disInfo.gbDistributerRecordSeconds";
-    this.setData({
-      [data]: e.detail.value,
-    })
-  },
-
   finish(){
     this.setData({
       editNow: false
     })
   },
-
   stopPropagation(){
    this.setData({
     editNow: true,
@@ -308,8 +291,7 @@ hideMask(){
 
     this.setData({
       showName:false,
-      showPhone: false,
-      showRecord: false
+      showPhone: false
     })
   }
 },
