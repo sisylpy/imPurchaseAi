@@ -13,11 +13,11 @@
     </view>
 
 
-    <view class="center-content" bindtap='choiceImgUser' style="margin-top: -150rpx;">
+    <view class="center-content" bindtap='choiceImgUser' style="margin-top: -200rpx;">
       <image 
       src="{{url + userInfo.gbDuWxAvartraUrl}}" mode="aspectFill" class=""
        style=" border: 1px solid gray; border-radius: 50%;  width: {{windowWidth / 2}}rpx; height: {{windowWidth / 2}}rpx; "/>
-      <image src="/images/camera.png" mode="aspectFill" class="" style="height: 40rpx;width: 40rpx; top: {{navBarHeight + 300 + 220}}rpx; position: absolute; right: 260rpx; background-color: #e7e7e7; padding: 20rpx 20rpx; border-radius: 50%;"/>
+      <image src="/images/camera.png" mode="aspectFill" class="" style="height: 40rpx;width: 40rpx; top: {{navBarHeight + 300 + 220 }}rpx; position: absolute; right: 260rpx; background-color: #e7e7e7; padding: 20rpx 20rpx; border-radius: 50%;"/>
     </view>
 
 
@@ -37,6 +37,13 @@
       </view>
     </view>
 
+    <view class="flex-row-between  p-30  border-bottom mt-10" bind:tap="getRecord" >
+      <text>语音下单时间</text>
+      <view class="flex-row">
+        <text class="mr-20">{{disInfo.gbDistributerRecordSeconds}}</text>
+        <image src="/images/arrow-right-3.png" mode="aspectFill" class="icon"/>
+      </view>
+    </view>
     <!-- <view class="flex-row-between p-30 border-bottom" bind:tap="toMendian" hover-class="hover">
       <text>门店</text>
       <view>
@@ -171,3 +178,29 @@
 
 </view>
 <!-- ../operation -->
+
+<!-- 语音下单时间修改弹窗 -->
+<view class='overlay {{showRecord ? "show" : "hide"}}' catchtap="hideMask" >
+  <view class="flex-column center-content nnn bg-white">
+    <view class="p-30">
+      <text class="flex-row">修改语音下单时间</text>
+    </view>
+
+    <view class="flex-column">
+      <input 
+        type="number" 
+        style="background-color: rgb(238, 238, 238); border-radius: 20rpx; width: {{windowWidth - 140}}rpx; padding: 20rpx 20rpx; height: 80rpx; font-size: 38rpx;" 
+        value="{{disInfo.gbDistributerRecordSeconds}}" 
+        bindinput="getRecordValue" 
+        catchtap="stopPropagation" 
+        bindblur="finish"
+        placeholder="请输入语音下单时间（秒）"
+      />      
+    </view>
+
+    <view class="submit-section flex-row" style="width: {{windowWidth - 60}}rpx;margin-bottom: 20rpx;">
+      <view class="submit-btn" bindtap="updateInfo">确定</view>
+    </view>
+  </view>
+</view>
+<!-- ../语音下单时间修改弹窗 -->
