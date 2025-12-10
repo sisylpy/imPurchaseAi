@@ -28,7 +28,7 @@
 				<view class="flex-row-default" style="padding: 20rpx 20rpx;">
 					<text class="explain shrink_fix">单位</text>
 					<view class=" flex-row-wrap shrink_change " >
-						<text class="standardName {{applyStandardName == item.gbDdgShowStandardName ? 'is-active' : ''}}" bindtap="changeStandard" data-name="{{item.gbDdgShowStandardName}}" >{{item.gbDdgShowStandardName}}</text>
+						<text class="standardName {{applyStandardName == item.gbDdgShowStandardName ? 'is-active' : ''}}" bindtap="changeStandard" data-name="{{item.gbDgGoodsStandardname}}" >{{item.gbDdgShowStandardName}}</text>
 
 						<text  class="standardName {{applyStandardName == standard.gbDsStandardName ? 'is-active' : ''}}" bindtap="changeStandard" data-name="{{standard.gbDsStandardName}}" catchlongpress="delStandard" data-id="{{standard.gbDistributerStandardId}}"   wx:for="{{item.gbDistributerStandardEntities}}" wx:key="gbDgDistributerStandardId"
             wx:for-item="standard">{{standard.gbDsStandardName}}</text>
@@ -54,7 +54,7 @@
 					</view>
 				</view>
         
-          <view class="flex_row_between" style="padding: 20rpx 20rpx;" wx:if="{{!editApply}}">
+          <view class="flex_row_between" style="padding: 20rpx 20rpx;">
             <text class="explain">库存清零</text>
 					 <view  class="">
           <switch checked="{{stockIsZero}}" bindchange="changeStock"/>

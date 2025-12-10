@@ -57,18 +57,6 @@
                 
               </view>
 
-              <!-- <view class="flex-row">
-                <view class="flex-row half-row">
-                  <text class="mr-10">采购员:</text>
-                  <text> {{tool.getAttrName(item.nxJrdhPurEntity.gbDuWxNickName)}}</text>
-                </view>
-
-
-                <view class="flex-row half-row">
-                  <text class="mr-10">卖方:</text>
-                  <text> {{tool.getAttrName(item.nxJrdhSellerEntity.nxJrdhWxNickName)}}</text>
-                </view>
-              </view> -->
 
               <view class="flex-row">
                 <view class="flex-row half-row" wx:if="{{item.gbDpbStatus > 1}}">

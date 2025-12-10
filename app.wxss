@@ -39,6 +39,13 @@ page {
   justify-content: space-between;
 }
 
+.flex-row-between-default {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+
 .flex-row-default {
   display: flex;
   flex-flow: row nowrap;
@@ -147,7 +154,7 @@ page {
 /* 字体大小 */
 .font-yuan {
   font-size: 24rpx;
-  margin-right: 4rpx;
+  /* margin-right: 4rpx; */
 }
 .font-cata-size{
   font-size: 26rpx;
@@ -221,8 +228,9 @@ page {
   
 }
 .text-link {
-  color: #1c7efb;
+  color: #007aff;
 }
+
 
 .text_center{
   text-align: center;
@@ -246,12 +254,19 @@ page {
 .text-white {
   color: #ffffff;
 }
+.text-value{
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
 
 /* 背景颜色 */
 .bg-white {
   background-color: #ffffff;
 }
-
+.bg-highlight{
+  background-color: #f8f9ff;
+}
 .bg-light {
   background-color: #f5f5f5;
 }
@@ -278,6 +293,10 @@ page {
 
 .bg-mainColor {
   background-color: #cffffa;
+}
+
+.bg-light-main{
+  background-color: #f5fffe;
 }
 
 /* 边距 */
@@ -373,6 +392,9 @@ page {
 .pl-0 {
   padding-left: 0;
 }
+.plr-10{
+  padding: 0 10rpx;
+}
 .plr-20{
   padding: 0 20rpx;
 }
@@ -444,6 +466,9 @@ page {
 .border-bottom-active {
   border-bottom: 4rpx solid #ff0000;
 }
+.border-bottom.is-last{
+  border-bottom: none;
+}
 
 /* 圆角 */
 .radius-0 {
@@ -498,7 +523,7 @@ page {
 }
 
 .pass_waste{
-  font-size: 30rpx;
+  /* font-size: 26rpx; */
   padding: 4rpx 30rpx;
   border-radius: 20rpx;
   background-color: rgb(204, 0, 31);
@@ -535,9 +560,15 @@ page {
   /* border: 1px solid #4c535c; */
   font-size: 20rpx;
   padding: 4rpx 10rpx;
-  border-radius: 10rpx;
   background: #5ab464;
   color: #fff;
+  transform: skew(-15deg);
+  display: inline-block;
+}
+
+.fresh_goods text {
+  transform: skew(15deg);
+  display: inline-block;
 }
 
 .face_img {
@@ -568,6 +599,10 @@ page {
 
 .radius-20 {
   border-radius: 20rpx;
+}
+
+.radius-40 {
+  border-radius: 40rpx;
 }
 
 /* 文本对齐 */
@@ -864,7 +899,56 @@ page {
   display: none;
 }
 .overlay.show{
-  display: block;
+  display: flex;
+}
+
+.edit-modal {
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  background: #f8f8f8;
+}
+
+.edit-input:focus {
+  border-color: #667eea;
+  background: #fff;
+}
+
+.btn-cancel, .btn-confirm {
+  flex: 1;
+  padding: 24rpx;
+  margin: 0 10rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.btn-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn-confirm {
+  background: #e0e0e0;
+  color: #999;
+}
+
+.btn-confirm-active {
+  background: #667eea;
+  color: #fff;
+}
+
+.btn-confirm-disabled {
+  background: #e0e0e0;
+  color: #999;
 }
 
 
@@ -929,7 +1013,7 @@ page {
 
 
 .big_full_padding{
-  padding: 60rpx 40rpx;
+  padding: 40rpx 40rpx;
 }
 
 
@@ -1117,4 +1201,6 @@ ec-canvas {
   color: rgba(255, 255, 255, 0);
 }
 
-@import "reportPage.wxss"
+@import "reportPage.wxss";
+
+@import "myApp.wxss"

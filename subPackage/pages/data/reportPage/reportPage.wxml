@@ -43,61 +43,64 @@
                 <view class="flex-column">
                   <view class="flex-row-between">
                     <view class="flex-column">
-                     
+
                       <!-- <view class="form_body_title form_body_colar">{{item.name}}</view> -->
                       <view class="form_body_title form_body_colar">
-                    <block wx:if="{{item.report.gbRepType == 'disPurGoods'}}">
-                      <view>采购商品统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'disPurNxDistributer'}}">
-                      <view>京京统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'disPurSupplier'}}">
-                      <view>供货商统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depSalesWeight'}}">
-                      <view>数量统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depSalesSubtotal'}}">
-                      <view>销售额统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depCost' || item.report.gbRepType == 'disCost'}}">
-                      <view>总成本</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depProfit'}}">
-                      <view>利润统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depBusiness'}}">
-                      <view>经营统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depStockNow'}}">
-                      <view>{{item.name}}</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depLoss'}}">
-                      <view>{{item.name}}</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depWaste'}}">
-                      <view>{{item.name}}</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depReturn'}}">
-                      <view>{{item.name}}</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depParameter'}}">
-                      <view>{{item.name}}</view>
-                    </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurGoods'}}">
+                          <view>采购商品统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurNxDistributer'}}">
+                          <view>京京统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurSupplier'}}">
+                          <view>供货商统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurSelf'}}">
+                          <view>自采统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depSalesWeight'}}">
+                          <view>数量统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depSalesSubtotal'}}">
+                          <view>销售额统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depCost' || item.report.gbRepType == 'disCost'}}">
+                          <view>总成本</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depProfit'}}">
+                          <view>利润统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depBusiness'}}">
+                          <view>经营统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depStockNow'}}">
+                          <view>{{item.name}}</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depLoss'}}">
+                          <view>{{item.name}}</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depWaste'}}">
+                          <view>{{item.name}}</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depReturn'}}">
+                          <view>{{item.name}}</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depParameter'}}">
+                          <view>{{item.name}}</view>
+                        </block>
 
-                  </view>
+                      </view>
                       <view class="pb-10" wx:if="{{item.report.gbRepType !== 'depStockNow'}}">{{item.report.gbRepStartDate}} 至 {{item.report.gbRepStopDate}}</view>
                       <view class="pb-10" wx:else="">现库存</view>
                     </view>
-                    
+
 
                     <view class="btnClick" bindtap="openOperation" data-id="{{item.report.gbReportId}}" hover-class="hover" data-name="{{item.name}}" data-type="{{item.type}}" data-code="{{item.code}}">
                       <image src="../../../../images/points.png" class="icon"></image>
                     </view>
                   </view>
                   <view class=" form_body_line_dep" style="width: {{windowWidth - 80}}rpx;"></view>
-                 
+
 
                 </view>
 
@@ -363,7 +366,7 @@
                   <view class="flex-column p-20">
 
                     <view class="flex-column p-20 form_data_border">
-                    
+
                       <view class="flex-row xia">
                         <view class="flex-column-center half-row you p-30">
                           <view class="text-secondary">总成本</view>
@@ -700,16 +703,16 @@
                 <view class="flex-column">
                   <view class="flex-row-between">
                     <view class="flex-column">
-                     
+
                       <view class="form_body_title form_body_colar">
-                        <view wx:if="{{item.report.gbRepType == 'disCost'}}">总成本</view>  
-                      <view wx:elif="{{item.report.gbRepType == 'disReturn'}}">退货成本</view>                    
-                      <view wx:elif="{{item.report.gbRepType == 'disWaste' }}">废弃成本</view>  
-                      <view wx:elif="{{item.report.gbRepType == 'disLoss' }}">损耗成本</view>
-                      <view wx:elif="{{item.report.gbRepType == 'disStockNow' }}">现库存</view> 
-                  </view>
+                        <view wx:if="{{item.report.gbRepType == 'disCost'}}">总成本</view>
+                        <view wx:elif="{{item.report.gbRepType == 'disReturn'}}">退货成本</view>
+                        <view wx:elif="{{item.report.gbRepType == 'disWaste' }}">废弃成本</view>
+                        <view wx:elif="{{item.report.gbRepType == 'disLoss' }}">损耗成本</view>
+                        <view wx:elif="{{item.report.gbRepType == 'disStockNow' }}">现库存</view>
+                      </view>
                       <view class="pb-10" wx:if="{{item.report.gbRepType !== 'disStockNow'}}">{{item.report.gbRepStartDate}} 至 {{item.report.gbRepStopDate}}</view>
-                     
+
                     </view>
 
                     <view class="btnClick" bindtap="openOperation" data-id="{{item.report.gbReportId}}" hover-class="hover" data-name="{{item.name}}" data-type="{{item.type}}" data-code="{{item.code}}">
@@ -717,7 +720,7 @@
                     </view>
                   </view>
                   <view class=" form_body_line_dep" style="width: {{windowWidth - 80}}rpx;"></view>
-                 
+
 
                 </view>
 
@@ -739,11 +742,10 @@
                           <view class="form_data">{{item.totalRestWeight}}</view>
                         </view>
                       </view>
-
                     </view>
                     <view class="flex-column p-20">
                       <view class="form_title ">
-                        库存
+                        商品库存
                       </view>
                       <view class="form_sub flex-column">
 
@@ -768,6 +770,35 @@
                       </view>
                     </view>
                   </view>
+
+                  <block wx:if="{{item.depArr.length > 0}}">
+                    <view class="flex-column p-20">
+                      <view class="form_title ">
+                        部门库存
+                      </view>
+                      <view class="form_sub flex-column">
+
+                        <view class="form_header_dep flex-row">
+                          <view class="third-row p-10"></view>
+                          <view class="third-row p-10">部门数量</view>
+                          <view class="third-row p-10">部门金额</view>
+                        </view>
+                        <view class="flex-row form_line  " wx:for="{{item.depArr}}">
+                          <view class="form_zero third-row">
+                            {{item.gbDepartmentAttrName}}
+                          </view>
+                          <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+                            {{item.depStockWeightTotalString}}
+                          </view>
+                          <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+                            ¥{{item.depStockSubtotalString}}
+                          </view>
+
+                        </view>
+
+                      </view>
+                    </view>
+                  </block>
                 </block>
                 <view class="flex-row p-20" wx:else>
                   无数据
@@ -778,7 +809,7 @@
                   <view class="flex-column p-20">
 
                     <view class="flex-column p-20 form_data_border">
-                    
+
                       <view class="flex-row xia">
                         <view class="flex-column-center half-row you p-30">
                           <view class="text-secondary">总成本</view>
@@ -813,16 +844,6 @@
 
                       </view>
 
-                      <!-- <view class="flex-row  ">
-            <view class="flex-column-center half-row  you  p-30">
-              <view class="text-secondary">库存成本</view>
-              <view class="form_data">{{item.totalRestSubtotal}}元</view>
-            </view>
-            <view class="flex-column-center half-row    p-30">
-              <view class="text-secondary">采购成本</view>
-              <view class="form_data">{{item.totalSubtotal}}元</view>
-            </view>
-          </view> -->
                     </view>
 
 
@@ -853,33 +874,33 @@
 
                       </view>
                     </view>
+                    <block wx:if="{{item.depArr.length > 0}}">
+                      <view class="flex-column p-20">
+                        <view class="form_title ">
+                          部门成本
+                        </view>
+                        <view class="form_sub flex-column">
 
-                    <!-- <view class="p-20">
-            <view class="form_title ">
-              库存
-            </view>
-          <view class="form_sub flex-column">
-          
-           <view class="form_header_dep flex-row">
-            <view class="third-row p-10"></view>
-            <view class="third-row p-10">库存数量</view>
-            <view class="third-row p-10">库存金额</view>
-           </view>
-           <view class="flex-row form_line  " wx:for="{{item.arr}}"  >
-            <view class="form_zero third-row" >
-              {{item.gbDfgFatherGoodsName}}
-            </view>
-            <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
-              {{item.fatherRestWeightTotalString}}
-            </view>
-            <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
-              ¥{{item.fatherRestTotalString}}
-            </view>
-             
-           </view>
-            
-          </view>
-          </view> -->
+                          <view class="form_header_dep flex-row">
+                            <view class="third-row p-10"></view>
+                            <view class="third-row p-10">成本总额</view>
+                            <view class="third-row p-10">成本比例</view>
+                          </view>
+                          <view class="flex-row form_line  " wx:for="{{item.depArr}}" wx:for-item="dep">
+                            <view class="form_zero third-row">
+                              {{dep.gbDepartmentAttrName}}
+                            </view>
+                            <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+                              {{dep.depCostGoodsTotalString}}
+                            </view>
+                            <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+                              {{tool.getProducePercent(dep.depCostGoodsTotalString, item.totalCost)}}%
+                            </view>
+
+                          </view>
+                        </view>
+                      </view>
+                    </block>
 
 
                   </view>
@@ -983,50 +1004,53 @@
                 </view>
               </block>
 
-          
+
 
             </view>
           </block>
 
-   <!-- ../ disData -->
-           <!-- dis -->
+          <!-- ../ disData -->
+          <!-- dis -->
 
-          <block wx:if="{{ item.report.gbRepType == 'disPurGoods' || item.report.gbRepType == 'disPurSupplier' || item.report.gbRepType == 'disPurNxDistributer'}}">
+          <block wx:if="{{ item.report.gbRepType == 'disPurGoods' || item.report.gbRepType == 'disPurSupplier' || item.report.gbRepType == 'disPurSelf'  || item.report.gbRepType == 'disPurNxDistributer'}}">
             <view class="form_body form_body_out ">
               <view class="flex-row-between p-20">
                 <view class="flex-column">
                   <view class="flex-row-between">
                     <view class="flex-column">
-                     
+
                       <!-- <view class="form_body_title form_body_colar">{{item.name}}</view> -->
                       <view class="form_body_title form_body_colar">
                         <block wx:if="{{item.report.gbRepType == 'disPurGoods'}}">
-                      <view>采购商品统计</view>
-                    </block>
+                          <view>采购商品统计</view>
+                        </block>
                         <block wx:if="{{item.report.gbRepType == 'disPurSupplier'}}">
-                      <view>供货商统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'disPurNxDistributer'}}">
-                      <view>京京配送统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depSalesWeight'}}">
-                      <view>数量统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depSalesSubtotal'}}">
-                      <view>销售额统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depCost'}}">
-                      <view>{{item.name}}</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depProfit'}}">
-                      <view>利润统计</view>
-                    </block>
-                    <block wx:if="{{item.report.gbRepType == 'depBusiness'}}">
-                      <view>经营统计</view>
-                    </block>
-                  
+                          <view>供货商统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurSelf'}}">
+                          <view>自采统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'disPurNxDistributer'}}">
+                          <view>京京配送统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depSalesWeight'}}">
+                          <view>数量统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depSalesSubtotal'}}">
+                          <view>销售额统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depCost'}}">
+                          <view>{{item.name}}</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depProfit'}}">
+                          <view>利润统计</view>
+                        </block>
+                        <block wx:if="{{item.report.gbRepType == 'depBusiness'}}">
+                          <view>经营统计</view>
+                        </block>
 
-                  </view>
+
+                      </view>
                       <view class="pb-10">{{item.report.gbRepStartDate}} 至 {{item.report.gbRepStopDate}}</view>
                     </view>
 
@@ -1035,7 +1059,7 @@
                     </view>
                   </view>
                   <view class=" form_body_line_dep" style="width: {{windowWidth - 80}}rpx;"></view>
-                 
+
 
                 </view>
 
@@ -1543,29 +1567,18 @@
                         </view>
                       </view>
 
-                      <view class="flex-row xia">
+                      <view class="flex-row">
                         <view class="flex-column-center half-row  you  p-30">
-                          <view class="text-secondary">京京送货</view>
-                          <view class="form_data">{{item.totalAppSubtotal}}元</view>
+                          <view class="text-secondary">自采总额</view>
+                          <view class="form_data">{{item.totalSelfSubtotal}}元</view>
                         </view>
                         <view class="flex-column-center half-row    p-30">
                           <view class="text-secondary">供货商总额</view>
                           <view class="form_data">{{item.totalSupplierSubtotal}}元</view>
                         </view>
 
-                      </view> 
-                      <view class="flex-row xia">
-                        
-                        <view class="flex-column-center half-row  you  p-30">
-                          <view class="text-secondary">自采总额</view>
-                          <view class="form_data">{{item.totalSelfSubtotal}}元</view>
-                        </view>
-                        <view class="flex-column-center half-row    p-30">
-                          <!-- <view class="text-secondary">京京送货</view> -->
-                          <!-- <view class="form_data">{{item.totalAppSubtotal}}元</view> -->
-                        </view>
+                      </view>
 
-                      </view>                    
                     </view>
 
 
@@ -1576,24 +1589,20 @@
                       <view class="form_sub flex-column">
 
                         <view class="form_header_dep flex-row">
-                          <view class="quarter-row p-10"></view>
-                          <view class="quarter-row p-10">京京送货</view>
-                          <view class="quarter-row p-10">供货商总额</view>
-                        
-                          <view class="quarter-row p-10">自采总额</view>
+                          <view class="third-row p-10"></view>
+                          <view class="third-row p-10">供货商总额</view>
+                          <view class="third-row p-10">自采总额</view>
                         </view>
                         <view class="flex-row form_line  " wx:for="{{item.arr}}">
-                          <view class="form_zero quarter-row">
+                          <view class="form_zero third-row">
                             {{item.gbDfgFatherGoodsName}}
                           </view>
-                          
-                          <view class="form_one quarter-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+
+                          <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
                             {{item.purchaseSupplierSubTotal}}元
                           </view>
-                          <view class="form_one quarter-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
-                            {{item.purchaseSubTotal}}元
-                          </view>
-                          <view class="form_one quarter-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+
+                          <view class="form_one third-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
                             {{item.purchaseSelfSubTotal}}元
                           </view>
 
@@ -1636,6 +1645,7 @@
                   无数据
                 </view>
               </block>
+
               <block wx:if="{{item.report.gbRepType == 'disPurSupplier'}}">
                 <block wx:if="{{item.code !== -1}}">
                   <view class="flex-column p-20">
@@ -1651,7 +1661,7 @@
                           <view class="form_data">{{item.perCost}}元/天</view>
                         </view>
                       </view>
-                  
+
                     </view>
 
 
@@ -1689,6 +1699,59 @@
                   无数据
                 </view>
               </block>
+
+              <block wx:if="{{item.report.gbRepType == 'disPurSelf'}}">
+                <block wx:if="{{item.code !== -1}}">
+                  <view class="flex-column p-20">
+
+                    <view class="flex-column p-20 form_data_border">
+                      <view class="flex-row xia">
+                        <view class="flex-column-center half-row you p-30">
+                          <view class="text-secondary">总成本</view>
+                          <view class="form_data">{{item.totalSubtotal}}元</view>
+                        </view>
+                        <view class="flex-column-center half-row  p-30 ">
+                          <view class="text-secondary">日均成本</view>
+                          <view class="form_data">{{item.perCost}}元/天</view>
+                        </view>
+                      </view>
+
+                    </view>
+
+
+                    <view class="p-20">
+                      <view class="form_title ">
+                        采购员列表
+                      </view>
+                      <view class="form_sub flex-column">
+
+                        <view class="form_header_dep flex-row">
+                          <view class="half-row p-10"></view>
+                          <view class="half-row p-10">采购总额</view>
+                        </view>
+                        <view class="flex-row form_line  " wx:for="{{item.arr}}">
+                          <view class="form_zero half-row">
+                            {{item.gbDuWxNickName}}
+                          </view>
+                          <view class="form_one half-row p-10 {{index%2 !== 0 ? 'formBack' : ''}}">
+                            {{item.gbDuPrintDeviceId}}元
+                          </view>
+                        
+
+                        </view>
+
+                      </view>
+                    </view>
+
+
+                  </view>
+                </block>
+                <view class="flex-row p-20" wx:else>
+                  无数据
+                </view>
+              </block>
+
+
               <block wx:if="{{item.report.gbRepType == 'disPurNxDistributer'}}">
                 <block wx:if="{{item.code !== -1}}">
                   <view class="flex-column p-20">
@@ -1704,7 +1767,7 @@
                           <view class="form_data">{{item.perCost}}元/天</view>
                         </view>
                       </view>
-                 
+
                     </view>
 
 
@@ -2167,7 +2230,7 @@
 
               </block>
 
-              <block wx:if="{{item.report.gbRepType == 'disPurchaseCost' || item.report.gbRepType == 'disPurSupplier'|| item.report.gbRepType == 'nxDisPurchaseCost'}}">
+              <block wx:if="{{item.report.gbRepType == 'disPurchaseCost' || item.report.gbRepType == 'disPurSupplier'|| item.report.gbRepType == 'disPurSelf' || item.report.gbRepType == 'nxDisPurchaseCost'}}">
                 <block wx:if="{{item.code !== -1}}">
                   <view class="flex-column p-20">
 
@@ -2328,7 +2391,7 @@
 
 <view class='overlay {{showOperation ? "show" : "hide"}}' catchtouchmove='ture' catchtap="hideMask">
   <view class="flex-column nnn bg-white" wx:if="{{chooseSize}}" animation='{{animationData}}'>
-    
+
     <view class="p-30  flex-row  border-bottom" bindtap="creatExcel" hover-class="hover">
       <image src="../../../../images/BusinessIcons_DocPaper-.png" class="icon"></image>
       <view class="text_operation">生成Excel</view>
@@ -2338,7 +2401,7 @@
       <image src="../../../../images/BusinessIcons_DocPaper-.png" class="icon "></image>
       <view class="text_operation">删除</view>
     </view>
-    
+
 
     <view style="height: 20rpx;"></view>
 

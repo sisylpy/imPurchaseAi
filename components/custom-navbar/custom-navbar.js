@@ -27,7 +27,7 @@ Component({
   lifetimes: {
     attached() {
       const app = getApp();
-      console.log("jssssss" , app.globalData)
+      // console.log("jssssss" , app.globalData)
        var windowWidth = app.globalData.windowWidth;
        var menuButtonInfo = app.globalData.menuButtonInfo;
        const navBarContentHeight = menuButtonInfo.height + (menuButtonInfo.top - statusBarHeight) * 2;

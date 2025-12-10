@@ -6,7 +6,7 @@
   <view class="">
     <view class="top_img_fixed flex-row" style="width: 100%; height: 110rpx; line-height: 110rpx; padding-top: {{statusBarHeight}}rpx;">
       <image src="../../../../images/back-2.png" class="back_icon" bindtap="toBack"></image>
-      <text>低星退货</text>
+      <text>退货</text>
     </view>
     <image src="../../../../images/top.png" style="width: 100%; height: {{statusBarHeight + 110}}rpx;"></image>
   </view>
@@ -44,93 +44,102 @@
   <scroll-view scroll-y="true" style="height: {{windowHeight - statusBarHeight - 200}}rpx; ">
 
     <block wx:if="{{arr.length > 0}}">
-
-      <view class="flex-column  border-bottom p-20 bg-white mb-20" wx:for-item="purGoods" wx:key="gbDepartmentGoodsId" wx:for-index="depGoodsIndex" wx:for="{{arr}}">
-
-        <view class="flex-row-default p-20">
-          <view class="flex-column ">
-            <view class="flex-row-wrap font-md" style="width: {{windowWidth - 80}}rpx; ">
-              <text class="font-lg ">{{purGoods.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
-
-              <block wx:if="{{goods.gbDgGoodsStandardWeight.length > 0}}">
-                <view class="">
-                  ({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}}/{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})
-                </view>
-              </block>
-
-              <block wx:else>
-                <text class="ml-10 ">({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
-              </block>
-
-            </view>
-
-            <view class="flex-row font-sm">
-              <view class="flex-row half-row" wx:if="{{purGoods.gbDistributerGoodsEntity.gbDgGoodsDetail !== null && purGoods.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0}}">
-                <text class="text-secondary">说明:</text>
-                <text>{{purGoods.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
-              </view>
-              <view class="flex-row" wx:if="{{purGoods.gbDistributerGoodsEntity.gbDgGoodsPlace !== null && purGoods.gbDistributerGoodsEntity.gbDgGoodsPlace.length > 0}}">
-                <text>产地:</text>
-                <text class="">{{purGoods.gbDistributerGoodsEntity.gbDgGoodsPlace}}</text>
-              </view>
-            </view>
-
-
-          </view>
-
-        </view>
-        <view class="flex-row p-20 font-sl">
-          <view class="flex-row third-row">
-            <text class="mr-10 text-secondary">数量:</text>
-            <text>{{purGoods.gbDpgBuyQuantity}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
-          </view>
-          <view class="flex-row third-row">
-            <text class="mr-10 text-secondary">单价:</text>
-            <text>{{purGoods.gbDpgBuyPrice}}/{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
-          </view>
-
-          <view class="flex-row third-row">
-            <text class="mr-10 text-secondary">小计:</text>
-            <text>{{purGoods.gbDpgBuySubtotal}}元</text>
-          </view>
-
-        </view>
-
-        <view class="flex-column font-md " wx:for="{{purGoods.gbDepartmentGoodsStockEntities}}" wx:for-item="stock">
-          <view class="flex-column">
-
-            <view class="flex-row p-20">
-              <view class="flex-row half-row">
-                <text class="mr-10 text-secondary">日期:</text>
-                <text>{{tool.getAttrFullTime(stock.starReduce.gbDgsrFullTime)}}</text>
-              </view>
-             
-                <view class="flex-row">
-                  <text class="mr-10 text-secondary flex-fixed">新鲜度:</text>
-                  <stars value="{{stock.gbDgsStars}}" total="5" />
-                </view>
-            
-            </view>
-
-
-            <view class="flex-row p-20">
-              <text class="mr-10 text-secondary">原因:</text>
-              <text>{{stock.starReduce.gbDeGoodsStockReduceAttachmentEntity.gbDgsraContent}}</text>
-            </view>
-
-
-            <view class="flex-row p-20">
-              <view class="flex-row" bindtap="showDialogBtn" data-item="{{stock.starReduce.gbDeGoodsStockReduceAttachmentEntity}}">
-                <view class="flex-row">
-                  <image src="{{url + stock.starReduce.gbDeGoodsStockReduceAttachmentEntity.gbDgsraFilePath}}" mode="aspectFill" style="width: {{windowWidth - 80}}rpx; height: 300rpx; margin-right: 20rpx;" />
-                </view>
-
-              </view>
+      <view class="user-info-card">
+        <view class="user-info-header">
+          <image src='{{url + jrdhUserInfo.nxJrdhWxAvartraUrl }}' class="user-avatar"></image>
+          <view class="user-details">
+            <view class="flex-row">
+              <text class="user-name">{{jrdhUserInfo.nxJrdhWxNickName}}</text>
             </view>
           </view>
         </view>
-
+        <view class="user-stats">
+          <view class="user-stat-item">
+            <text class="user-stat-label">退货批次</text>
+            <text class="user-stat-value">{{tuihuoCount}}个</text>
+          </view>
+          <view class="user-stat-item">
+            <text class="user-stat-label">退货金额</text>
+            <text class="user-stat-value">{{tuihuoSubtotal}}元</text>
+          </view>
+        </view>
       </view>
+
+     <!-- 商品列表项 -->
+     <view class="goods-item" wx:for-item="purGoods" wx:key="gbDepartmentGoodsId" wx:for-index="depGoodsIndex" wx:for="{{arr}}">
+      
+      <!-- 商品基本信息 -->
+      <view class="flex-row">
+        <text class="">{{purGoods.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
+        <view class="">
+          <block wx:if="{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardWeight.length > 0}}">
+            ({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardWeight}}/{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})
+          </block>
+          <block wx:else>
+            ({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})
+          </block>
+        </view>
+      </view>
+
+      <!-- 采购信息 -->
+      <view class="purchase-info">
+        <view class="info-line">
+          <text class="info-label">采购时间:</text>
+          <text class="info-text">{{purGoods.gbDpgStockFinishDate}}</text>
+          <text class="info-label">数量:</text>
+          <text class="info-text">{{purGoods.gbDpgBuyQuantity}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+        </view>
+        <view class="info-line">
+          <text class="info-label">单价:</text>
+          <text class="info-text">{{purGoods.gbDpgBuyPrice}}/{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+          <text class="info-label">小计:</text>
+          <text class="info-text value">{{purGoods.gbDpgBuySubtotal}}元</text>
+        </view>
+      </view>
+
+      <!-- 损耗记录 -->
+      <view class="loss-records" wx:for="{{purGoods.gbDepartmentGoodsStockEntities}}" wx:for-item="stock">
+        <view class="loss-item" wx:for="{{stock.starReduce}}" wx:for-item="reduce">
+          <view class="loss-header">
+            <text class="loss-date">{{tool.getAttrFullTime(reduce.gbDgsrFullTime)}}</text>
+            <text class="loss-type" wx:if="{{reduce.gbDgsrType == '3'}}">损耗</text>
+            <text class="loss-type return" wx:elif="{{reduce.gbDgsrType == '4'}}">退货</text>
+            <text class="loss-type waste" wx:elif="{{reduce.gbDgsrType == '2'}}">废弃</text>
+          </view>
+          
+          <view class="loss-content">
+            <block wx:if="{{reduce.gbDgsrType == '3'}}">
+              <text class="loss-label">损耗数量:</text>
+              <text class="loss-quantity">{{reduce.gbDgsrLossWeight}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+              <text class="loss-label">损耗成本:</text>
+              <text class="loss-cost">{{reduce.gbDgsrLossSubtotal}}元</text>
+            </block>
+            <block wx:if="{{reduce.gbDgsrType == '4'}}">
+              <text class="loss-label">退货数量:</text>
+              <text class="loss-quantity">{{reduce.gbDgsrReturnWeight}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+              <text class="loss-label">退货成本:</text>
+              <text class="loss-cost">{{reduce.gbDgsrReturnSubtotal}}元</text>
+            </block>
+            <block wx:if="{{reduce.gbDgsrType == '2'}}">
+              <text class="loss-label">废弃数量:</text>
+              <text class="loss-quantity">{{reduce.gbDgsrWasteWeight}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+              <text class="loss-label">废弃成本:</text>
+              <text class="loss-cost">{{reduce.gbDgsrWasteSubtotal}}元</text>
+            </block>
+           
+          </view>
+          <view class="loss-content">
+            <text class="loss-label">原因:</text>
+            <text class="">{{reduce.gbDeGoodsStockReduceAttachmentEntity.gbDgsraContent}}</text>
+          </view>
+          
+          <view class="loss-image" wx:if="{{reduce.gbDeGoodsStockReduceAttachmentEntity.gbDgsraFilePath.length > 0}}" bindtap="showDialogBtn" data-item="{{reduce.gbDeGoodsStockReduceAttachmentEntity}}">
+            <image src="{{url + reduce.gbDeGoodsStockReduceAttachmentEntity.gbDgsraFilePath}}" mode="aspectFill" class="attachment-image" />
+          </view>
+        </view>
+      </view>
+
+    </view>
       <view class="center-content font-sm text-secondary" style="height: 200rpx;"> 没有数据了</view>
 
     </block>

@@ -1,4 +1,4 @@
-<view class='mask' wx:if='{{show}}' catchtouchmove='ture' style="height:{{windowHeight}}rpx;">
+<view class='mask' wx:if='{{show}}' catchtouchmove='ture'>
   <view class='modal-content'>
 
     <view class="top">
@@ -18,7 +18,7 @@
         <view class="flex_row_between p-20" style="font-size: 45rpx;">
           <text class="explain">退货数量</text>
           <view class="rightPart">
-            <text>{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+            <text>{{item.gbDpgQuantity}}{{item.gbDistributerGoodsEntity.gbDgGoodsName}}</text>
             <block wx:if="{{orders.gbDoDsStandardScale !== null && orders.gbDoDsStandardScale.length > 0 && orders.gbDoDsStandardScale !== '-1'}}"> <text class="small">({{orders.gbDoDsStandardScale}}{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}/{{orders.gbDoStandard}})</text>
             </block>
           </view>
@@ -26,13 +26,13 @@
         <view class="flex_row_between p-20" style="font-size: 45rpx;">
           <text class="explain">单价</text>
           <view class="rightPart">
-            <text>{{orders.gbDoPrice}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+            <text>{{item.gbDpgBuyPrice}}元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
           </view>
         </view>
         <view class="flex_row_between p-20" style="font-size: 45rpx;">
           <text class="explain">小计</text>
           <view class="rightPart">
-            <text>{{orders.gbDoSubtotal}}元</text>
+            <text>{{item.gbDpgBuySubtotal}}元</text>
           </view>
         </view>
 

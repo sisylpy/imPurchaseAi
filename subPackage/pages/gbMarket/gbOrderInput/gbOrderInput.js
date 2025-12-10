@@ -13,8 +13,6 @@ import dateUtil from '../../../../utils/dateUtil';
 Page({
 
 
-
-
   onShow: function () {
 
     // 推荐直接用新API
@@ -81,8 +79,8 @@ Page({
           var arr = res.result.data.gbDPGEntities;
           var total = "";
           for (var i = 0; i < arr.length; i++) {
-            for (var j = 0; j < arr[i].gbDepartmentOrdersEntities.length; j++) {
-              var sub = arr[i].gbDepartmentOrdersEntities[j].gbDoSubtotal;
+            for (var j = 0; j < arr[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities.length; j++) {
+              var sub = arr[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[j].gbDoSubtotal;
               total = (Number(sub) + Number(total)).toFixed(1);
             }
           }
@@ -345,25 +343,25 @@ Page({
 
   //把比例采购价格赋值给订单的比例价格和普通价格
   _putBuyPriceAndDoPriceScale(data) {
-    var orderArr = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDepartmentOrdersEntities;
+    var orderArr = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
 
     for (var i = 0; i < orderArr.length; i++) {
       var scaleWeight = orderArr[i].gbDoScaleWeight;
       if (scaleWeight !== "0.0" && scaleWeight > 0) {
         var scalePrice = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDpgBuyScalePrice;
-        var scale = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDepartmentOrdersEntities[i].gbDoDsStandardScale;
+        var scale = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[i].gbDoDsStandardScale;
         var doSubtotal = (Number(scalePrice) * Number(scaleWeight)).toFixed(1)
         var doPrice = (Number(scalePrice) / Number(scale)).toFixed(1)
         console.log("_putBuyPriceAndDoPriceScale_putBuyPriceAndDoPriceScale");
         console.log(doSubtotal)
         this.setData({
-          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].gbDoScalePrice"]: data,
-          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: doPrice,
+          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoScalePrice"]: data,
+          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: doPrice,
 
-          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: doSubtotal,
-          ["purGoods.gbDepartmentOrdersEntities[" + i + "].gbDoScalePrice"]: data,
-          ["purGoods.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: doPrice,
-          ["purGoods.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: doSubtotal,
+          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: doSubtotal,
+          ["purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoScalePrice"]: data,
+          ["purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: doPrice,
+          ["purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: doSubtotal,
 
 
         })
@@ -374,7 +372,7 @@ Page({
 
   _changeBuyPriceToDoPrice(data) {
 
-    var orderArr = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDepartmentOrdersEntities;
+    var orderArr = this.data.batch.gbDPGEntities[this.data.focusGoodsIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
     for (var i = 0; i < orderArr.length; i++) {
 
       var weight = orderArr[i].gbDoWeight;
@@ -382,13 +380,13 @@ Page({
       if (weight !== null && weight > 0) {
         var subtotal = Number(weight) * Number(data);
         this.setData({
-          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: subtotal.toFixed(1),
-          ["purGoods.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: subtotal.toFixed(1),
+          ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: subtotal.toFixed(1),
+          ["purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal"]: subtotal.toFixed(1),
         })
       }
       this.setData({
-        ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: data,
-        ["purGoods.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: data,
+        ["batch.gbDPGEntities[" + this.data.focusGoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: data,
+        ["purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice"]: data,
       })
       this._getSubTotal();
     }
@@ -491,11 +489,11 @@ Page({
   //   for (var i = 0; i < batch.gbDPGEntities.length; i++) {
   //     var subtotal = batch.gbDPGEntities[i].gbDpgBuySubtotal;
   //     if (subtotal > 0 && subtotal !== null) {
-  //       var ordersArr = batch.gbDPGEntities[i].gbDepartmentOrdersEntities;
+  //       var ordersArr = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
   //       for (var j = 0; j < ordersArr.length; j++) {
   //         orderAmount = Number(orderAmount) + Number(1);
-  //         var orderWeight = batch.gbDPGEntities[i].gbDepartmentOrdersEntities[j].gbDoWeight;
-  //         var orderSubtotal = batch.gbDPGEntities[i].gbDepartmentOrdersEntities[j].gbDoSubtotal;
+  //         var orderWeight = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[j].gbDoWeight;
+  //         var orderSubtotal = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[j].gbDoSubtotal;
   //         console.log(orderSubtotal);
 
   //         if (orderWeight > 0 && orderWeight !== null && orderSubtotal > 0 && orderSubtotal !== null) {
@@ -549,11 +547,11 @@ Page({
     var finishAmount = 0;
     var unFinishAmount = 0;
     for (var i = 0; i < batch.gbDPGEntities.length; i++) {
-      var ordersArr = batch.gbDPGEntities[i].gbDepartmentOrdersEntities;
+      var ordersArr = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var j = 0; j < ordersArr.length; j++) {
         orderAmount = Number(orderAmount) + Number(1);
-        var orderWeight = batch.gbDPGEntities[i].gbDepartmentOrdersEntities[j].gbDoWeight;
-        var orderSubtotal = batch.gbDPGEntities[i].gbDepartmentOrdersEntities[j].gbDoSubtotal;
+        var orderWeight = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[j].gbDoWeight;
+        var orderSubtotal = batch.gbDPGEntities[i].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[j].gbDoSubtotal;
         console.log(orderSubtotal);
         if (orderWeight > 0 && orderWeight !== null && orderSubtotal > 0 && orderSubtotal !== null) {
           finishAmount = Number(finishAmount) + Number(1);
@@ -597,76 +595,6 @@ Page({
     })
   },
 
-
-  radioChange(e){
-    console.log(e);
-    var typeData = "batch.gbDpbPayType";
-    this.setData({
-      [typeData]:  e.detail.value,
-    })
-    console.log(this.data.batch)
-  },
-
-
-
-  sendSucess() {
-    if(this.data.batch.gbDpbPayType == null){
-      wx.showToast({
-        title: '请选择支付方式',
-        icon: 'none'
-      })
-    }else{
-      load.showLoading("保存订单");
-      sellerFinishPurchaseGoodsBatchGb(this.data.batch)
-        .then(res => {
-          load.hideLoading();
-          if (res.result.code == 0) {
-          
-            var pages = getCurrentPages();
-            var prevPage1 = pages[pages.length - 2];
-            prevPage1.setData({
-              update: true,
-            })
-            
-            wx.requestSubscribeMessage({
-              tmplIds: ['CgludlqVZc_vmFaZUgVFC-iprkydrtOfF_GcODltpTc','_KhWtCVg3fIBH-tHqSV0hUk5m_vuKmxw1CGn0PEv6D0',
-              'TE6HIkd7LRQ08zdnQXowRjZu8OBK0eGEd368p2NtTeA'
-            ],
-              success(res) {
-                console.log("可以给用户推送一条中奖通知了。。。");
-                wx.navigateBack({
-                  delta: 1,
-                })
-              },
-              fail(res) {
-        
-                console.log('fail  失败')
-        
-                console.log(res)
-        
-                logger.warn('订阅消息fail', res)
-        
-              },
-              
-            })
-          
-  
-          } else {
-            wx.showToast({
-              title: res.result.msg,
-              icon: 'none'
-            })
-          }
-        })
-    }
-    
-  },
-
-  cancelCostBatch() {
-    this.setData({
-      isTishi: false
-    })
-  },
 
 
 

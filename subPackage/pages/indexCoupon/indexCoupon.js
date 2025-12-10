@@ -1025,11 +1025,11 @@ Page({
         [selectedData]: false,
         selectedArr: selectedArrTemp
       })
-      var orderArr = this.data.purArr[index].gbDepartmentOrdersEntities;
+      var orderArr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       console.log(orderArr.length);
       for (var i = 0; i < orderArr.length; i++) {
 
-        var orderData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + i + "].isNotice";
+        var orderData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].isNotice";
         this.setData({
           [orderData]: false
         })
@@ -1050,9 +1050,9 @@ Page({
         selectedArr: selectedArrTemp
       })
 
-      var arr = this.data.purArr[index].gbDepartmentOrdersEntities;
+      var arr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderChoicedData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + i + "].isNotice";
+        var orderChoicedData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].isNotice";
         this.setData({
           [orderChoicedData]: true
         })
@@ -1065,10 +1065,10 @@ Page({
     console.log(e);
     var index = e.currentTarget.dataset.index;
     var orderIndex = e.currentTarget.dataset.orderindex;
-    var orderChoiced = this.data.purArr[index].gbDepartmentOrdersEntities[orderIndex].isNotice;
-    console.log(this.data.purArr[index].gbDepartmentOrdersEntities[orderIndex].gbDoQuantity)
-    var arr = this.data.purArr[index].gbDepartmentOrdersEntities;
-    var orderChoicedData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + orderIndex + "].isNotice";
+    var orderChoiced = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].isNotice;
+    console.log(this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].gbDoQuantity)
+    var arr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
+    var orderChoicedData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].isNotice";
     if (orderChoiced) {
       this.setData({
         [orderChoicedData]: false
@@ -1144,10 +1144,10 @@ Page({
     var selgoodsIndex = selItem.goodsIndex;
     var purData = "purArr[" + selgoodsIndex + "].isSelected";
     selArr.splice(index, 1);
-    var orderArr = this.data.purArr[selgoodsIndex].gbDepartmentOrdersEntities;
+    var orderArr = this.data.purArr[selgoodsIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
     if (orderArr.length > 0) {
       for (var i = 0; i < orderArr.length; i++) {
-        var oderData = "purArr[" + selgoodsIndex + "].gbDepartmentOrdersEntities[" + i + "].isNotice";
+        var oderData = "purArr[" + selgoodsIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].isNotice";
         this.setData({
           [oderData]: false
         })
@@ -1565,7 +1565,7 @@ Page({
     this.setData({
       showReturn: true,
       returnItem: e.currentTarget.dataset.item,
-      returnOrders: e.currentTarget.dataset.item.gbDepartmentOrdersEntities[0],
+      returnOrders: e.currentTarget.dataset.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0],
       // depName: this.data.userInfo.gbDepartmentEntity.gbDepartmentName
     })
 
@@ -1620,7 +1620,7 @@ Page({
 
           resolve({
             title: "今日订货", // 默认是小程序的名称(可以写slogan等)
-            path: `subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId=${batchId}&retName=${retName}&disId=${this.data.disInfo.gbDistributerId}&fromBuyer=1&buyerUserId=${userId}&depId=${depId}`,
+            path: `subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId=${batchId}&retName=${retName}&disId=${this.data.disInfo.gbDistributerId}&fromBuyer=1&buyUserId=${userId}&depId=${depId}`,
             imageUrl: this.data.url + '/userImage/say.png',
           })
         } else {

@@ -69,7 +69,7 @@
   <!-- 表单容器 -->
   <view class="flex-column font-lg popup">
     <view class="flex-column center-content ">
-      <text class="title  p-20">京京采购</text>
+      <text class="title  p-20">京采账本</text>
       <text class="sub-title">专为餐饮采购打造，简化订货流程</text>
     </view>
     <view class="submit-section p-30">

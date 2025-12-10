@@ -54,7 +54,7 @@
 					</view>
 				</view>
         
-          <view class="flex_row_between" style="padding: 20rpx 20rpx;" wx:if="{{!editApply}}">
+          <view class="flex_row_between" style="padding: 20rpx 20rpx;">
             <text class="explain">库存清零</text>
 					 <view  class="">
           <switch checked="{{stockIsZero}}" bindchange="changeStock"/>

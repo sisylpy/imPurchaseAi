@@ -65,7 +65,7 @@
 
 
             <!--  带订单显示 -->
-            <view class="flex-row middle" wx:if="{{item.gbDpgPurchaseType == 1 ||item.gbDpgPurchaseType == 2}}" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="inputGoodsOrder" data-index="{{index}}" data-orderindex="{{orderIndex}}" data-item="{{item}}" hover-class="hover" data-orders="{{orders}}">
+            <view class="flex-row middle" wx:if="{{item.gbDpgPurchaseType == 1 ||item.gbDpgPurchaseType == 2}}" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="inputGoodsOrder" data-index="{{index}}" data-orderindex="{{orderIndex}}" data-item="{{item}}" hover-class="hover" data-orders="{{orders}}">
 
               <text class="mr-10 empty">{{index + 1}}.</text>
               <view class="flex-column  with-tbl-padding border-bottom  " style="width: {{windowWidth - 100}}rpx;">

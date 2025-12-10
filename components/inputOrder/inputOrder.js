@@ -31,6 +31,23 @@ Component({
     scrollViewTop: {
       type: Number,
       value: ""
+    },
+    foucusWeight:{
+      type: Boolean,
+      value: "false"
+    },
+    foucusPrice:{
+      type: Boolean,
+      value: "false"
+    },
+    canSave:{
+      type: Boolean,
+      value: "false"
+    },
+    
+    disInfo:{
+      type: Object,
+      value: ""
     }
 
     
@@ -41,6 +58,7 @@ Component({
    */
   data: {
     showReason: false,
+    isClosing: false,
   },
 
   /**
@@ -48,33 +66,60 @@ Component({
    */
   methods: {
 
-    clickMask() {
+    // 关闭动画方法
+    closeWithAnimation() {
       this.setData({
-        show: false,
-        showReason: false,
-        scaleInput: false
-      })
+        isClosing: true
+      });
+      
+      // 等待动画完成后关闭
+      setTimeout(() => {
+        this.setData({
+          show: false,
+          showReason: false,
+          scaleInput: false,
+          isClosing: false
+        });
+      }, 300);
+    },
+
+    clickMask() {
+      this.closeWithAnimation();
     },
 
     cancle() {
       this.setData({
-        show: false,
-        editApply: false,
-        item: "",
-        showReason: false,
-        scaleInput: false
-      })
-      this.triggerEvent('cancle')
+        isClosing: true
+      });
+      
+      setTimeout(() => {
+        this.setData({
+          show: false,
+          editApply: false,
+          item: "",
+          showReason: false,
+          scaleInput: false,
+          isClosing: false
+        });
+        this.triggerEvent('cancle');
+      }, 300);
     },
     finish(e){
       this.setData({
-        show: false,
-        editApply: false,
-        item: "",
-        showReason: false,
-        scaleInput: false
-      })
-      this.triggerEvent('finish')
+        isClosing: true
+      });
+      
+      setTimeout(() => {
+        this.setData({
+          show: false,
+          editApply: false,
+          item: "",
+          showReason: false,
+          scaleInput: false,
+          isClosing: false
+        });
+        this.triggerEvent('finish');
+      }, 300);
     },
     confirm(e) {
      var aaa =   this._checkPriceAndReason();
@@ -92,7 +137,7 @@ Component({
           }
         }
         //panduan2
-        var orderArr = this.data.item.gbDepartmentOrdersEntities;
+        var orderArr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
         for (var j = 0; j < orderArr.length; j++) {
           var choice = orderArr[j].hasChoice;
           if (choice) {
@@ -110,10 +155,17 @@ Component({
           item: this.data.item
         })
         this.setData({
-          show: false,
-          showReason: false,
-          scaleInput: false,
-        })
+          isClosing: true
+        });
+        
+        setTimeout(() => {
+          this.setData({
+            show: false,
+            showReason: false,
+            scaleInput: false,
+            isClosing: false
+          });
+        }, 300);
       }else{
         wx.showToast({
           title: '请输入价格异常原因',
@@ -217,9 +269,9 @@ Component({
     getOrderWeight(e) {
       var index = e.currentTarget.dataset.index;
       var price = Number(this.data.item.gbDpgBuyPrice);
-      var orderWeightData = "item.gbDepartmentOrdersEntities[" + index + "].gbDoWeight";
-      var orderPriceData = "item.gbDepartmentOrdersEntities[" + index + "].gbDoPrice";
-      var subData = "item.gbDepartmentOrdersEntities[" + index + "].gbDoSubtotal";
+      var orderWeightData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].gbDoWeight";
+      var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].gbDoPrice";
+      var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].gbDoSubtotal";
       var orderWeighValue = e.detail.value;
       //输入非空 
       if (orderWeighValue.length > 0) {
@@ -305,10 +357,10 @@ Component({
     },
 
     _emptyInputPrice() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var subData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
+        var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
         this.setData({
           [orderPriceData]: "",
           [subData]: ""
@@ -319,15 +371,16 @@ Component({
       this.setData({
         [subData]: "",
         [priceData]: "",
+        canSave: false
       })
     },
     
     _emptyInputPriceScale() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var subData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
-        var sellingSubData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoSellingSubtotal";
+        var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
+        var sellingSubData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoSellingSubtotal";
         this.setData({
           [orderPriceData]: "",
           [subData]: "",
@@ -349,55 +402,71 @@ Component({
     _countOrderData() {
       console.log(this.data.item)
       var price = Number(this.data.item.gbDpgBuyPrice);
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var weight = arr[i].gbDoWeight;
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var subData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
-        var sub = (Number(price) * weight).toFixed(1);
-       
-        this.setData({
-          [orderPriceData]: price,
-          [subData]: sub,
+        if(arr[i].isNotice){
+          var weight = arr[i].gbDoWeight;
+          var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+          var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
+          var sub = (Number(price) * weight).toFixed(1);
          
-        })
+          this.setData({
+            [orderPriceData]: price,
+            [subData]: sub,
+           
+          })
+        }
+        
       }
       this._getBuySubtotal();
 
     },
 
     _getBuySubtotal(e) {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       var total = "";
       var weightTotal = "";
       for (var i = 0; i < arr.length; i++) {
-        var sub = arr[i].gbDoSubtotal;
-        var wei = arr[i].gbDoWeight;
-        if (sub !== null) {
-          weightTotal = Number(weightTotal) + Number(wei);
-          total = Number(total) + Number(sub);
-          total = total.toFixed(1);
+        if(arr[i].isNotice){
+          var sub = arr[i].gbDoSubtotal;
+          var wei = arr[i].gbDoWeight;
+          if (sub !== null) {
+            weightTotal = Number(weightTotal) + Number(wei);
+            total = Number(total) + Number(sub);
+            total = total.toFixed(1);
+          }
         }
+        
       }
       var data = "item.gbDpgBuySubtotal";
       var weightData = "item.gbDpgBuyQuantity";
       var ifTemp = ((weightTotal + '').indexOf('.') != -1) ? weightTotal.toFixed(1) : weightTotal;
-
       this.setData({
         [data]: total,
         [weightData]: ifTemp,
       })
+      if(total > 0){
+        this.setData({
+          canSave: true,
+        })
+      }else{
+        this.setData({
+          canSave: false,
+        })
+      }
+      console.log("infoorororoorrr", this.data.canSave)
+
     },
 
     // 88888
     getScaleWeight(e) {
       var value = e.detail.value;
       var orderIndex = e.currentTarget.dataset.index;
-      var scale = this.data.item.gbDepartmentOrdersEntities[orderIndex].gbDoDsStandardScale;
+      var scale = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].gbDoDsStandardScale;
       var orderWeight = Number(scale) * Number(value);
 
-      var itemData = "item.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoScaleWeight";
-      var itemOrderData = "item.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoWeight";
+      var itemData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoScaleWeight";
+      var itemOrderData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoWeight";
       this.setData({
         orderIndex: orderIndex,
         [itemData]: value,
@@ -412,7 +481,7 @@ Component({
     },
 
     _getTotalWeightScale() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       var scaleQuantityTotal = 0;
       var scaleOrderQuantityTotal = 0;
       for (var i = 0; i < arr.length; i++) {
@@ -433,9 +502,9 @@ Component({
     },
 
     _getOrderSubtotalScale(){
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for(var i = 0; i < arr.length; i++){
-        var subData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoSubtotal";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoSubtotal";
         var weight = arr[i].gbDoScaleWeight;
         var price = arr[i].gbDoScalePrice;
         var subtotal = (Number(weight) * Number(price)).toFixed(1);
@@ -464,10 +533,10 @@ Component({
     _countOrderPrice(){
       var doPrice = this.data.item.gbDpgBuyPrice;
       var scalePrice = this.data.item.gbDpgBuyScalePrice;
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for(var i = 0; i < arr.length; i++){
-        var priceData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoPrice";
-        var scalePriceData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoScalePrice";
+        var priceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoPrice";
+        var scalePriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoScalePrice";
 
         this.setData({
           [priceData]: doPrice,

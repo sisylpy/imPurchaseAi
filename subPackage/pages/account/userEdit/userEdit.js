@@ -46,7 +46,10 @@ Page({
     editNow: false,
     showName: false,
     showPhone: false,
-
+    showRecordSeconds: false, // 录音时长编辑弹窗显示状态
+    recordSecondsInput: '', // 录音时长输入值
+    showStockCycle: false, // 库存显示周期选择弹窗显示状态
+    selectedStockCycle: 0, // 选中的库存周期
   },
 
 
@@ -186,6 +189,148 @@ getName(e){
 
   },  
 
+  // 显示录音时长编辑弹窗
+  showRecordSeconds(){
+    this.setData({
+      showRecordSeconds: true,
+      recordSecondsInput: this.data.disInfo.gbDistributerRecordSeconds || '',
+      editNow: true
+    })
+  },
+
+  // 显示库存显示周期选择弹窗
+  showStockCycle(){
+    this.setData({
+      showStockCycle: true,
+      selectedStockCycle: this.data.disInfo.gbDistributerStockCycle || 0,
+      editNow: true
+    })
+  },
+
+  // 获取录音时长输入值
+  getRecordSeconds(e){
+    var data = "recordSecondsInput";
+    this.setData({
+      [data]: e.detail.value
+    })
+  },
+
+  // 更新录音时长
+  updateRecordSeconds(){
+    const newRecordSeconds = parseInt(this.data.recordSecondsInput);
+    
+    if (!newRecordSeconds || newRecordSeconds <= 0) {
+      wx.showToast({
+        title: '请输入有效的录音时长',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 更新本地数据
+    var data = "disInfo.gbDistributerRecordSeconds";
+    this.setData({
+      [data]: newRecordSeconds,
+      showRecordSeconds: false,
+      editNow: false
+    });
+
+    // 调用API更新服务器数据
+    var user = this.data.disInfo;
+    updateDisContent(user).then(res => {
+      if(res.result.code == 0){
+        wx.showToast({
+          title: '录音时长更新成功',
+          icon: 'success'
+        });
+        
+        // 更新本地存储
+        wx.setStorageSync('disInfo', this.data.disInfo);
+        
+        // 更新上一页数据
+        let pages = getCurrentPages();
+        if (pages.length > 1) {
+          let prevPage = pages[pages.length - 2];
+          prevPage.setData({
+            disInfo: this.data.disInfo
+          });
+        }
+      } else {
+        wx.showToast({
+          title: '更新失败',
+          icon: 'none'
+        });
+      }
+    }).catch(err => {
+      wx.showToast({
+        title: '更新失败',
+        icon: 'none'
+      });
+    });
+  },
+
+  // 选择库存显示周期
+  selectStockCycle(e){
+    const cycle = parseInt(e.currentTarget.dataset.cycle);
+    this.setData({
+      selectedStockCycle: cycle
+    });
+  },
+
+  // 隐藏库存周期选择弹窗
+  hideStockCycleModal(){
+    this.setData({
+      showStockCycle: false,
+      editNow: false
+    });
+  },
+
+  // 更新库存显示周期
+  updateStockCycle(){
+    const newCycle = this.data.selectedStockCycle;
+    
+    // 更新本地数据
+    var data = "disInfo.gbDistributerStockCycle";
+    this.setData({
+      [data]: newCycle,
+      showStockCycle: false,
+      editNow: false
+    });
+
+    // 调用API更新服务器数据
+    var user = this.data.disInfo;
+    updateDisContent(user).then(res => {
+      if(res.result.code == 0){
+        wx.showToast({
+          title: '库存显示周期更新成功',
+          icon: 'success'
+        });
+        
+        // 更新本地存储
+        wx.setStorageSync('disInfo', this.data.disInfo);
+        
+        // 更新上一页数据
+        let pages = getCurrentPages();
+        if (pages.length > 1) {
+          let prevPage = pages[pages.length - 2];
+          prevPage.setData({
+            disInfo: this.data.disInfo
+          });
+        }
+      } else {
+        wx.showToast({
+          title: '更新失败',
+          icon: 'none'
+        });
+      }
+    }).catch(err => {
+      wx.showToast({
+        title: '更新失败',
+        icon: 'none'
+      });
+    });
+  },
+
   getPhone(e){
     var data = "disInfo.gbDistributerPhone";
     this.setData({
@@ -225,14 +370,12 @@ getName(e){
   requestSubscribeMessage() {
     wx.requestSubscribeMessage({
       tmplIds: [
-        'CgludlqVZc_vmFaZUgVFC-iprkydrtOfF_GcODltpTc',
-        '_KhWtCVg3fIBH-tHqSV0hUk5m_vuKmxw1CGn0PEv6D0',
+        'wCtYVih8kAdCHjfaYL1qwOtQnmQEKAGO_EgRmlB6cOE',
         'TE6HIkd7LRQ08zdnQXowRjZu8OBK0eGEd368p2NtTeA'
       ],
       success: (res) => {
         if (res[
-          'CgludlqVZc_vmFaZUgVFC-iprkydrtOfF_GcODltpTc',
-          '_KhWtCVg3fIBH-tHqSV0hUk5m_vuKmxw1CGn0PEv6D0',
+        'wCtYVih8kAdCHjfaYL1qwOtQnmQEKAGO_EgRmlB6cOE',
           'TE6HIkd7LRQ08zdnQXowRjZu8OBK0eGEd368p2NtTeA'
         ] === 'accept') {
           console.log("用户同意订阅AAA");
@@ -291,7 +434,9 @@ hideMask(){
 
     this.setData({
       showName:false,
-      showPhone: false
+      showPhone: false,
+      showRecordSeconds: false,
+      showStockCycle: false
     })
   }
 },

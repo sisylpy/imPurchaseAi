@@ -1,6 +1,7 @@
 page {
   background: #f5f5f5;
 }
+
 .navbar {
   position: relative;
   width: 100%;
@@ -75,6 +76,7 @@ page {
   height: 8rpx;
   border-radius: 4rpx;
   background-color: #5ab464;
+  /* background-color: #757575; */
   transition: transform 0.3s ease, width 0.3s ease;
 }
 
@@ -86,6 +88,8 @@ page {
   justify-content: space-around;
   align-items: center;
 }
+
+
 .dateGroup{
   width:140rpx;
   height:150rpx;
@@ -642,6 +646,140 @@ button::after { border: none; }
   justify-content: center;  /* 垂直居中 */
   align-items: center;     /* 水平居中 */
   text-align: center;      /* 文本居中 */
+}
+
+/* ============ 收货确认弹窗样式 ============ */
+
+.overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 9999 !important;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.overlay.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.overlay.hide {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.receive-warn-popup {
+  background: #ffffff !important;
+  border-radius: 20rpx !important;
+  padding: 40rpx 30rpx !important;
+  width: 600rpx !important;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15) !important;
+  position: relative !important;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.3s ease;
+  margin: 0 auto !important;
+}
+
+/* 弹窗显示动画 */
+.overlay.show .receive-warn-popup {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.warn-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.warn-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 15rpx;
+}
+
+.warn-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.warn-content {
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.warn-text {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+
+.order-info {
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.info-value.amount {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  border-radius: 12rpx;
+  padding: 20rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 53, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.confirm-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 53, 0.4);
+}
+
+.btn-text {
+  font-size: 32rpx;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* 确保内容区域占满父容器高度 */

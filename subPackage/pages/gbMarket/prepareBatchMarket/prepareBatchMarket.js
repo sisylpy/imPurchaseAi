@@ -174,12 +174,12 @@ Page({
   },
 
   onShareAppMessage: function (options) {
-    console.log('batchId='+ this.data.batchId + '&retName=' + this.data.retName + '&disId=' + this.data.disId + '&fromBuyer=1' +'&buyerUserId=' + this.data.userInfo.nxJrdhUserId 
+    console.log('batchId='+ this.data.batchId + '&retName=' + this.data.retName + '&disId=' + this.data.disId + '&fromBuyer=1' +'&buyUserId=' + this.data.userInfo.nxJrdhUserId 
     +'&depId=' + this.data.depId + '&purUserId=' + this.data.purUserId);
     
       return {
         title: '订货',
-        path: '/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId='+ this.data.batchId + '&retName=' + this.data.retName + '&disId=' + this.data.disId + '&fromBuyer=1' +'&buyerUserId=' + this.data.userInfo.nxJrdhUserId 
+        path: '/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId='+ this.data.batchId + '&retName=' + this.data.retName + '&disId=' + this.data.disId + '&fromBuyer=1' +'&buyUserId=' + this.data.userInfo.nxJrdhUserId 
         +'&depId=' + this.data.depId + '&purUserId=' + this.data.purUserId,
       }
       

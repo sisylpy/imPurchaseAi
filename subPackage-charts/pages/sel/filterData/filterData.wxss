@@ -1,0 +1,155 @@
+
+.member_url{
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+}
+
+/* 选择按钮样式 */
+.select-btn {
+  padding: 10rpx 20rpx;
+  border: 2rpx solid #007aff;
+  border-radius: 20rpx;
+  background-color: #fff;
+  color: #007aff;
+  font-size: 24rpx;
+  text-align: center;
+  min-width: 80rpx;
+}
+
+.select-btn.selected {
+  background-color: #007aff;
+  color: #fff;
+}
+
+/* 确认按钮样式 */
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.btn-primary {
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  padding: 20rpx 0;
+}
+
+.btn-primary:active {
+  background-color: #0056b3;
+}
+
+
+
+/* 布局样式 */
+.flex-row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.mt-10 {
+  margin-top: 20rpx;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.border-top {
+  border-top: 1rpx solid #eee;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* 当前筛选条件提示样式 */
+.current-filter-tip {
+  background-color: #e3f2fd;
+  border-bottom: 1rpx solid #bbdefb;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: #1976d2;
+}
+
+.tip-label {
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.bg-light-blue {
+  background-color: #e3f2fd;
+}
+
+/* 无数据提示样式 */
+.no-data-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 40rpx;
+  background-color: #fff;
+}
+
+.no-data-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.6;
+}
+
+.no-data-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+}
+
+.no-data-desc {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+  line-height: 1.5;
+}
+
+.refresh-btn {
+  background-color: #007aff;
+  color: #fff;
+  padding: 20rpx 40rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.refresh-btn:active {
+  background-color: #0056b3;
+}

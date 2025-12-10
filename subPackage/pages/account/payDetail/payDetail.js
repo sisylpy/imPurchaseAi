@@ -38,6 +38,23 @@ Page({
     totalCount: 0,
     limit: 10,
     currentPage: 1,
+    sliderOffset: 0,
+    sliderOffsets: [],
+    sliderLeft: 0,
+    tabs: [
+      
+      {
+        name: "订货",
+      },{
+        name: "语音",
+      },{
+        name: "商品",
+      },
+    ],
+    currentTab: 0,
+      selIndex: 0,
+    
+
     
 
   },
@@ -65,7 +82,7 @@ Page({
     })
 
     this._initData();
-
+    // this.clueOffset();
   
   },
 
@@ -76,7 +93,8 @@ Page({
    var data = {
     limit: this.data.limit,
     page: this.data.currentPage,
-    disId: this.data.disId
+    disId: this.data.disId,
+    type: this.data.currentTab,
    }
    disGetPayListDetail(data).then(res =>{
       load.hideLoading();
@@ -91,10 +109,61 @@ Page({
         })
       
       }
-
     })
   },
 
+
+  /**
+   * 计算偏移量
+   */
+  clueOffset() {
+  
+    itemWidth = Math.ceil(this.data.windowWidth / this.data.tabs.length);
+    console.log("thiswiek", this.data.windowWidth, "itemw", itemWidth);
+    let tempArr = [];
+    for (let i in this.data.tabs) {
+      tempArr.push(itemWidth * i);
+    }
+    // tab 样式初始化
+    this.setData({
+      sliderOffsets: tempArr,
+      sliderLeft: (this.data.windowWidth / 8),
+    });
+
+  },
+
+  /**
+   * tabItme点击
+   */
+  onTab1Click(event) {
+
+    console.log("onTab1Click");
+    this.setData({
+      currentTab: event.currentTarget.dataset.current,
+      selIndex: 0,
+      totalPage: 0,
+       totalCount: 0,
+      currentPage: 1,
+    })
+
+    // this._initData();
+    // this.clueOffset();
+   
+  },
+
+  bindChange: function (e) {
+    console.log(e);
+   this.setData({
+     currentTab: e.detail.current,
+     selIndex: 0,
+     totalPage: 0,
+      totalCount: 0,
+     currentPage: 1,
+   })
+
+   this._initData()
+ 
+},
 
 
   onScrollToLower: function () {
@@ -110,6 +179,7 @@ Page({
       currentPage,
       totalPage,
       disId,
+      currentTab,
       limit
     } = this.data;
 
@@ -119,6 +189,7 @@ Page({
         limit: limit,
         page: currentPage,
         disId: disId,
+        type: currentTab,
       };
       load.showLoading("获取数据中");
       disGetPayListDetail(data)
@@ -171,6 +242,8 @@ Page({
       });
     }
   },
+
+
 
 
   toBack(){

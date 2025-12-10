@@ -1,5 +1,5 @@
-<view class='mask' wx:if='{{show}}' catchtouchmove='ture' style="height:{{maskHeight}}rpx;top:-{{scrollViewTop}}rpx;">
-	<view class='modal-content flex-column ' style=" margin-top:{{scrollViewTop + 200}}rpx;">
+<view class='mask {{isClosing ? "closing" : ""}}' wx:if='{{show}}' catchtouchmove='ture' style="height:{{maskHeight}}rpx;top:-{{scrollViewTop}}rpx;">
+	<view class='modal-content flex-column {{isClosing ? "closing" : ""}}' style=" margin-top:{{scrollViewTop + 200}}rpx;">
 		<view class="top">
 			<view class='goodsTitle flex-row'>
 				<text class="brand"
@@ -58,7 +58,7 @@
 								value="{{item.gbDpgBuyScalePrice}}" bindinput="getPurchasePriceScale" bindblur="_checkPrice"
 								hold-keyboard='true'></input> -->
 								<input class='input'  type='digit' value="{{item.gbDpgBuyPrice}}" bindinput="getPurchasePrice"
-									bindblur="_checkPrice" hold-keyboard='true'></input>
+									bindblur="_checkPrice" hold-keyboard='true' focus="{{foucusPrice}}"></input>
 							</view>
 							<text>元/{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
 							<!-- <block wx:if="{{item.gbDpgStandard !== item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}">
@@ -91,25 +91,30 @@
 									hold-keyboard='true'></input>
 							</view>
 						</view>
-
 					</view>
 				</view>
 
 
 				<view class="flex-row-default  p-20">
-					<text class="mr-10" style="width: 100rpx;">订单:</text>
+					<text class="mr-10" style="width: 100rpx; font-size: 32rpx;">订单:</text>
 					<scroll-view scroll-y="true" class=" flex-column"
 						style="max-height: {{windowHeight / 3}}rpx; width: {{windowWidth - 180}}rpx;">
-						<view class="flex-column " wx:for="{{item.gbDepartmentOrdersEntities}}" wx:key="gbDepartmentOrdersId"
-							style="padding-left: 20rpx; 	background-color:#f3f6f8; margin-bottom: 10rpx; padding-top: 10rpx;padding-right: 10rpx;"
-							wx:for-item="orders" wx:for-index="orderIndex">
-							<block wx:if="{{orders.hasChoice}}">
+						<view class="flex-column " wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:key="gbDepartmentOrdersId"
+							style="padding-left: 20rpx; 	background-color:#f3f6f8; margin-bottom: 10rpx; padding-top: 10rpx;padding-right: 10rpx; font-size: 32rpx;"
+							wx:for-item="orders" wx:for-index="orderIndex" >
+							<block wx:if="{{orders.isNotice}}">
 								<view class="flex-row-between with-tbl-padding">
-									<view class="flex-row">
+                <block wx:if="{{disInfo.mendianDepartmentList.length == 1 || disInfo.mendianDepartmentList[0].gbDepartmentSubAmount == 1}}">
+                  <view >订货:</view>
+                </block>
+                <block wx:else="">
+                  <view class="flex-row" >
 										<view wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
 											{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.</view>
 										<view class="mr-10">{{orders.gbDepartmentEntity.gbDepartmentName}}</view>
 									</view>
+                </block>
+							
 									<view class="flex-row ">
 										<text>{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
 									</view>
@@ -135,7 +140,7 @@
 											<view class="inputView" style="margin-right: 10rpx;">
 												<input class="input" type="digit" adjust-position="true" 
 													value="{{orders.gbDoWeight == null || orders.gbDoWeight == '0.0' ? '' : orders.gbDoWeight}}"
-													bindinput="getOrderWeight" data-index="{{orderIndex}}" style="width: {{windowWidth / 4}}rpx; " />
+													bindinput="getOrderWeight"  focus="{{orderIndex == 0 && foucusWeight ? 'true' : ''}}" data-index="{{orderIndex}}" style="width: {{windowWidth / 4}}rpx; " />
 											</view>
 											<text>{{item.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
 										</view>
@@ -154,25 +159,12 @@
 
 			<view class='flex-row' >
 			
-				<view class="btn_row" wx:if="{{item.gbDpgStatus == 1}}" >
-					<view class="finish-btn hidden flex-row"></view>
-				<view class="btn_row_finish" style="width: {{windowWidth - 460}}rpx; ">
+				<view class="btn_row" >
+				<view class="btn_row_finish" style="width: {{windowWidth / 2 + 40}}rpx; margin-left: {{windowWidth / 2 - 190}}rpx; ">
 					<text class='cancel-btn' bindtap="cancle" hover-class="hoverBtn">关闭</text>
-					<text class='confirm-btn' catchtap='confirm' hover-class="hoverBtn">完成</text>
+					<text class="confirm-btn  {{canSave ? 'is-active' : ''}}" catchtap='confirm' hover-class="hoverBtn">完成</text>
 				</view>
 				
-				</view>
-				<view class="btn_row" wx:else >
-				  <!-- <view class="finish-btn flex-row">
-					  <image src="../../images/check.png" class="smallIcon"></image>
-						<text class='' bindtap="finish" hover-class="hoverBtn">标记买了</text>
-					</view> -->
-          <view></view>
-					<view class=" btn_row_finish" style="width: {{windowWidth - 460}}rpx; ">
-						<text class='cancel-btn' bindtap="cancle" hover-class="hoverBtn">关闭</text>
-						<text class='confirm-btn' catchtap='confirm' hover-class="hoverBtn">完成</text>
-					</view>
-					
 				</view>
 			</view>
 		</view>

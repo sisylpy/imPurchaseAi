@@ -1,14 +1,7 @@
 {
   "usingComponents": {
     "customer-navbar": "/components/custom-navbar/custom-navbar",
-    "isPurchase": "/components/isPurchase/isPurchase",
-    "purchaseOrder": "/components/purchaseOrder/purchaseOrder",
-    "disEditPurchase": "/components/disEditPurchase/disEditPurchase",
-    "payType": "/components/payType/payType",
-    "payTypeAuto": "/components/payTypeAuto/payTypeAuto",
-    "payTypeReturn": "/components/payTypeReturn/payTypeReturn",
     "returnType": "/components/returnType/returnType"
-
 
   },
   "enablePullDownRefresh": true

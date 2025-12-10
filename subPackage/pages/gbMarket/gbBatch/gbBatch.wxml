@@ -51,7 +51,7 @@
         <view class="flex-column form_body" style="height:{{windowHeight - formHeight -statusBarHeight }}rpx; width: {{windowWidth - 40}}rpx; ">
           <scroll-view class="tui-city-scroll-y" scroll-y="true" scroll-into-view="NAV{{focusIndex}}" scroll-with-animation="true" style="height: {{windowHeight -  formHeight - 80}}rpx; ">
             <view class="flex-column with-s-padding " wx:for="{{batch.gbDPGEntities}}" wx:key="gbDistributerPurchaseGoodsId">
-              <view class="flex-row-default p-20  border-bottom {{orderIndex + 1 == item.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="margin-bottom: 0rpx; width: {{widowWidth - 40}}rpx;  ">
+              <view class="flex-row-default p-20  border-bottom {{orderIndex + 1 == item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="margin-bottom: 0rpx; width: {{widowWidth - 40}}rpx;  ">
                 <text class="mr-10">{{ index + 1}}.</text>
                 <view class="flex-column">
                   <view class="flex-row-between" style="width:{{(windowWidth - 140 ) }}rpx;">
@@ -99,7 +99,7 @@
 
                   </view>
 
-                  <view class="flex-row  with-tbl-padding border-bottom {{orderIndex == item.gbDepartmentOrdersEntities.length - 1 ? 'is-last' : ''}} middle" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="inputGoods" data-index="{{index}}" data-orderindex="{{orderIndex}}" data-item="{{item}}" hover-class="hover" data-orders="{{orders}}">
+                  <view class="flex-row  with-tbl-padding border-bottom {{orderIndex == item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities.length - 1 ? 'is-last' : ''}} middle" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex" bindtap="inputGoods" data-index="{{index}}" data-orderindex="{{orderIndex}}" data-item="{{item}}" hover-class="hover" data-orders="{{orders}}">
                     <view class="felx-row" style="width:{{(windowWidth - 140 ) / 10 * 7}}rpx; ">
                       <block wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
                         <text class="mr-10">{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.</text>
@@ -233,7 +233,7 @@
                 <text class="" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && item.gbDistributerGoodsEntity.gbDgGoodsDetail !== 'null'}}">{{item.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
               </view>
 
-              <view class=" flex-column " style="width:{{(windowWidth - 80 ) }}rpx;" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
+              <view class=" flex-column " style="width:{{(windowWidth - 80 ) }}rpx;" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
                 <view class="flex-column with-tbl-padding">
                   <view class="flex-row middle">
                     <text class="mr-10 empty">{{index + 1}}.</text>
@@ -251,7 +251,7 @@
                   </view>
                   <view class="flex-row">
                     <text class="mr-10 empty">{{index + 1}}.</text>
-                    <view class="flex-row small border-bottom  {{orderIndex + 1 == item.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="width: {{windowWidth - 100}}rpx; ">
+                    <view class="flex-row small border-bottom  {{orderIndex + 1 == item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="width: {{windowWidth - 100}}rpx; ">
                       <view class="third-row">
                         <text class="mr-10">单价:</text>
                         <text class="" wx:if="{{orders.gbDoDsStandardScale !== null && orders.gbDoDsStandardScale > 0}}">s{{orders.gbDoScalePrice
@@ -366,7 +366,7 @@
                 <text class="" wx:if="{{item.gbDistributerGoodsEntity.gbDgGoodsDetail.length > 0 && item.gbDistributerGoodsEntity.gbDgGoodsDetail !== 'null'}}">{{item.gbDistributerGoodsEntity.gbDgGoodsDetail}}</text>
               </view>
 
-              <view class="flex-column   border-bottom {{orderIndex + 1 == item.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="width:{{(windowWidth - 60 ) }}rpx;" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
+              <view class="flex-column   border-bottom {{orderIndex + 1 == item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities.length ? 'is-last' : ''}}" style="width:{{(windowWidth - 60 ) }}rpx;" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
                 <view class="flex-row middle">
                   <text class=" empty">{{index + 1}}.</text>
                   <text wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">{{orders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.</text>

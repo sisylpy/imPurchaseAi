@@ -1,17 +1,13 @@
 const globalData = getApp().globalData;
 var load = require('../../lib/load.js');
-import apiUrl from '../../config.js'
+const apiUrl = require('../../config.js')
 var dateUtils = require('../../utils/dateUtil')
 
 
 import {
-  gbLogin,
   gbLoginIndex
 } from '../../lib/apiDistributer'
 
-import {
-  addAppGoodsWithOrder
-} from '../../lib/apiDistributerGb'
 
 import {
   // swiper-1
@@ -19,41 +15,40 @@ import {
   saveDisPurGoodsBatchGb,
   purUserSaveMendain,
   puraserReturnPurGoods,
-  //swiper -
-  jingjingGetBuyingGoodsGb, //供货商
+  receiveGbBatchItem,
+  receiveGbBatch,
+  //swiper - 2
+  jingjingGetBuyingGoodsGb,
+  jingjingGetBuyingGoodsGbWithNx,
   deleteDisPurBatchGbItem,
   deleteDisPurAndNxDataItem,
-  finishSharePurGoodsBatch,
-  finishSharePurGoodsBatchReturn,
-  finishSharePurGoodsBatchIsAuto,
-  finishShixianBill,
-  //swiper -- 3
-  gbGetAppOrders,
-  shixianGetAppOrders,
 
+  addAutoOrderGoods
 } from '../../lib/apiDepOrder'
 
 Page({
 
   onShow() {
 
-     // 推荐直接用新API
-  let windowInfo = wx.getWindowInfo();
-  let globalData = getApp().globalData;
-  this.setData({
-    windowWidth: windowInfo.windowWidth * globalData.rpxR,
-    windowHeight: windowInfo.windowHeight * globalData.rpxR,
-    navBarHeight: globalData.navBarHeight * globalData.rpxR,
-  });
+    let windowInfo = wx.getWindowInfo();
+    let globalData = getApp().globalData;
+    this.setData({
+      windowWidth: windowInfo.windowWidth * globalData.rpxR,
+      windowHeight: windowInfo.windowHeight * globalData.rpxR,
+      navBarHeight: globalData.navBarHeight * globalData.rpxR,
+    });
 
-    if (this.data.tab1Index == 0 && this.data.userInfo !== null) {
+    wx.removeStorageSync('selArr');
+
+    if (this.data.tab1Index == 0) {
       this._getInitData();
-    } else if (this.data.tab1Index == 1) {
-      this._getPurchasingBatch();
-    } else if (this.data.tab1Index == 2) {
-      this._getAppOrder();
+    } else {
+      if (this.data.hasNxDis) {
+        this._initBatchWithNxData();
+      } else {
+        this._initBatchData();
+      }
     }
-
   },
 
 
@@ -61,14 +56,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    update: false,
-    openIndex: -1,
     tab1Index: 0,
     itemIndex: 0, // 当前选中的 Tab 索引
     sliderWidth: 0, // 滑块宽度
     sliderLeft: 0, // 滑块偏移量
 
-    update: false,
     purArr: [],
     selectedArr: [],
     showGoods: false,
@@ -81,16 +73,15 @@ Page({
     hasSubs: 2, // 部门类型
     selNumber: 1, // 部门数量
     isShixianAuto: false,
-    toLaodu: false,
     tabs: [{
-      name: "未采购",
-      amount: ""
-    },
-    {
-      name: "订货",
-      amount: ""
-    }
-  ],
+        name: "未采购",
+        amount: ""
+      },
+      {
+        name: "订货",
+        amount: ""
+      }
+    ],
 
 
   },
@@ -99,13 +90,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-   
-    this.setData({
-     
-      url: apiUrl.server,
-      depId: options.depId,
-      todayDate: dateUtils.getArriveDate(0),
-    })
+
+
     var week = dateUtils.getWhatDay(0);
     var date = dateUtils.getOnlyHao(0);
     var todayaaa = dateUtils.getArriveDate(0);
@@ -113,26 +99,50 @@ Page({
     this.setData({
       week: week,
       date: date,
-      todayaaa: todayaaa
+      todayaaa: todayaaa,
+      url: apiUrl.server,
+      todayDate: dateUtils.getArriveDate(0),
     })
 
     var userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
-      this.setData({
-        userInfo: userInfo,
-        userId: userInfo.gbDepartmentUserId,
-      })
 
-      var disInfo = wx.getStorageSync('disInfo');
-      if (disInfo) {
-        this.setData({
-          disInfo: disInfo,
-          disId: disInfo.gbDistributerId,
-          depId: disInfo.purDepartmentList[0].gbDepartmentId,
+      if (userInfo.gbDuAdmin == 1) {
+        wx.redirectTo({
+          url: '../../subPackage-ai/pages/ai/chefOrderDep/chefOrderDep',
         })
+      } else {
+       
+
+        this.setData({
+          userInfo: userInfo,
+          userId: userInfo.gbDepartmentUserId,
+        })
+
+        var disInfo = wx.getStorageSync('disInfo');
+        if (disInfo) {
+          this.setData({
+            disInfo: disInfo,
+            disId: disInfo.gbDistributerId,
+            depId: disInfo.purDepartmentList[0].gbDepartmentId,
+          })
+        }
+
+        if (disInfo.nxDistributerGbDistributerEntity !== null) {
+          this.setData({
+            hasNxDis: true,
+          })
+        } else {
+          this.setData({
+            hasNxDis: false,
+          })
+        }
+
+
+
+        this._checkIfShowPage();
       }
 
-      this._checkIfShowPage();
 
     } else {
       this._userLogin()
@@ -150,17 +160,9 @@ Page({
       purchaseRefreshing: true
     })
     load.showLoading("获取订单");
-    var nxDisId = -1;
-    if(this.data.disInfo.nxDistributerEntity !== null){
-      nxDisId = this.data.disInfo.nxDistributerEntity.nxDistributerId
-    }
-    var data = {
-      depId: this.data.depId,
-      disId: this.data.disId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId,
-      nxDisId: nxDisId
-    }
-    getPurchaseGoodsGbWithTabCount(data)
+
+
+    getPurchaseGoodsGbWithTabCount(this.data.disId)
       .then(res => {
         load.hideLoading();
         if (res.result.code == 0) {
@@ -177,12 +179,7 @@ Page({
             [wxOrderCountData]: res.result.data.wxAmount,
             disInfo: res.result.data.disInfo,
           })
-          if (res.result.data.disInfo.nxDistributerEntity !== null) {
-            var appOrderData = "tabs[2].amount";
-            this.setData({
-              [appOrderData]: res.result.data.appAmount,
-            })
-          }
+
           wx.setStorageSync('disInfo', res.result.data.disInfo)
         } else {
           this.setData({
@@ -206,14 +203,18 @@ Page({
     this.setData({
       orderRefreshing: true
     })
-    load.showLoading("获取微信好友订货")
-    var data = {
-      disId: this.data.disId,
-      depId: this.data.depId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId
+
+    if (this.data.hasNxDis) {
+      this._initBatchWithNxData();
+    } else {
+      this._initBatchData();
     }
 
-    jingjingGetBuyingGoodsGb(data)
+  },
+
+  _initBatchData() {
+    load.showLoading("获取订货")
+    jingjingGetBuyingGoodsGb(this.data.disId)
       .then(res => {
         load.hideLoading();
         console.log(res.result.data);
@@ -230,12 +231,6 @@ Page({
             [wxOrderCountData]: res.result.data.wxAmount,
             disInfo: res.result.data.disInfo,
           })
-          if (res.result.data.disInfo.nxDistributerEntity !== null) {
-            var appOrderData = "tabs[2].amount";
-            this.setData({
-              [appOrderData]: res.result.data.appAmount,
-            })
-          }
 
           wx.setStorageSync('disInfo', res.result.data.disInfo);
 
@@ -257,122 +252,55 @@ Page({
       })
 
 
-
   },
 
-  // App页面刷新
-  onAppRefresh() {
-    this.setData({
-      appRefreshing: true
-    })
 
-   
-    var data = {
-      disId: this.data.disId,
-      depId: this.data.depId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId,
-      nxDisId: this.data.disInfo.nxDistributerEntity.nxDistributerId
-    }
-    console.log("dattatartatata", data);
-    load.showLoading("获取配送订单");
-    shixianGetAppOrders(data).then(res => {
-      var newOrderCount = "tabs[0].amount";
-      var wxOrderCountData = "tabs[1].amount";
-      console.log("gbGetAppOrdersgbGetAppOrders", res.result.data);
-      load.hideLoading();
-      if (res.result.code == 0) {
-        wx.stopPullDownRefresh()
-        this.setData({
-          appRefreshing: false
-        })
-        this.setData({
-          appArr: res.result.data.arr,
-          billArr: res.result.data.billArr,
-          selectedArr: [],
-          [newOrderCount]: res.result.data.orderAmount,
-          [wxOrderCountData]: res.result.data.wxAmount,
-          disInfo: res.result.data.disInfo,
-          aaa: res.result.data.aaa,
-        })
-        if (res.result.data.disInfo.nxDistributerEntity !== null) {
-          var appOrderData = "tabs[2].amount";
+  _initBatchWithNxData() {
+
+    load.showLoading("获取订货")
+    jingjingGetBuyingGoodsGbWithNx(this.data.disId)
+      .then(res => {
+        load.hideLoading();
+        console.log(res.result.data);
+        if (res.result.code == 0) {
+          wx.stopPullDownRefresh()
           this.setData({
-            [appOrderData]: res.result.data.appAmount,
+            orderRefreshing: false
+          })
+          var newOrderCount = "tabs[0].amount";
+          var wxOrderCountData = "tabs[1].amount";
+          this.setData({
+            nxDisArr: res.result.data.arr,
+            [newOrderCount]: res.result.data.orderAmount,
+            [wxOrderCountData]: res.result.data.wxAmount,
+            disInfo: res.result.data.disInfo,
+          })
+
+          wx.setStorageSync('disInfo', res.result.data.disInfo);
+
+        } else {
+          this.setData({
+            purArr: [],
+            batchSize: 0,
+            finishSize: 0,
+            selectedArr: []
+          })
+          wx.showToast({
+            title: res.result.msg,
+            icon: 'none'
+          })
+          this.setData({
+            purArr: []
           })
         }
-        wx.setStorageSync('disInfo', res.result.data.disInfo);
-      }
-    })
-
-
-  },
-
-  loadPurchaseData(callback) {
-    setTimeout(() => {
-      const newList = Array.from({
-        length: 10
-      }, (_, i) => `Purchase ${i + 1}`)
-      this.setData({
-        purchaseList: newList
       })
-      callback && callback()
-    }, 1000)
+
   },
 
-  loadOrderData(callback) {
-    setTimeout(() => {
-      const newList = Array.from({
-        length: 10
-      }, (_, i) => `Order ${i + 1}`)
-      this.setData({
-        orderList: newList
-      })
-      callback && callback()
-    }, 1000)
-  },
 
-  loadAppData(callback) {
-    setTimeout(() => {
-      const newList = Array.from({
-        length: 10
-      }, (_, i) => `App ${i + 1}`)
-      this.setData({
-        appList: newList
-      })
-      callback && callback()
-    }, 1000)
-  },
-
-  // onPullDownRefresh() {
-  //   const currentIndex = this.data.currentSwiperIndex;
-
-  //   // 根据当前Swiper页进行数据请求或处理
-  //   if (currentIndex === 0) {
-  //     this.refreshDataForPage(0); // 例如刷新第一个页面数据
-  //   } else if (currentIndex === 1) {
-  //     this.refreshDataForPage(1); // 刷新第二个页面数据
-  //   } else if (currentIndex === 2) {
-  //     this.refreshDataForPage(2); // 刷新第三个页面数据
-  //   }
-  // },
-
-  // refreshDataForPage(index) {
-  //   // 根据需要在这里进行数据刷新
-  //   console.log(`刷新第 ${index + 1} 页的数据`);
-
-  //   // 假设这是异步请求的过程，刷新数据后调用 stopPullDownRefresh
-  //   setTimeout(() => {
-  //     // 停止下拉刷新
-  //     wx.stopPullDownRefresh();
-  //   }, 2000);
-  // },
 
   _checkIfShowPage() {
-    if (this.data.disInfo.mendianDepartmentList.length > 0) {
-
-      this._getInitData();
-
-    } else {
+    if (this.data.disInfo.mendianDepartmentList.length == 0) {
       this.setData({
         showPage: true,
         mendianInfo: {
@@ -395,78 +323,23 @@ Page({
       })
 
       this.showPopup();
+
     }
   },
 
 
-  changeIsAuto(e) {
-    console.log(e);
-    this.setData({
-      isShixianAuto: e.detail.value
-    })
-  },
-
-  
-  gorRunnerLobby: function (e) {
-
-    var bill = e.currentTarget.dataset.item;
-    bill.gbUserOpenId = this.data.userInfo.gbDuWxOpenId;
-    bill.orderDepartments = null;
-    if (this.data.isShixianAuto) {
-      bill.gbDbSetAutoGoods = 1;
-    } else {
-      bill.gbDbSetAutoGoods = 0;
-    }
-    console.log(bill);
-    finishShixianBill(bill)
-      .then(res => {
-        if (res) {
-          console.log(res)
-          var map = res.result.map;
-          var that = this;
-          wx.requestPayment({
-            nonceStr: map.nonceStr,
-            package: map.package,
-            signType: "MD5",
-            timeStamp: map.timeStamp,
-            paySign: map.paySign,
-            success: function (res) {
-              console.log(res);
-
-              that._getAppOrder();
-            },
-            fail: function (res) {
-              console.log(res);
-            }
-          })
-        }
-      })
-
-  },
 
 
 
-
-  //swiper one 
   _getInitData() {
     load.showLoading("获取订单");
-    var nxDisId = -1;
-    if(this.data.disInfo.nxDistributerEntity !== null){
-      nxDisId = this.data.disInfo.nxDistributerEntity.nxDistributerId
-    }
-    var data = {
-      depId: this.data.depId,
-      disId: this.data.disId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId,
-      nxDisId: nxDisId
-    }
-    getPurchaseGoodsGbWithTabCount(data)
+
+    getPurchaseGoodsGbWithTabCount(this.data.disId)
       .then(res => {
         load.hideLoading();
         if (res.result.code == 0) {
           var newOrderCount = "tabs[0].amount";
           var wxOrderCountData = "tabs[1].amount";
-          console.log("tabs===" , this.data.tabs)
           this.setData({
             purArr: res.result.data.arr,
             selectedArr: [],
@@ -474,54 +347,7 @@ Page({
             [newOrderCount]: res.result.data.orderAmount,
             [wxOrderCountData]: res.result.data.wxAmount,
           })
-          if (res.result.data.disInfo.nxDistributerEntity !== null) {
-            this.setData({
-            
-              tabs: [{
-                  name: "未采购",
-                  amount: ""
-                },
-                {
-                  name: "订货",
-                  amount: ""
-                },
-                {
-                  name: "京京送货",
-                  amount: ""
-                }
-              ],
-              
-            })
-            var newOrderCount = "tabs[0].amount";
-            var wxOrderCountData = "tabs[1].amount";
-            var appOrderData = "tabs[2].amount";
-            this.setData({
-              [newOrderCount]: res.result.data.orderAmount,
-              [wxOrderCountData]: res.result.data.wxAmount,
-              [appOrderData]: res.result.data.appAmount,
-            })
-          } else{
-            this.setData({
-            
-              tabs: [{
-                  name: "未采购",
-                  amount: ""
-                },
-                {
-                  name: "订货中",
-                  amount: ""
-                }
-              ],
-              
-            })
-            var newOrderCount = "tabs[0].amount";
-            var wxOrderCountData = "tabs[1].amount";
-            this.setData({
-              [newOrderCount]: res.result.data.orderAmount,
-              [wxOrderCountData]: res.result.data.wxAmount,
-            })
-          }
-         
+
           wx.setStorageSync('disInfo', res.result.data.disInfo);
           this.calculateSlider(0); // 更新滑块宽度和位置
 
@@ -646,6 +472,7 @@ Page({
           disInfo: res.result.data,
         })
         wx.setStorageSync('disInfo', res.result.data);
+        wx.setStorageSync('mendianInfo', res.result.data.mendianDepartmentList[0]);
         this._getInitData();
         this.hidePopup();
       }
@@ -667,61 +494,53 @@ Page({
           .then((res) => {
             console.log("res.re", res.result)
             if (res.result.code !== -1) {
-              if(res.result.data !== "noBuyer"){
+              if (res.result.data !== "noBuyer") {
+                wx.setStorageSync('disInfo', res.result.data.disInfo);
+                wx.setStorageSync('userInfo', res.result.data.depUserInfo);
                 var admin = res.result.data.depUserInfo.gbDuAdmin;
-                if(admin == 2){
+                if (admin == 2) {
+                  var avatarUrl = '';
+                  if (res.result.data.depUserInfo.gbDuWxAvartraUrl) {
+                    avatarUrl = apiUrl.server + res.result.data.depUserInfo.gbDuWxAvartraUrl;
+                  } else {
+                    avatarUrl = '/images/user.png';
+                  }
                   this.setData({
+                    avatarUrl: avatarUrl,
                     disInfo: res.result.data.disInfo,
                     userInfo: res.result.data.depUserInfo,
                     disId: res.result.data.disInfo.gbDistributerId,
                     depId: res.result.data.disInfo.purDepartmentList[0].gbDepartmentId,
                   })
-                  wx.setStorageSync('disInfo', res.result.data.disInfo);
-                  wx.setStorageSync('userInfo', res.result.data.depUserInfo);
+                  if (res.result.data.disInfo.nxDistributerGbDistributerEntity !== null) {
+                    this.setData({
+                      hasNxDis: true,
+                    })
+                  } else {
+                    this.setData({
+                      hasNxDis: false,
+                    })
+                  }
+
+                  wx.setStorageSync('mendianInfo', res.result.data.disInfo.mendianDepartmentList[0]);
                   this._checkIfShowPage();
                   this._getInitData();
-                }else{
-                 wx.redirectTo({
-                   url: '../../subPackage/pages/ai/chefOrder/chefOrder',
-                 })
+                } else {
+                  console.log("admidndndidid==111111")
+                  wx.setStorageSync('orderDepInfo', res.result.data.depInfo);
+                  wx.redirectTo({
+                    url: '../../subPackage-ai/pages/ai/chefOrderDep/chefOrderDep',
+                  })
                 }
-               
-              }else{
+
+              } else {
+                console.log("111")
                 wx.redirectTo({
                   url: '../../subPackage/pages/gbMarket/jinriListWithLogin/jinriListWithLogin',
                 })
 
               }
-              
-              //跳转到首页
-            } else {
-              wx.redirectTo({
-                url: '../tro/tro',
-              })
-            }
-          })
-      }
-    })
-  },
-  //swiper one before
-  _userLogin1() {
-    wx.login({
-      success: (resLogin) => {
-        gbLogin(resLogin.code)
-          .then((res) => {
-            if (res.result.code !== -1) {
-              console.log("lgoososososoosso")
-              console.log(res.result.data)
-              this.setData({
-                disInfo: res.result.data.disInfo,
-                userInfo: res.result.data.depUserInfo,
-                disId: res.result.data.disInfo.gbDistributerId,
-                depId: res.result.data.disInfo.purDepartmentList[0].gbDepartmentId,
-              })
-              wx.setStorageSync('disInfo', res.result.data.disInfo);
-              wx.setStorageSync('userInfo', res.result.data.depUserInfo);
-              this._checkIfShowPage();
-              this._getInitData();
+
               //跳转到首页
             } else {
               wx.redirectTo({
@@ -734,61 +553,19 @@ Page({
   },
 
 
-
-
-  choiceSubDep(e) {
-
-    var dep = e.currentTarget.dataset.item;
-    var depId = dep.gbDepartmentId;
-    var depName = dep.gbDepartmentName;
-    this.setData({
-      showChoice: false,
-    })
-    wx.setStorageSync('depInfo', dep);
-    wx.navigateTo({
-      url: '../../subPackage/pages/ai/resGoodsAi/resGoodsAi?depId=' + depId + '&disId=' + this.data.disId +
-        '&depName=' + depName,
-    })
-
-  },
-
-
-  choiceMendian(e) {
-    var dep = e.currentTarget.dataset.item;
-    var depId = dep.gbDepartmentId;
-    var depName = dep.gbDepartmentName;
-    this.setData({
-      showChoice: false,
-    })
-    wx.setStorageSync('depInfo', dep);
-    wx.navigateTo({
-      url: '../../subPackage/pages/ai/resGoodsAi/resGoodsAi?depId=' + depId + '&disId=' + this.data.disId +
-        '&depName=' + depName,
-    })
-
-
-  },
-
-
-
-  toCost(){
+  toCost() {
     console.log("costt");
     wx.navigateTo({
-      url: '../../subPackage/pages/cost/index/index',
+      url: '../../subPackage-charts/pages/statistic/costGoodsByDate/costGoodsByDate',
     })
-    // wx.navigateTo({
-    //   url: '../../subPackage/pages/stock/index/index',
-    // })
-    // wx.navigateTo({
-    //   url: '../../subPackage/pages/cost/index/index',
-    // })
-  },
-  
 
-  toStock(){
+  },
+
+
+  toStock() {
     console.log("dstooddkckc")
     wx.navigateTo({
-      url: '../../subPackage/pages/stock/index/index',
+      url: '../../subPackage-charts/pages/stock/index/index',
     })
   },
 
@@ -800,9 +577,6 @@ Page({
     wx.navigateTo({
       url: '../../subPackage/pages/purGoods/purGoods',
     })
-
-
-
   },
 
   _getPurSelArr() {
@@ -822,29 +596,13 @@ Page({
 
 
   toOrderApp(e) {
-    // var ids = wx.getStorageSync('purArrIds');
     var arr = this._getPurSelArr();
-    var ids = [];
-    if (arr.length > 0) {
-      for (var i = 0; i < arr.length; i++) {
-        ids.push(arr[i].gbDpgDisGoodsId);
-      }
-    }
-    if (ids) {
-      var data = {
-        ids: ids,
-        nxDisId: this.data.disInfo.nxDistributerEntity.nxDistributerId,
-      }
-      load.showLoading("设置订货商品")
-      addAppGoodsWithOrder(data).then(res => {
-        load.hideLoading();
-        if (res.result.code == 0) {
-          this._getInitData();
+    wx.setStorageSync('selArr', arr);
+    console.log("toOrderApp")
+    wx.navigateTo({
+      url: '../../subPackage-supplier/pages/supplier/supplierOrder/supplierOrder',
+    })
 
-        }
-      })
-
-    }
   },
 
 
@@ -865,45 +623,6 @@ Page({
 
 
 
-  _getAppOrder() {
-
-    var data = {
-      disId: this.data.disId,
-      depId: this.data.depId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId,
-      nxDisId: this.data.disInfo.nxDistributerEntity.nxDistributerId
-    }
-    load.showLoading("获取配送订单");
-    shixianGetAppOrders(data).then(res => {
-      var newOrderCount = "tabs[0].amount";
-      var wxOrderCountData = "tabs[1].amount";
-      console.log("gbGetAppOrdersgbGetAppOrders", res.result.data);
-      load.hideLoading();
-      if (res.result.code == 0) {
-
-        this.setData({
-          appArr: res.result.data.arr,
-          billArr: res.result.data.billArr,
-          selectedArr: [],
-          [newOrderCount]: res.result.data.orderAmount,
-          [wxOrderCountData]: res.result.data.wxAmount,
-          disInfo: res.result.data.disInfo,
-          aaa: res.result.data.aaa,
-        })
-        if (res.result.data.disInfo.nxDistributerEntity !== null) {
-          var appOrderData = "tabs[2].amount";
-          this.setData({
-            [appOrderData]: res.result.data.appAmount,
-          })
-        }
-        wx.setStorageSync('disInfo', res.result.data.disInfo);
-      }
-    })
-
-
-  },
-
-
   //
 
   cancelGbNxDataItem(e) {
@@ -921,55 +640,97 @@ Page({
       })
   },
 
-  cancelGbBatchItem(e) {
-    deleteDisPurBatchGbItem(e.currentTarget.dataset.id)
-      .then(res => {
-        if (res.result.code == 0) {
-          this._getPurchasingBatch();
-        } else {
-          wx.showToast({
-            title: res.result.msg,
-            icon: 'none'
-          })
-          this._getPurchasingBatch();
+  cancelGbBatchItem() {
+    this.setData({
+      showOperation: false
+    })
+    if(this.data.editPurGoods.gbDpgOrdersWeightAmount > 0){
+      wx.showModal({
+        title: '供货商已出库',
+        content: '如果要取消订货，请供货商先设置商品为“重新拣货称重”',
+        showCancel: false,
+        confirmText: "好的",
+        complete: (res) => {
+         
         }
       })
+
+    }else{
+      
+      var id = this.data.editPurGoods.gbDistributerPurchaseGoodsId;
+      deleteDisPurBatchGbItem(id)
+        .then(res => {
+          if (res.result.code == 0) {
+            if (this.data.hasNxDis) {
+              this._initBatchWithNxData();
+            } else {
+              this._initBatchData();
+            }
+          } else {
+            wx.showToast({
+              title: res.result.msg,
+              icon: 'none'
+            })
+  
+          }
+        })
+    }
+    
   },
 
-  toAiOrders(){
-    // wx.navigateTo({
-    //   url: '../../subPackage/pages/ai/chefOrder/chefOrder',
-    // })
+
+
+  receiveGbBatchItem() {
+    this.setData({
+      showOperation: false
+    })
+    if(this.data.editBatch.gbDpbStatus  < 2 ){
+      wx.showModal({
+        title: '出库',
+        content: '如果要取消订货，请供货商先设置商品为“重新拣货称重”',
+        showCancel: false,
+        confirmText: "好的",
+        complete: (res) => {
+         
+        }
+      })
+
+    }else{
+      
+      var id = this.data.editPurGoods.gbDistributerPurchaseGoodsId;
+      receiveGbBatchItem(id)
+        .then(res => {
+          if (res.result.code == 0) {
+            if (this.data.hasNxDis) {
+              this._initBatchWithNxData();
+            } else {
+              this._initBatchData();
+            }
+          } else {
+            wx.showToast({
+              title: res.result.msg,
+              icon: 'none'
+            })
+  
+          }
+        })
+    }
+    
+  },
+
+
+  toAiOrders() {
+
     console.log("aa")
+    wx.setStorageSync('mendianInfo', this.data.disInfo.mendianDepartmentList[0])
     wx.navigateTo({
-      url: '../../subPackage/pages/ai/chefOrder/chefOrder',
+      url: '../../subPackage-ai/pages/ai/chefOrder/chefOrder',
     })
   },
 
 
-  toAiOrders1(){
-   
-
-    if (this.data.disInfo.mendianDepartmentList.length > 1 || this.data.disInfo.mendianDepartmentList[0].gbDepartmentSubAmount > 1) {
-      this.setData({
-        showChoice: true,
-        toResGoods: true,
-      })
-    } else {
-
-
-      wx.setStorageSync('depInfo', this.data.disInfo.mendianDepartmentList[0].gbDepartmentEntityList[0]);
-      console.log('depId=' + this.data.depId + '&disId=' + this.data.disId + '&depName=' + this.data.disInfo.mendianDepartmentList[0].gbDepartmentEntityList[0].gbDepartmentName)
-      wx.navigateTo({
-        url: '../../subPackage/pages/ai/resGoodsAi/resGoodsAi?depId=' + this.data.depId + '&disId=' + this.data.disId + '&depName=' + this.data.disInfo.mendianDepartmentList[0].gbDepartmentEntityList[0].gbDepartmentName,
-      })
-    }
-   
-  },  
 
   // swiper one
-
-
 
   selectItem(e) {
     var index = e.currentTarget.dataset.index;
@@ -987,11 +748,11 @@ Page({
         [selectedData]: false,
         selectedArr: selectedArrTemp
       })
-      var orderArr = this.data.purArr[index].gbDepartmentOrdersEntities;
+      var orderArr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       console.log(orderArr.length);
       for (var i = 0; i < orderArr.length; i++) {
 
-        var orderData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + i + "].isNotice";
+        var orderData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].isNotice";
         this.setData({
           [orderData]: false
         })
@@ -1005,16 +766,16 @@ Page({
         id: id
       }
       selectedArrTemp.push(item);
-      var userData = "purArr[" + index + "].gbDpgPurUserId";
+      // var userData = "purArr[" + index + "].gbDpgPurUserId";
       this.setData({
         [selectedData]: true,
-        [userData]: this.data.userInfo.gbDepartmentUserId,
+        // [userData]: this.data.userInfo.gbDepartmentUserId,
         selectedArr: selectedArrTemp
       })
 
-      var arr = this.data.purArr[index].gbDepartmentOrdersEntities;
+      var arr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderChoicedData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + i + "].isNotice";
+        var orderChoicedData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].isNotice";
         this.setData({
           [orderChoicedData]: true
         })
@@ -1027,10 +788,10 @@ Page({
     console.log(e);
     var index = e.currentTarget.dataset.index;
     var orderIndex = e.currentTarget.dataset.orderindex;
-    var orderChoiced = this.data.purArr[index].gbDepartmentOrdersEntities[orderIndex].isNotice;
-    console.log(this.data.purArr[index].gbDepartmentOrdersEntities[orderIndex].gbDoQuantity)
-    var arr = this.data.purArr[index].gbDepartmentOrdersEntities;
-    var orderChoicedData = "purArr[" + index + "].gbDepartmentOrdersEntities[" + orderIndex + "].isNotice";
+    var orderChoiced = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].isNotice;
+    console.log(this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].gbDoQuantity)
+    var arr = this.data.purArr[index].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
+    var orderChoicedData = "purArr[" + index + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].isNotice";
     if (orderChoiced) {
       this.setData({
         [orderChoicedData]: false
@@ -1128,8 +889,6 @@ Page({
 
 
 
-
-
   /**
    * 计算偏移量
    */
@@ -1164,261 +923,23 @@ Page({
     this.setData({
       tab1Index: event.detail.current,
       itemIndex: event.detail.current,
-      openIndex: -1,
     })
 
     if (this.data.tab1Index == 0) {
       this._getInitData();
     }
     if (this.data.tab1Index == 1) {
-
-      this._getPurchasingBatch();
-
-    }
-    if (this.data.tab1Index == 2) {
-
-      this._getAppOrder();
+      if (this.data.hasNxDis) {
+        this._initBatchWithNxData();
+      } else {
+        this._initBatchData();
+      }
 
     }
+
     this.calculateSlider(event.detail.current); // 更新滑块宽度和位置
   },
 
-  // swiper two
-  _getPurchasingBatch() {
-    load.showLoading("获取微信好友订货")
-    var data = {
-      disId: this.data.disId,
-      depId: this.data.depId,
-      appDepId: this.data.disInfo.appSupplierDepartment.gbDepartmentId
-    }
-
-    jingjingGetBuyingGoodsGb(data)
-      .then(res => {
-        load.hideLoading();
-        console.log(res.result.data);
-        if (res.result.code == 0) {
-          var newOrderCount = "tabs[0].amount";
-          var wxOrderCountData = "tabs[1].amount";
-          this.setData({
-            batchArr: res.result.data.arr,
-            [newOrderCount]: res.result.data.orderAmount,
-            [wxOrderCountData]: res.result.data.wxAmount,
-            disInfo: res.result.data.disInfo,
-          })
-          if(res.result.data.disInfo.nxDistributerEntity !== null){
-            var appOrderData = "tabs[2].amount";
-            this.setData({
-              [appOrderData]: res.result.data.appAmount,
-            })
-          }
-
-          wx.setStorageSync('disInfo', res.result.data.disInfo);
-
-        } else {
-          this.setData({
-            purArr: [],
-            batchSize: 0,
-            finishSize: 0,
-            selectedArr: []
-          })
-          wx.showToast({
-            title: res.result.msg,
-            icon: 'none'
-          })
-          this.setData({
-            purArr: []
-          })
-        }
-      })
-  },
-
-
-
-  showFinish(e) {
-    var item = e.currentTarget.dataset.item;
-    item.gbDpbPaySubtotal = item.gbDpbSubtotal;
-    if (item.gbDpbPayType !== 1) {
-      item.gbDpbPayType = 0;
-    }
-    this.setData({
-      batch: item,
-      url: this.data.url,
-    })
-    if (item.gbDpbPurchaseType == 21) {
-      this.setData({
-        showPay: true,
-      })
-    } else if (item.gbDpbPurchaseType == 2) {
-      this.setData({
-        showPayAuto: true,
-      })
-    } else {
-      this.setData({
-        showPayReturn: true,
-      })
-    }
-
-  },
-
-  toSupplier() {
-    wx.setStorageSync('supplierArr', this.data.supplierArr)
-    wx.navigateTo({
-      url: '../selectSupplier/selectSupplier?type=buy&orderType=' + this.data.orderType,
-    })
-  },
-
-  toSupplierReturn() {
-    wx.navigateTo({
-      url: '../selectSupplier/selectSupplier?type=return',
-    })
-  },
-
-  toSupplierUserReturn(e) {
-    if (this.data.returnSupplierId > 0) {
-      wx.navigateTo({
-        url: '../selectSupplierUser/selectSupplierUser?supplierId=' + this.data.returnSupplierId,
-      })
-    } else {
-      wx.showModal({
-        title: "请先选择退货供货商",
-        content: "这个收到退货的供货商的业务员",
-        showCancel: false,
-        confirmText: "知道了",
-      })
-    }
-  },
-
-  confirmPay(e) {
-    var item = e.detail.item;
-    var batch = this.data.batch;
-    batch.gbDpbPayType = item.gbDpbPayType;
-    console.log(batch)
-    finishSharePurGoodsBatch(batch)
-      .then(res => {
-        if (res.result.code == 0) {
-          this.setData({
-            batch: "",
-            showPay: false,
-            showPayReturn: false,
-          })
-          this._getPurchasingBatch();
-        } else {
-          wx.showToast({
-            title: res.result.msg,
-            icon: 'none'
-          })
-        }
-      })
-
-
-  },
-
-
-  confirmPayAuto(e) {
-    console.log("confirmPayAuto")
-    var item = e.detail.item;
-    var batch = this.data.batch;
-    batch.gbDpbPayType = item.gbDpbPayType;
-    console.log(batch);
-    var data = {
-      payType: item.gbDpbPayType,
-      batchId: item.gbDistributerPurchaseBatchId,
-      isAuto: e.detail.isAuto
-    }
-    console.log(data);
-    finishSharePurGoodsBatchIsAuto(data).then(res => {
-      if (res.result.code == 0) {
-        this.setData({
-          batch: "",
-          showPayAuto: false,
-        })
-        this._getPurchasingBatch();
-      }
-    })
-
-
-
-  },
-
-
-
-  confirmPayReturn(e) {
-    console.log("confirmPayReturnconfirmPayReturn")
-    console.log("confirmPayAuto")
-    var item = e.detail.item;
-
-    finishSharePurGoodsBatchReturn(item.gbDistributerPurchaseBatchId).then(res => {
-      if (res.result.code == 0) {
-        this.setData({
-          batch: "",
-          showPayReturn: false
-        })
-        this._getPurchasingBatch();
-      }
-    })
-  },
-
-  confirmReturn(e) {
-    console.log(e);
-    var returnSupplier = null;
-    if (this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity !== null) {
-      returnSupplier = this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity.nxJrdhSupplierEntity;
-    }
-
-    var payType = this.data.returnOrders.returnPurGoodsEntity.gbDpgPayType;
-    //退货到部门
-    if (returnSupplier == null) {
-      // item.
-      var ordersItem = this.data.returnOrders;
-      ordersItem.gbDoReturnUserId = this.data.userInfo.gbDepartmentUserId;
-      ordersItem.gbDoStatus = 4;
-      console.log("orditmem", ordersItem)
-      finishReturnOrderToDep(ordersItem)
-        .then(res => {
-          if (res.result.code == 0) {
-            this.setData({
-              item: "",
-              returnOrders: "",
-              showReturn: false
-            })
-            this._getInitData();
-          }
-        })
-    } else {
-
-      var item = {
-        gbDpbSupplierUserId: this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity.nxJrdhSellerEntity.nxJrdhUserId,
-        gbDpbSupplierId: this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity.nxJrdhSupplierEntity.nxJrdhSupplierId,
-        gbDpbBuyUserId: this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity.gbDpbBuyUserId,
-        gbDpbSellUserId: this.data.returnOrders.returnPurGoodsEntity.gbDisPurchaseBatchEntity.gbDpbSellUserId,
-        gbDpbDistributerId: this.data.userInfo.gbDuDistributerId,
-        gbDpbPurDepartmentId: this.data.userInfo.gbDuDepartmentFatherId,
-        gbDpbPayType: payType,
-        gbDpbPurUserId: this.data.userInfo.gbDepartmentUserId,
-        gbDpbSubtotal: "-" + this.data.returnOrders.gbDoSubtotal,
-        gbDpbUserAdminType: this.data.userInfo.gbDuAdmin,
-        gbDPGEntities: this.data.item
-      }
-
-      console.log(item);
-      finishReturnToSuppler(item)
-        .then(res => {
-          if (res.result.code == 0) {
-            this.setData({
-              item: "",
-              returnOrders: "",
-              showReturn: false,
-              returnCash: true,
-              returnSupplierId: "",
-              returnSupplierName: "",
-              returnSupplierUsrId: "",
-              returnSupplierUserName: "",
-            })
-            this._getInitData();
-          }
-        })
-    }
-  },
 
 
 
@@ -1491,7 +1012,7 @@ Page({
 
   toEditHome() {
     wx.navigateTo({
-      url: '../../subPackage/pages/management/homePage/homePage?disId=' + this.data.disId,
+      url: '../../subPackage-charts/pages/management/homePage/homePage?disId=' + this.data.disId,
     })
   },
 
@@ -1520,6 +1041,15 @@ Page({
     })
   },
 
+  // xiadan
+  toResGoods() {
+
+    wx.navigateTo({
+      url: '../../subPackage-goods/pages/goods/resGoods/resGoods',
+    })
+
+  },
+
 
 
   showReturnType(e) {
@@ -1527,7 +1057,7 @@ Page({
     this.setData({
       showReturn: true,
       returnItem: e.currentTarget.dataset.item,
-      returnOrders: e.currentTarget.dataset.item.gbDepartmentOrdersEntities[0],
+      returnOrders: e.currentTarget.dataset.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0],
       // depName: this.data.userInfo.gbDepartmentEntity.gbDepartmentName
     })
 
@@ -1541,8 +1071,60 @@ Page({
         this._getInitData();
       }
     })
+  },
 
+  /**
+   * 切换自动订货状态
+   * @param {Object} e 事件对象
+   */
+  changeAutoGoods(e) {
+    const goodsId = this.data.editPurGoods.gbDistributerGoodsEntity.gbDistributerGoodsId;
+    const supplierId = this.data.batchSupplier.nxJrdhSupplierId;
+    const currentGsId = this.data.editPurGoods.gbDistributerGoodsEntity.gbDgGbSupplierId;
 
+    // 如果当前供货商ID不等于批次供货商ID，说明未开启自动订货，需要开启
+    // 如果当前供货商ID等于批次供货商ID，说明已开启自动订货，需要取消
+    const changeSupplierId = (supplierId !== currentGsId) ? supplierId : -1;
+
+    // 简单设置显示小贴士
+    this.setData({
+      showTip: true,
+      showOperation: false
+    });
+
+    load.showLoading((supplierId !== currentGsId) ? "开启自动订货中..." : "取消自动订货中...");
+    // 调用API更新自动订货状态
+    addAutoOrderGoods({
+      supplierId: changeSupplierId,
+      goodsId: goodsId
+    }).then(res => {
+      load.hideLoading();
+
+      if (res.result.code === 0) {
+        // 显示成功提示
+        wx.showToast({
+          title: (supplierId !== currentGsId) ? '已开启自动订货' : '已关闭自动订货',
+          icon: 'success',
+          duration: 2000
+        });
+        var data = "batchArr[" + this.data.bIndex + "].gbDPGEntities[" + this.data.gIndex + "].gbDistributerGoodsEntity";
+
+        res.result.data.gbDepartmentOrdersEntities = this.data.gDepArr;
+        this.setData({
+          [data]: res.result.data,
+        })
+
+      } else {
+        wx.showToast({
+          title: res.result.msg || '操作失败',
+          icon: 'none'
+        });
+        // 失败时隐藏小贴士
+        this.setData({
+          showTip: false
+        });
+      }
+    })
 
   },
 
@@ -1560,7 +1142,6 @@ Page({
         gbDPGEntities: arr,
         gbDpbPurchaseType: 2,
         gbDpbBuyUserOpenId: this.data.userInfo.gbDuWxOpenId,
-        gbDpbBuyUserId: this.data.userInfo.gbDepartmentUserId,
       };
 
       load.showLoading("保存订货")
@@ -1574,7 +1155,6 @@ Page({
           var depId = this.data.depId;
           this.setData({
             isTishi: true,
-            // update: true,
             selectedArr: [],
             batchId: batchId, // 保存batchId
             retName: retName // 保存retName
@@ -1582,7 +1162,7 @@ Page({
 
           resolve({
             title: "订货商品", // 默认是小程序的名称(可以写slogan等)
-            path: `subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId=${batchId}&retName=${retName}&disId=${this.data.disInfo.gbDistributerId}&fromBuyer=1&buyerUserId=${userId}&depId=${depId}`,
+            path: `subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch?batchId=${batchId}&retName=${retName}&disId=${this.data.disInfo.gbDistributerId}&fromBuyer=1&depId=${depId}&buyUserId=${userId}`,
             imageUrl: this.data.url + '/userImage/say.png',
           })
         } else {
@@ -1599,9 +1179,62 @@ Page({
 
 
 
+  toEditPurGoods(e) {
+    this.setData({
+      bIndex: e.currentTarget.dataset.bindex,
+      gIndex: e.currentTarget.dataset.gindex,
+      gDepArr: e.currentTarget.dataset.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities,
+      goodsSupplierId: e.currentTarget.dataset.item.gbDistributerGoodsEntity.gbDgGbSupplierId,
+      selSupplerId: e.currentTarget.dataset.item.gbDpgPurchaseNxSupplierId,
+      showOperation: true,
+      editPurGoods: e.currentTarget.dataset.item,
+      batchSupplier: e.currentTarget.dataset.supplier,
+      editBatch: e.currentTarget.dataset.batch,
+
+    })
+
+  },
 
 
 
+
+
+
+
+
+showFinish(e){
+  this.setData({
+    showReceiveWarn: true,
+    editBatch: e.currentTarget.dataset.item,
+  })
+},
+hideReceive(){
+  this.setData({
+    showReceiveWarn: false,
+    editBatch: "",
+  })
+},
+
+  toReceiveBatch(){
+  this.setData({
+    showReceiveWarn: false
+  })
+  var id = this.data.editBatch.gbDistributerPurchaseBatchId;
+  load.showLoading("收货中");
+  receiveGbBatch(id).then(res =>{
+    load.hideLoading();
+    if(res.result.code == 0){
+      this._initBatchData();
+    }else{
+      
+      wx.showToast({
+        title: res.result.msg,
+        icon: 'none'
+      })
+    }
+  })
+
+},
 
 
 

@@ -2,7 +2,7 @@
 <view class="custom-navbar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
   <view class="nav-container" style="height: {{navBarContentHeight}}px; ">
     <!-- 左侧区域 -->
-    <view class="nav-left"  bindtap="navbuttontap" style="width: {{leftWidth}}px; ">
+    <view class="nav-left"  bindtap="navbuttontap" style="width: {{leftWidth}}px; height: {{navBarContentHeight}}px;">
       <image src="{{avatar}}" mode="aspectFill" class="user-avatar"/>
     </view>
     <!-- 中间标题 -->

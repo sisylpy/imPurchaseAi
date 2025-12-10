@@ -1,0 +1,202 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+
+<view class="flex flex-column">
+
+
+
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="{{disGoods.gbDgGoodsName}} ({{disGoods.gbDgGoodsStandardname}})" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+  <!--  top -->
+  <view class=" flex-row-between plr-20 border-bottom bg-white">
+    <view class="flex-row">
+      <view class="p-20" bindtap="toDatePage">
+        <image src="../../../../images/calender.png" class="icon"></image>
+      </view>
+      <view class="flex-column pt-10">
+        <view class="font-yuan">{{hanzi}}</view>
+        <view class="flex-row" wx:if="{{startDate == stopDate}}">
+          <view class=" small" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+        </view>
+        <view class="flex-row" wx:else>
+          <view class="" wx:if="{{startDate}}"> {{tool.transferDateString(startDate)}}</view>
+          <text class="plr-10">-</text>
+          <view class="" wx:if="{{stopDate}}">{{tool.transferDateString(stopDate)}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="flex-row p-20" bindtap="toFilter">
+      <image src="{{supplierIds == -1 ? '/images/filter.png' : '/images/filter-3-fill.png'}}" class="icon margin-right"></image>
+    </view>
+  </view>
+
+
+
+  <!-- 供货商和采购员选择显示 -->
+  <view class="filter-container" wx:if="{{(selectedSupplierName && selectedSupplierName.length > 0) || (selectedPurUserName && selectedPurUserName.length > 0)}}">
+    <view class="filter-row">
+      <!-- 供货商选择显示 -->
+      <view class="filter-chip" wx:if="{{selectedSupplierName && selectedSupplierName.length > 0}}">
+        <text class="filter-text">供货商: {{selectedSupplierName}}</text>
+        <view class="filter-delete" bindtap="delSearch">
+          <image src="/images/del-2.png" mode="aspectFill" class="delete-icon"></image>
+        </view>
+      </view>
+
+      <!-- 采购员选择显示 -->
+      <view class="filter-chip" wx:if="{{selectedPurUserName && selectedPurUserName.length > 0}}">
+        <text class="filter-text">采购员: {{selectedPurUserName}}</text>
+        <view class="filter-delete" bindtap="delSearch">
+          <image src="/images/del-2.png" mode="aspectFill" class="delete-icon"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <scroll-view scroll-y="true" style="height: {{windowHeight - navBarHeight}}rpx; ">
+    <view class="flex-column p-20 " wx:if="{{businessArr.length > 0}}">
+
+
+      <view class="flex-column p-10 border-bottom bg-white font-sm" wx:for="{{businessArr}}">
+
+        <view class="flex-column form_data_border_slide p-20 {{(supplierId !== -1 && item.gbDpgPurchaseNxSupplierId == supplierId) || (purUserId !== -1 && item.gbDpgPurUserId == purUserId ) || (purGoodsId == item.gbDistributerPurchaseGoodsId)  ? 'active' : ''}}">
+
+          <view class="flex-column ">
+            <view class="flex-row form_data_border_out_slide_border pt-10 pb-10">
+              <view class="flex-row half-row">
+                <text class="text-secondary mr-10">时间:</text>
+                <text class="">{{tool.transferDateString(item.gbDpgStockFinishDate)}}</text>
+              </view>
+
+             
+              <view class="flex-row half-row">
+                <text class="text-secondary mr-10">单价:</text>
+
+                <text>{{item.gbDpgBuyPrice}}元/{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+            </view>
+
+            <view class="flex-row pt-10 pb-10 form_data_border_out_slide_border">
+              <view class="flex-row half-row">
+                <text class="text-secondary mr-10">进货:</text>
+                <text>{{item.gbDpgBuyQuantity}}{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row ">
+                <text class="text-secondary mr-10">总计:</text>
+                <text>{{item.gbDpgBuySubtotal}}元</text>
+              </view>
+            </view>
+
+            <view class="flex-row pt-10 pb-10 form_data_border_out_slide_border">
+
+              <view class="half-row flex-row" wx:if="{{item.nxJrdhSupplierEntity == null}}">
+                <text class="shrink_fix text-secondary mr-10">进货方式:</text>
+                <text>自采</text>
+              </view>
+              <view class="half-row flex-row" wx:else="">
+                <text class="shrink_fix text-secondary mr-10">进货方式:</text>
+                <text>订货</text>
+              </view>
+
+              <view class="half-row flex-row" wx:if="{{item.nxJrdhSupplierEntity == null}}">
+                <text class="shrink_fix text-secondary mr-10">采购员:</text>
+                <text>{{item.purchaseDepartmentUser.gbDuWxNickName}}</text>
+              </view>
+              <view class="flex-row half-row" wx:else="">
+                <text class="shrink_fix text-secondary mr-10">订货商:</text>
+                <text>{{item.nxJrdhSupplierEntity.nxJrdhsSupplierName}}</text>
+              </view>
+
+
+            </view>
+            <view class="flex-row pt-10 pb-10 form_data_border_out_slide_border">
+
+              <view class="flex-row half-row ">
+                <text class="shrink_fix text-secondary mr-10">库存:</text>
+                <text>{{item.gbDpgStockRestWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row ">
+                <text class="shrink_fix text-secondary mr-10">出库:</text>
+                <text>{{item.gbDpgStockProduceWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+
+            </view>
+            <view class="flex-row pt-10 pb-10  form_data_border_out_slide_border  ">
+              <view class="flex-row-default half-row">
+                <text class="shrink_fix text-secondary mr-10">损耗:</text>
+                <text>{{item.gbDpgStockLossWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row ">
+                <text class="shrink_fix text-secondary mr-10">废弃:</text>
+                <text>{{item.gbDpgStockWasteWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+              </view>
+            </view>
+          </view>
+
+
+          <view class="p-10">
+            <text class="text-secondary font-xs">进货门店:</text>
+          </view>
+          <view class="flex-row-default border-top  border-bottom {{item.gbDepartmentOrdersEntities.length == depIndex + 1 ? 'is-last' : ''}}" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:if="{{orders.gbDepartmentId  !== item.purchaseDepartmentEntity.gbDepartmentId}}" wx:for-index="depIndex">
+            <view class="flex-row p-20" style="width: {{(windowWidth - 80) / 4}}rpx; ">
+              <text class="">{{orders.gbDepartmentEntity.gbDepartmentName}}</text>
+            </view>
+            <view class="flex-column" style="width: {{(windowWidth - 80) / 4 * 3}}rpx; border-left: 1px solid lightgray; ">
+
+              <view class="flex-column font-xs  p-10">
+                <view class="flex-row-between border-bottom p-10">
+                  <view class="flex-row">
+                    <text class="mr-10 text-secondary">订货:</text>
+                    <text class="">{{orders.gbDoQuantity}}{{orders.gbDoStandard}}</text>
+                  </view>
+
+                </view>
+                <view class="flex-row-between p-10">
+                  <view class="flex-row">
+                    <text class="mr-10 text-secondary">入库:</text>
+                    <text>{{orders.gbDoWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+                  </view>
+                  <!-- <view class="flex-row">
+                          <text class="mr-10 text-secondary">剩余:</text>
+                          <text>{{outStock.gbDgsRestWeight}}{{disGoods.gbDgGoodsStandardname}}</text>
+                        </view> -->
+                </view>
+
+              </view>
+
+            </view>
+          </view>
+
+        </view>
+
+      </view>
+
+    <view class="flex-column-center font-xs text-secondary" style="height: 200rpx;"> 没有数据啦！</view>
+
+    </view>
+
+    <view wx:else>
+      <view class="" style="height: {{windowHeight - 540}}rpx;margin-top: 300rpx;">
+        <view class="">
+          <view class="flex-column center-content">
+            <image src="/images/file-empty.png" mode="aspectFill" class="empty_image" />
+            <text class="font-md text-secondary mt-30">暂时数据</text>
+          </view>
+        </view>
+      </view>
+
+    </view>
+  </scroll-view>
+
+
+
+
+</view>
+
+
+
+
+
+
+
+<wasteGoods show="{{showWaste}}" bindconfirm="confirm" item="{{item}}" disGoods="{{disGoods}}" bindcancle="cancle" modalHeight="{{windowHeight}}" scrollViewTop="{{scrollViewTop}}" modalContentHeight="{{modalContentHeight}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" consultItem="{{item}}" />

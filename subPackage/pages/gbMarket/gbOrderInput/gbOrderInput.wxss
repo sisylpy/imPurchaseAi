@@ -156,13 +156,14 @@ page{
 }
 .inputTotal{
   border-radius: 20rpx;
-  line-height: 100rpx;
-  height: 100rpx;
+  line-height: 80rpx;
+  height: 80rpx;
   text-align: center;
   font-size: 50rpx;
   padding: 0 10rpx;
   background-color: #fff;
   color: #0f78b4;
+  border: 1px solid #b8b8b8;
 
 }
 .input_number{
@@ -250,8 +251,6 @@ page{
   border: 1px solid lightgray;
   border-radius: 10rpx;
   margin-bottom: 20rpx;
-  /* background: #fff; */
-  background: rgb(238, 238, 238);
 
   padding: 20rpx 0;
 }

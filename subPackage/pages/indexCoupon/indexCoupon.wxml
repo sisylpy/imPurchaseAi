@@ -155,7 +155,7 @@
 
                   </view>
                   <view class="flex-column " style="width:{{windowWidth - 160}}rpx;">
-                    <view class="flex-row font-sm pt-10" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
+                    <view class="flex-row font-sm pt-10" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders" wx:for-index="orderIndex">
                       <image src="{{orders.isNotice ?  '../../images/selected-2.png' : '../../images/radiobuttonunselect-2.png'}}" class="icon mr-10" bindtap="selectOrders" data-index="{{index}}" data-orderindex="{{orderIndex}}"></image>
 
                       <block wx:if="{{orders.gbDepartmentEntity.fatherGbDepartmentEntity !== null}}">
@@ -286,7 +286,7 @@
 
                             <block wx:if="{{disInfo.mendianDepartmentList.length == 1 && disInfo.mendianDepartmentList[0].gbDepartmentSubAmount == 1}}">
                               <view class='flex-row mr-10 font-md'>
-                                <text class="ml-20">{{item.gbDepartmentOrdersEntities[0].gbDoQuantity}}{{item.gbDepartmentOrdersEntities[0].gbDoStandard}}</text>
+                                <text class="ml-20">{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoQuantity}}{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoStandard}}</text>
                                 <block wx:if="{{item.gbDpgStatus == 2 && batch.gbDpbStatus == 1}}">
                                   <text class="ml-20 text-success font-xs">出货中</text>
                                 </block>
@@ -332,7 +332,7 @@
                         </view>
 
 
-                        <view class="flex-column font-sm mr-20" wx:for-item="order" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-index="orderIndex" wx:key="gbDepartmentOrdersId">
+                        <view class="flex-column font-sm mr-20" wx:for-item="order" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-index="orderIndex" wx:key="gbDepartmentOrdersId">
 
                           <block wx:if="{{disInfo.mendianDepartmentList.length > 1 || disInfo.mendianDepartmentList[0].gbDepartmentSubAmount > 1}}">
                             <view class='flex-row mr-10'>
@@ -493,7 +493,7 @@
 
 
 
-                        <view class="flex-column font-sm mr-20" wx:for-item="order" wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-index="orderIndex">
+                        <view class="flex-column font-sm mr-20" wx:for-item="order" wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-index="orderIndex">
 
                           <block wx:if="{{disInfo.mendianDepartmentList.length > 1 || disInfo.mendianDepartmentList[0].gbDepartmentSubAmount > 1}}">
                             <view class='flex-row mr-10'>
@@ -614,14 +614,14 @@
                         <block wx:else>
                           <text class="text-secondary mr-20">({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
                         </block>
-                        <text>{{purGoods.gbDepartmentOrdersEntities[0].gbDoQuantity}}{{purGoods.gbDepartmentOrdersEntities[0].gbDoStandard}}</text>
-                        <block wx:if="{{purGoods.gbDepartmentOrdersEntities[0].gbDoOrderType == 9}}">
+                        <text>{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoQuantity}}{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoStandard}}</text>
+                        <block wx:if="{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoOrderType == 9}}">
                           <text class="text-danger">[退货]</text>
                         </block>
 
                       </view>
 
-                      <view class="flex-row  pr-10 pl-10" wx:if="{{purGoods.gbDpgStatus < 2  && purGoods.gbDepartmentOrdersEntities[0].gbDoOrderType !== 9}}">
+                      <view class="flex-row  pr-10 pl-10" wx:if="{{purGoods.gbDpgStatus < 2  && purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoOrderType !== 9}}">
                         <block>
                           <view class="center-content p-10" bindtap="cancelGbNxDataItem" hover-class="hoverBtn" data-id="{{purGoods.gbDistributerPurchaseGoodsId}}">
 
@@ -631,22 +631,22 @@
                       </view>
                     </view>
 
-                    <view class="flex-row font-sm" wx:if="{{purGoods.gbDepartmentOrdersEntities[0].gbDoStatus > -1}}">
+                    <view class="flex-row font-sm" wx:if="{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoStatus > -1}}">
                       <!-- <text class="mr-20 text-white">{{index + 1}}.</text> -->
 
                       <view class="flex-row third-row">
                         <text class="mr-10 text-secondary"> 出货:</text>
-                        <text>{{purGoods.gbDepartmentOrdersEntities[0].gbDoWeight}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
+                        <text>{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoWeight}}{{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}}</text>
                       </view>
 
                       <view class="flex-row third-row">
                         <text class="mr-10 text-secondary">单价:</text>
-                        <text>{{purGoods.gbDepartmentOrdersEntities[0].gbDoPrice !== '0.0' && purGoods.gbDepartmentOrdersEntities[0].gbDoPrice !== null ? purGoods.gbDepartmentOrdersEntities[0].gbDoPrice : '-'}}</text>
+                        <text>{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoPrice !== '0.0' && purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoPrice !== null ? purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoPrice : '-'}}</text>
                       </view>
 
                       <view class="flex-row third-row">
                         <text class="mr-10 text-secondary">小计:</text>
-                        <text>{{purGoods.gbDepartmentOrdersEntities[0].gbDoSubtotal !== '0.0' && purGoods.gbDepartmentOrdersEntities[0].gbDoSubtotal !==  null ? purGoods.gbDepartmentOrdersEntities[0].gbDoSubtotal : '-' }}元</text>
+                        <text>{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoSubtotal !== '0.0' && purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoSubtotal !==  null ? purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoSubtotal : '-' }}元</text>
                       </view>
 
                     </view>
@@ -664,19 +664,19 @@
                         <block wx:else>
                           <text class="text-secondary mr-20">({{purGoods.gbDistributerGoodsEntity.gbDgGoodsStandardname}})</text>
                         </block>
-                        <block wx:if="{{purGoods.gbDepartmentOrdersEntities[0].gbDoOrderType == 9}}">
+                        <block wx:if="{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoOrderType == 9}}">
                           <text class="text-danger">[退货]</text>
                         </block>
                       </view>
 
-                      <view class="flex-row  pr-10 pl-10" wx:if="{{purGoods.gbDpgStatus < 2  && purGoods.gbDepartmentOrdersEntities[0].gbDoOrderType !== 9}}">
+                      <view class="flex-row  pr-10 pl-10" wx:if="{{purGoods.gbDpgStatus < 2  && purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[0].gbDoOrderType !== 9}}">
                         <view class="center-content p-10" bindtap="cancelGbNxDataItem" hover-class="hoverBtn" data-id="{{purGoods.gbDistributerPurchaseGoodsId}}">
                           <image src="../../images/ashbin.png" class="icon"></image>
                         </view>
                       </view>
                     </view>
 
-                    <view class="flex-row" wx:for="{{purGoods.gbDepartmentOrdersEntities}}" wx:for-item="orders">
+                    <view class="flex-row" wx:for="{{purGoods.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="orders">
                       <!-- <text class="text-white">{{index + 1}}</text> -->
                       <view class="flex-column">
                         <view>

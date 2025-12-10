@@ -32,7 +32,7 @@
 
 						<text  class="standardName {{applyStandardName == standard.nxStandardName ? 'is-active' : ''}}" bindtap="changeStandard" data-name="{{standard.nxStandardName}}" wx:for="{{item.nxGoodsStandardEntities}}" wx:key="gbDistributerStandardId"
             wx:for-item="standard">{{standard.nxStandardName}}</text>
-            <text class="standardName" bindtap="showInputStandard"> +</text>
+            <!-- <text class="standardName" bindtap="showInputStandard"> +</text> -->
 					</view>
 
 				</view>

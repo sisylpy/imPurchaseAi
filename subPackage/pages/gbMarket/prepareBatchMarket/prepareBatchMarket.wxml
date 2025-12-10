@@ -68,7 +68,7 @@
                   <text class="gray shrink_fix">订单:</text>
                   <view class="flex-row-wrap" >
                   <view class="flex-row margin-right with-s-padding" 
-                  wx:for="{{item.gbDepartmentOrdersEntities}}" wx:for-item="purGoodsOrders">
+                  wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:for-item="purGoodsOrders">
                   <text class="circle"></text>
                     <view class="mr-10">
                       <text wx:if="{{purGoodsOrders.gbDepartmentEntity.gbDepartmentFatherId > 0}}">{{purGoodsOrders.gbDepartmentEntity.fatherGbDepartmentEntity.gbDepartmentName}}.{{purGoodsOrders.gbDepartmentEntity.gbDepartmentName}}</text>

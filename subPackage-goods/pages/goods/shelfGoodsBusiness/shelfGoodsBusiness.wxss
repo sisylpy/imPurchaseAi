@@ -1,0 +1,158 @@
+
+
+
+.del_btn{
+  background-color: rgb(197, 197, 197);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  padding: 14rpx 40rpx;
+  color: gray;
+}
+
+.del_btn.is-active{
+  background-color: aqua;
+  color: #000;
+
+
+}
+
+/* 供货商筛选器样式 */
+.supplier-filter-container {
+  padding: 20rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.supplier-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #187e6e;
+  border-radius: 40rpx;
+  padding: 16rpx 20rpx;
+  width: fit-content;
+  min-width: 200rpx;
+}
+
+.supplier-filter-text {
+  font-size: 28rpx;
+  color: #fff;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.supplier-filter-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
+  margin-left: 16rpx;
+  cursor: pointer;
+}
+
+.supplier-delete-icon {
+  width: 24rpx;
+  height: 24rpx;
+  filter: brightness(0) invert(1); /* 将图标改为白色 */
+}
+
+/* 采购员筛选器特殊样式 */
+.purchase-user-chip {
+  background-color: #FF6B35; /* 橙色背景，与供货商筛选器区分 */
+}
+
+
+
+
+
+
+
+
+/* 筛选条件样式 */
+.filter-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 10rpx;
+  background-color: #f9f9f9;
+}
+
+.picker {
+  padding: 10rpx;
+  background-color: #e0e0e0;
+  border-radius: 5rpx;
+}
+
+/* 数据详情列表样式 */
+.details-section {
+  
+  background-color: #ffffff;
+}
+
+/* 表头固定样式 */
+.details-header {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 10; /* 确保表头在内容上方 */
+  display: flex;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.details-header, .details-row {
+  display: flex;
+  width: max-content; /* 确保内容宽度足够以实现水平滚动 */
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.details-cell {
+  padding: 10rpx;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 40rpx; /* 根据内容调整宽度 */
+}
+
+.fix_width_one{
+  width: 120rpx;
+  border-right: 1px solid lightgray;
+}
+
+.fix_width_two{
+  width: 160rpx;
+  border-right: 1px solid lightgray;
+  font-weight: 500;
+  
+}
+
+/* 阴影效果 */
+.shadow-effect {
+  box-shadow: 5rpx 0 5rpx -3rpx rgba(0, 0, 0, 0.3); /* 添加右侧阴影 */
+}
+
+
+/* 固定列样式 */
+.fixed-cell-date {
+  position: sticky;
+  left: 0;
+  background-color: #ffffff;
+  z-index: 3; /* 提高日期列的层级 */
+  border-right: 1rpx solid #ddd;
+  /* min-width: 120rpx; 确保宽度一致 */
+  width: 120rpx;
+
+}
+
+.fixed-cell-store {
+  position: sticky;
+  left: 140rpx; /* 确保左边距为日期列宽度 */
+  background-color: #ffffff;
+  z-index: 2; /* 提高门店列的层级，但低于日期列 */
+  border-right: 1rpx solid #ddd;
+  width: 100rpx;
+  /* min-width: 120rpx; 确保宽度一致 */
+}
+
+

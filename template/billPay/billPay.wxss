@@ -1,137 +1,139 @@
+/* ============ 结算栏美化 - 与供货商页面风格保持一致 ============ */
+
 .order_list {
   position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   display: none;
-  /* height: 120rpx; */
-  background: rgb(24, 150, 131);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(100%);
 }
 
 .order_list.is-active {
   display: block;
+  transform: translateY(0);
 }
 
 .order_list_content {
-  background: rgb(26, 25, 25);
-  color: #fff;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-top: 1rpx solid rgba(74, 144, 226, 0.1);
+  box-shadow: 0 -8rpx 32rpx rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10rpx);
   display: flex;
-  flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: 20rpx;
-}
-
-.car {
-  /* background: red; *//* flex-basis: 80%; */
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-
-.gouwuche {
-  width: 80rpx;
-  height: 70rpx;
-}
-
-.dot {
-  position: absolute;
-  width: 50rpx;
-  height: 50rpx;
-  background: red;
-  border-radius: 50%;
-  margin-top: -26rpx;
-  margin-left: 80rpx;
-  text-align: center;
-}
-
-.aaa {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  padding: 24rpx 30rpx;
+  position: relative;
   overflow: hidden;
 }
 
-.order_content {
-  font-size: 30rpx;
-  /* display: flex;
-  flex-flow: row wrap; */
-  flex-grow: 1;
-  position: relative;
-  /* margin-right:40rpx; */
-}
-
-.order_goods {
-  float: left;
-  margin-right:6rpx;
-  margin-bottom: 8rpx;
-  white-space: nowrap; /* 规定文本是否折行 */
-  overflow: hidden; /* 规定超出内容宽度的元素隐藏 */
-  text-overflow: ellipsis;
-}
-
-.order_send {
-  font-size: 36rpx;
-  color: #f7ca03;
-  /* background: gray; */
-}
-
-.weighTime {
-  margin-left: 20rpx;
-  font-size: 38rpx;
-  color: rgb(218, 216, 216);
-}
-
-.car {
-  /* background: red; *//* flex-basis: 80%; */
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-
-.gouwuche {
-  width: 80rpx;
-  height: 70rpx;
-}
-
-.dot {
+/* 顶部装饰条 */
+.order_list_content::before {
+  content: '';
   position: absolute;
-  width: 50rpx;
-  height: 50rpx;
-  background: red;
-  border-radius: 50%;
-  margin-top: -26rpx;
-  margin-left: 80rpx;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+}
+
+/* 左侧金额信息区域 */
+.car {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 20rpx;
+}
+
+/* 金额信息容器 */
+.order_content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4rpx;
+}
+
+/* 金额标签 */
+.small {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 金额数值 */
+.big {
+  font-size: 36rpx;
+  color: #4A90E2;
+  font-weight: 700;
+  text-shadow: 0 2rpx 4rpx rgba(74, 144, 226, 0.1);
+}
+
+/* 右侧确认按钮 */
+.order_send {
+  background: linear-gradient(135deg, #4A90E2 0%, #2E7CE6 100%);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 20rpx 40rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 6rpx 20rpx rgba(74, 144, 226, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 160rpx;
   text-align: center;
 }
 
-.aaa {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
+/* 按钮悬停效果 */
+.order_send:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 25rpx rgba(74, 144, 226, 0.4);
 }
 
-.order_content {
-  font-size: 30rpx;
-  /* display: flex;
-  flex-flow: row wrap; */
-  flex-grow: 1;
-  position: relative;
-  /* margin-right:40rpx; */
+/* 按钮点击效果 */
+.order_send:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4rpx 15rpx rgba(74, 144, 226, 0.4);
 }
 
-.order_goods {
-  float: left;
-  margin-right:6rpx;
-  margin-bottom: 8rpx;
-  white-space: nowrap; /* 规定文本是否折行 */
-  overflow: hidden; /* 规定超出内容宽度的元素隐藏 */
-  text-overflow: ellipsis;
+/* 按钮光泽效果 */
+.order_send::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
-.order_send {
-  font-size: 36rpx;
-  color: #f7ca03;
-  /* background: gray; */
+.order_send:active::before {
+  left: 100%;
+}
+
+/* 响应式调整 */
+@media (max-width: 750rpx) {
+  .order_list_content {
+    padding: 20rpx 24rpx;
+  }
+  
+  .order_send {
+    padding: 18rpx 32rpx;
+    font-size: 30rpx;
+    min-width: 140rpx;
+  }
+  
+  .big {
+    font-size: 32rpx;
+  }
+  
+  .small {
+    font-size: 22rpx;
+  }
 }
 

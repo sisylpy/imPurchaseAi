@@ -116,12 +116,7 @@ Page({
 
       batchId: options.batchId,
       retName: options.retName,
-      disId: options.disId,
-      buyerUserId: options.buyerUserId,
-      fromBuyer: options.fromBuyer,
-      depId: options.depId,
-      purUserId: options.purUserId,
-      supplierId: options.supplierId
+      from: options.from
     })
     
     var jrdhUserInfo = wx.getStorageSync('jrdhUserInfo');
@@ -182,14 +177,6 @@ Page({
       })
   },
 
-
-  getSupplierBatch(e) {
-   
-    wx.redirectTo({
-      url: '../supplierBills/supplierBills?sellUserId=' + this.data.batch.gbDpbSellUserId + '&disId=' + this.data.disId,
-    })
-
-  },
 
 
 
@@ -639,6 +626,31 @@ _getPrintArr: function(callback) {
   },
 
 
+
+  showShareTishi() {
+    
+  
+    this.setData({
+      isTishi: true,
+    })
+  },
+
+
+// 处理支付方式选择
+radioChange(e) {
+  var payType = parseInt(e.detail.value);
+  this.setData({
+    ["batch.gbDpbPayType"]: payType
+  });
+},
+
+cancelCostBatch(){
+  this.setData({
+    isTishi: false
+  })
+},
+
+
   saveTuihuo() {
 
     sellerReceiveReturnBill(this.data.batch)
@@ -939,9 +951,47 @@ _getPrintArr: function(callback) {
 
 
   toBack(){
-    wx.redirectTo({
-      url: '../jinriListWithLogin/jinriListWithLogin',
-    })
-  },
+    //本页面的this.data.batch.gbDpbSupplierId 供货商 Id，去寻找返回页面customerArr 的 item.nxJrdhSupplierId,
+    console.log('=== gbReceiveBatch toBack 开始 ===');
+    console.log('this.data.batch:', this.data.batch);
+    console.log('this.data.batch.gbDpbSupplierId:', this.data.batch.gbDpbSupplierId);
+    console.log('this.data.from:', this.data.from);
+    
+   // 存储供货商ID，用于返回时自动选择
+   wx.setStorageSync('returnSupplierId', this.data.batch.gbDpbSupplierId);
+   console.log('已存储 returnSupplierId:', this.data.batch.gbDpbSupplierId);
+   
+   // 只有在从供应商页面进入时，才尝试设置上一页数据  
+  //   pathBuilderAll.append("&from=notification"); // 添加这个参数
+   if(this.data.from == 'supplier'){
+     //就在上一个页面customerArr中选择供货商后，设置
+     var pages = getCurrentPages();
+     if(pages.length > 1){
+       var prevPage = pages[pages.length - 2];
+       prevPage.setData({
+         supplierId: this.data.batch.gbDpbSupplierId,
+       })
+     }
+     console.log('从供应商页面进入，使用 navigateBack 返回');
+     wx.navigateBack({delta : 1})
+   }else if(this.data.from == 'notification'){
+     console.log('其他方式进入，跳转到 jinriListWithLogin 页面');
+     wx.redirectTo({
+       url: '../jinriListWithLogin/jinriListWithLogin',
+     })
+   }
+   else{
+     wx.redirectTo({
+       url: '../../../../pages/index/index',
+       success: function(res) {
+         console.log('跳转成功', res);
+       },
+       fail: function(err) {
+         console.log('跳转失败', err);
+       }
+     })
+   }
+    console.log('=== gbReceiveBatch toBack 结束 ===');
+   },
 
 })

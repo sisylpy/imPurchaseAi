@@ -54,7 +54,7 @@
   line-height: 80rpx;
   height: 80rpx;
   font-size: 38rpx;
-  color: #0768ac;
+  color: #187e6e;
   padding-left: 10rpx;
 
   
@@ -90,7 +90,7 @@
 }
 .goodsTitle{
   font-size: 50rpx;
-  background: #0768ac;
+  background: #187e6e;
   color: #fff;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .sureBtn.is-active{
-  background: #1ba0e5;
+  background: #187e6e;
   color: #fff;
 }
 

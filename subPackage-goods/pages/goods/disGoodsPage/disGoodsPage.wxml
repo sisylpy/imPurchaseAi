@@ -1,0 +1,334 @@
+<wxs src="/utils/fn.wxs" module="tool" />
+
+<view class="flex flex-column">
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="商品设置" 
+avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+
+  <view class="flex-row-between bg-white " style="width:{{windowWidth}}rpx;">
+    <view class="flex-column p-20 font-md" style="width:{{windowWidth - 100}}rpx; ">
+      <view class="flex-row p-10">
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">商品:</text>
+          <text class="font-bold">{{goods.gbDgGoodsName}}</text>
+        </view>
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">规格:</text>
+          <text class="">{{goods.gbDgGoodsStandardname}}</text>
+        </view>
+        
+      </view>
+
+      <view class=" flex-row-default p-10">
+        <view class="flex-row half-row">
+          <text class="text-secondary flex-fixed mr-10">口味:</text>
+          <text class=" shrink_change" wx:if="{{goods.gbDgGoodsDetail !==  null && goods.gbDgGoodsDetail.length > 0}}">{{goods.gbDgGoodsDetail}}</text>
+        </view>
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">单位重量:</text>
+          <text class="pt-20 pb-20 shrink_change" wx:if="{{goods.gbDgGoodsStandardWeight !==  null && goods.gbDgGoodsStandardWeight.length > 0}}">{{goods.gbDgGoodsStandardWeight}}</text>
+        </view>
+      </view>
+
+      <view class="flex-row p-10">
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">品牌:</text>
+          <text class="pt-20 pb-20 shrink_change" wx:if="{{goods.gbDgGoodsBrand !==  null && goods.gbDgGoodsBrand.length > 0}}">{{goods.gbDgGoodsBrand}}</text>
+        </view>
+
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">产地:</text>
+          <text class="pt-20 pb-20 shrink_change" wx:if="{{goods.gbDgGoodsPlace !==  null && goods.gbDgGoodsPlace.length > 0}}">{{goods.gbDgGoodsPlace}}</text>
+        </view>
+      </view>
+
+
+      
+      <view class=" flex-row-default p-10  mb-20">
+        <view class="flex-row-default half-row">
+          <text class="mr-10 text-secondary flex-fixed">出货模块:</text>
+          <block wx:if="{{goods.gbDgGoodsType == 1}}">
+            <text class="">门店自采</text>
+          </block>
+          <block wx:if="{{goods.gbDgGoodsType == 2}}">
+            <text class="">集采</text>
+          </block>
+          <block wx:if="{{goods.gbDgGoodsType == 21}}">
+            <text class="">自动订货</text>
+          </block>
+          <block wx:if="{{goods.gbDgGoodsType == 3}}">
+            <text class="">库房</text>
+          </block>
+
+          <block wx:if="{{goods.gbDgGoodsType == 4}}">
+            <text class="">中央厨房</text>
+          </block>
+          <block wx:if="{{goods.gbDgGoodsType == 5}}">
+            <text class="">配送</text>
+          </block>
+        </view>
+
+        <view class="half-row flex-row-default" wx:if="{{goods.gbDistributerAppointSupplierEntity == null}}">
+          <text class="text-secondary flex-fixed mr-10">出货部门:</text>
+          <text class="shrink_change">{{goods.gbDepartmentEntity.gbDepartmentName}}</text>
+        </view>
+        <view class="half-row flex-row-default" wx:else="">
+          <text class="text-secondary flex-fixed mr-10">供货商:</text>
+          <text class="shrink_change">{{goods.gbDistributerAppointSupplierEntity.nxJrdhsSupplierName}}</text>
+        </view>
+      </view>
+
+      <view class="flex-row p-10 border-bottom mb-20" wx:if="{{goods.gbDgGoodsType == 5}}">
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">配送商:</text>
+          <text class="pt-20 pb-20 shrink_change" wx:if="{{goods.nxDistributerEntity !== null}}">京京送货</text>
+          <text class="red" wx:else>无</text>
+        </view>
+
+        <view class="half-row">
+          <text class="text-secondary flex-fixed mr-10">配送商商品:</text>
+          <text class="shrink_change pt-20 pb-20 " wx:if="{{goods.nxDistributerGoodsEntity !== null}}">{{goods.nxDistributerGoodsEntity.nxDgGoodsName}}</text>
+          <text class="red" wx:else>无</text>
+        </view>
+      </view>
+
+    </view>
+
+    <view class="button-container-white" hover-class="hover" bindtap="openOperationBtn">
+      <image src="/images/points.png" class="icon"></image>
+    </view>
+  </view>
+
+  <view class="flex-column" id="mjltest0">
+        <!-- <view class="bg-white p-20  border-bottom flex-column" wx:if="{{goods.gbDgIsSelfControl ==  1}}">
+          <view class="flex-row-between pt-20 pb-20">
+            <text class="text-secondary flex-fixed mr-10">是否自制</text>
+            <switch checked="{{goods.gbDgIsSelfControl == 1 ? 'checked' : ''}}" bindchange="switchIsSelfControl" />
+          </view>
+          <block wx:if="{{goods.gbDgIsSelfControl == 1}}">
+            <view class="flex-row p-10" style="width:{{windowWidth - 120}}rpx;">
+
+              <view class="flex-row half-row">
+                <text class="graymr-20">成本单价:</text>
+                <view class="flex-row">
+                  <text class="">{{goods.gbDgSelfPrice}}元</text>
+                  <text>/{{goods.gbDgGoodsStandardname}}</text>
+                </view>
+
+              </view>
+
+            </view>
+          </block>
+        </view> -->
+        <!-- <view class="bg-white p-20  border-bottom flex-column">
+          <view class="flex-row-between pt-20 pb-20">
+            <text class="text-secondary flex-fixed mr-10">是否加盟</text>
+            <switch checked="{{goods.gbDgIsFranchisePrice == 1 ? 'checked' : ''}}" bindchange="switchIsFranchisePrice" />
+          </view>
+          <block wx:if="{{goods.gbDgIsFranchisePrice == 1}}">
+            <view class="flex-row-between p-10">
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">加盟一级:</text>
+                <text>{{goods.gbDgFranchisePriceOne}}元/{{goods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">时间:</text>
+                <text>{{goods.gbDgFranchisePriceOneUpdate}}</text>
+              </view>
+            </view>
+
+            <view class="flex-row-between p-10">
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">加盟二级:</text>
+                <text>{{goods.gbDgFranchisePriceTwo}}元/{{goods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">时间:</text>
+                <text>{{goods.gbDgFranchisePriceTwoUpdate}}</text>
+              </view>
+            </view>
+            <view class="flex-row-between p-10">
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">加盟三级:</text>
+                <text>{{goods.gbDgFranchisePriceThree}}元/{{goods.gbDgGoodsStandardname}}</text>
+              </view>
+              <view class="flex-row half-row">
+                <text class="text-secondary flex-fixed mr-10">时间:</text>
+                <text>{{goods.gbDgFranchisePriceThreeUpdate}}</text>
+              </view>
+            </view>
+          </block>
+        </view> -->
+
+        <!-- <view class="bg-white p-20  border-bottom flex-column" wx:if="{{disInfo.gbDistributerBusinessType !== 21 && disInfo.gbDistributerBusinessType !== 22}}">
+          <view class="flex-row-between pt-20 pb-20">
+            <text class="text-secondary flex-fixed mr-10">是否控价</text>
+            <switch checked="{{goods.gbDgControlPrice == 1 ? 'checked' : ''}}" bindchange="switchControlPrice" />
+          </view>
+
+          <block wx:if="{{goods.gbDgControlPrice == 1}}">
+            <view class="flex-row p-10" style="width:{{windowWidth - 120}}rpx;">
+              <text class="graymr-20">价格:</text>
+              <view class="flex-row" style="width:{{windowWidth - 280}}rpx;">
+                <text class="third-row">{{goods.gbDgGoodsPrice}}元</text>
+
+                <text class="third-row">{{goods.gbDgGoodsLowestPrice}}元</text>
+
+                <text class="third-row">{{goods.gbDgGoodsHighestPrice}}元</text>
+
+              </view>
+
+            </view>
+          </block>
+        </view> -->
+
+        <view class="bg-white p-20  border-bottom flex-column">
+          <view class="flex-row-between pt-20 pb-20">
+            <text class="text-secondary flex-fixed mr-10">保鲜管理</text>
+            <switch checked="{{goods.gbDgControlFresh == 1 ? 'checked' : ''}}" bindchange="switchControlFresh" />
+          </view>
+          <block wx:if="{{goods.gbDgControlFresh == 1}}">
+            <view class="flex-row p-10 small">
+              <text class="graymr-20">时间设置:</text>
+              <view style="width:{{windowWidth - 280}}rpx;" class="flex-row">
+                <view class="flex-row half-row">
+                  <text class="">{{goods.gbDgFreshWasteHour}}小时废弃</text>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="bg-white p-20  border-bottom flex-column">
+          <text class="text-secondary small">商品下架</text>
+          <view class="flex-row-between pt-20 pb-20">
+            <text class="text-secondary flex-fixed mr-10">停止订货</text>
+            <switch checked="{{goods.gbDgPullOff == 1 ? 'checked' : ''}}" bindchange="switchChange" data-abc="pull" />
+          </view>
+        </view>
+
+        <view class="bg-white p-20  flex-column border-bottom">
+          <text class="text-secondary small">订货单位</text>
+          <view class="flex-row-wrap pt-20 pb-20">
+            <text class="standard">{{goods.gbDgGoodsStandardname}}</text>
+            <view class="standard" wx:for="{{goods.gbDistributerStandardEntities}}" wx:for-item="standard" wx:key="gbDistributerStandardId" wx:for-index="standandIndex" bindtap="clickItem" data-itemstandard="{{standard}}" data-index="{{standandIndex}}" data-type="standard"><text class="mr-10">{{standard.gbDsStandardName}}</text>
+              <text class="text-secondary" wx:if="{{standard.gbDsStandardScale !== null && standard.gbDsStandardScale > 0  }}">({{standard.gbDsStandardScale}}{{goods.gbDgGoodsStandardname}})</text>
+            </view>
+
+            <text class="standard" bindtap="addStandard" data-name="{{goods.gbGoodsEntity.gbGoodsName}}">+</text>
+          </view>
+        </view>
+
+        <view class="bg-white p-20  flex-column border-bottom">
+          <text class="text-secondary small">别名</text>
+          <view class="flex-row-wrap pt-20 pb-20">
+            <text class="standard" wx:for="{{goods.gbDistributerAliasEntities}}" wx:for-item="alias" wx:for-index="aliasIndex" wx:key="gbDistributerAliasId" bindtap="clickItem" data-itemalias="{{alias}}" data-type="alias" data-index="{{aliasIndex}}">{{alias.gbDaAliasName}}</text>
+            <text class="standard" bindtap="addAlias" data-name="{{goods.gbGoodsEntity.gbGoodsName}}">+</text>
+          </view>
+        </view>
+
+      </view>
+</view>
+
+
+
+
+<!-- mask catchtap="hideMask" -->
+<view class='overlay {{showOperation ? "show" : "hide"}}' >
+  <!-- + scrollViewTop -->
+  <view class=" popup bg-white" wx:if="{{showChoice}}">
+    <view class="p-20 mb-20 border-bottom" bindtap="edit">
+      编辑
+    </view>
+    <view class="p-20" bindtap="delete">删除</view>
+  </view>
+
+
+  <!--  showFresh -->
+
+  <view class="bg-white popup" wx:elif="{{showFresh}}" >
+
+    <view class="flex-column">
+      <view class="flex-column center-content mainBack">
+        <view class="p-20   five-weight  flex-row font-lg">
+          {{goods.gbDgGoodsName}}({{goods.gbDgGoodsStandardname}})
+        </view>
+      </view>
+
+      <view class="p-20 flex-row mb-30 mt-30">
+        <text class="p-20"> 废弃时间:</text>
+        <view style="position: relative; display: flex; align-items: center;">
+          <input 
+            class="inputPrice" 
+            focus="{{showFresh}}" 
+            type="digit" 
+            value="{{goods.gbDgFreshWasteHour}}" 
+            placeholder="请输入小时数"
+            placeholder-style="color: #999; font-size: 28rpx;"
+            bindinput="getFresh" 
+            data-type="gbDgFreshWasteHour" 
+            style="width: {{windowWidth / 3}}rpx; border: 2rpx solid #e5e5e5; border-radius: 8rpx; padding: 10rpx; background-color: #f8f8f8;" 
+          />
+          <view 
+            style="position: absolute; right: 10rpx; color: #1989fa; font-size: 24rpx; cursor: pointer;"
+            catchtap="showFreshInputHint"
+          >
+            ❓
+          </view>
+        </view>
+        <text style="margin-left: 10rpx; color: #666; font-size: 28rpx;">个小时</text>
+      </view>
+      
+      <!-- 输入提示信息 -->
+      <view style="margin: -20rpx 20rpx 20rpx 20rpx; padding: 10rpx; background-color: #f0f8ff; border-radius: 8rpx; border-left: 4rpx solid #1989fa;">
+        <text style="color: #1989fa; font-size: 24rpx;">💡 提示：请输入商品保鲜时间的小时数（仅支持整数，最大999小时）</text>
+      </view>
+
+      <view class=" p-20" style="width: {{windowWidth - 140}}rpx; ">
+        <view class="flex-row" style="width: {{(windowWidth - 180) / 3 * 2}}rpx; margin-left: {{(windowWidth - 20)  / 3}}rpx; ">
+          <view class="p-20" catchtap="cancleFresh">
+            <text class="cancel-btn"> 取消</text>
+          </view>
+          <view class="p-20" catchtap="{{goods.gbDgFreshWasteHour > 0 ? '_updateGoodsFresh' : ''}}" style="margin-left: 20rpx;">
+            <text class="confirm-btn {{goods.gbDgFreshWasteHour > 0 ? 'is-active' : ''}}">确定废弃设置</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- ../showFresh -->
+
+
+</view>
+<!-- ./mask -->
+
+
+
+<view class='overlay {{showOperationBtn ? "show" : "hide"}}' style="height:{{maskHeight > windowHeight ? maskHeight : windowHeight}}rpx;" catchtap="hideMaskBtn">
+
+  <view class="flex-column nnn bg-white">
+    <!-- <view class="p-30 flex-row border-bottom" catchtap="toLiziMarket">
+      <image src="/images/location.png" class="icon mr-20"></image>
+      <text class="">查看市场供应</text>
+    </view> -->
+    
+    <view class="p-30 flex-row border-bottom" catchtap="toOpenDetail">
+      <image src="/images/edit.png" class="icon mr-20"></image>
+      <text class="">修改商品</text>
+    </view>
+
+    <view class="p-30 flex-row" catchtap="deleteDisGoods">
+      <image src="/images/ashbin.png" class="icon mr-20"></image>
+      <text class="">删除商品</text>
+    </view>
+
+     <view style="height: 20rpx;"></view>
+  </view>
+
+</view>
+
+
+
+<addStandard show="{{showAdd}}" bindgetFocus="getFocus" bindconfirm="confirmStandard" bindcancle="cancle" goods="{{goods}}" standardScale="{{standardScale}}" depGoodsName="{{depGoodsName}}" standardName="{{standardName}}" windowHeight="{{windowHeight}}" edit="{{editStandard}}" itemStandard="{{itemStandard}}"  />
+
+
+<addAlias show="{{showAddAlias}}" bindgetFocus="getFocus" bindconfirm="confirmAlias" bindcancle="cancle" depGoodsName="{{depGoodsName}}" windowHeight="{{windowHeight}}"  standardName="{{standardName}}" edit="{{editAlias}}" standardName="{{standardName}}" itemAlias="{{itemAlias}}" />

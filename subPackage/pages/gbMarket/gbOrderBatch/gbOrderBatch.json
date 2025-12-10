@@ -1,6 +1,7 @@
 {
     "usingComponents": {
-      "market-navbar": "/components/market-navbar/market-navbar"
+      "market-navbar": "/components/market-navbar/market-navbar",
+      "delWarnModal": "/components/delWarnModal/delWarnModal"
   
     }
   

@@ -1,0 +1,193 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/register/register",
+    "pages/tro/tro",
+    "pages/inviteRegister/inviteRegister",
+    "pages/inviteTro/inviteTro",
+    "pages/inviteRegisterNx/inviteRegisterNx",
+    "pages/inviteTroNx/inviteTroNx",
+    "pages/inviteAndOrder/inviteAndOrder",
+    "pages/inviteAdmin/inviteAdmin"
+  ],
+  "subPackages": [
+    {
+      "root": "subPackage/ai/",
+      "name": "ai",
+      "pages": [
+        "pages/chefOrder/chefOrder",
+        "pages/chefOrderDep/chefOrderDep",
+        "pages/resGoodsAi/resGoodsAi",
+        "pages/resGoodsLessCash/resGoodsLessCash",
+        "pages/paste/paste",
+        "pages/customerGoodsAi/customerGoodsAi",
+        "pages/disAddGoods/disAddGoods",
+        "pages/pasteAddGoods/pasteAddGoods",
+        "pages/resGoodsSearch/resGoodsSearch",
+        "pages/resGoodsCashSearch/resGoodsCashSearch",
+        "pages/stockGoodsBusiness/stockGoodsBusiness",
+        "pages/editDepApplyGoods/editDepApplyGoods"
+      ]
+    },
+    {
+      "root": "subPackage/gbMarket/",
+      "name": "gbMarket",
+      "pages": [
+        "pages/prepareBatchMarket/prepareBatchMarket",
+        "pages/gbOrderBatch/gbOrderBatch",
+        "pages/gbOrderBatchReturn/gbOrderBatchReturn",
+        "pages/gbBatch/gbBatch",
+        "pages/gbOrderInput/gbOrderInput",
+        "pages/index/index",
+        "pages/supplierBills/supplierBills",
+        "pages/settlePageGb/settlePageGb",
+        "pages/jrdhGoodsStars/jrdhGoodsStars",
+        "pages/depUserEdit/depUserEdit",
+        "pages/jinriListWithLogin/jinriListWithLogin",
+        "pages/disOrderBatchDetail/disOrderBatchDetail"
+      ]
+    },
+    {
+      "root": "subPackage/yishang/",
+      "name": "yishang",
+      "pages": [
+        "pages/yishangList/yishangList",
+        "pages/addAppGoodsWithOrder/addAppGoodsWithOrder",
+        "pages/issuePage/issuePage",
+        "pages/myNxDistributerBill/myNxDistributerBill",
+        "pages/myNxDistributerCata/myNxDistributerCata",
+        "pages/nxDistributerGoods/nxDistributerGoods",
+        "pages/nxDistributerGoodsSearch/nxDistributerGoodsSearch",
+        "pages/toDepartmentGoodsList/toDepartmentGoodsList",
+        "pages/peisongOrder/peisongOrder",
+        "pages/index/index",
+        "pages/addAppGoods/addAppGoods",
+        "pages/disAddGoods/disAddGoods",
+        "pages/nxGoodsFenxi/nxGoodsFenxi",
+        "pages/nxDistributerDetail/nxDistributerDetail",
+        "pages/nxDistributerDetailPay/nxDistributerDetailPay",
+        "pages/settleAccount/settleAccount",
+        "pages/map/map"
+      ]
+    },
+    {
+      "root": "subPackage/management/",
+      "name": "management",
+      "pages": [
+        "pages/homePage/homePage",
+        "pages/staff/staff",
+        "pages/purGoodsStars/purGoodsStars",
+        "pages/purGoodsFenxi/purGoodsFenxi",
+        "pages/costGoodsFenxi/costGoodsFenxi",
+        "pages/purUserFenxi/purUserFenxi",
+        "pages/disUserEdit/disUserEdit"
+      ]
+    },
+    {
+      "root": "subPackage/goods/",
+      "name": "goods",
+      "pages": [
+        "pages/index/index",
+        "pages/stockGoodsList/stockGoodsList",
+        "pages/goodsFenxi/goodsFenxi",
+        "pages/goodsFenxiCost/goodsFenxiCost",
+        "pages/resGoods/resGoods",
+        "pages/disGoodsPage/disGoodsPage",
+        "pages/goodsPurList/goodsPurList",
+        "pages/goodsOrderList/goodsOrderList",
+        "pages/appointSupplierList/appointSupplierList",
+        "pages/searchGoods/searchGoods",
+        "pages/disGoodsDetail/disGoodsDetail",
+        "pages/shelfGoodsBusiness/shelfGoodsBusiness",
+        "pages/stockGoodsBusiness/stockGoodsBusiness"
+      ]
+    },
+    {
+      "root": "subPackage/supplier/",
+      "name": "supplier",
+      "pages": [
+        "pages/index/index",
+        "pages/supplierOrder/supplierOrder",
+        "pages/jrdhIndex/jrdhIndex",
+        "pages/supplierGoods/supplierGoods",
+        "pages/jrdhGoodsList/jrdhGoodsList",
+        "pages/jrdhOrderList/jrdhOrderList",
+        "pages/supplierDetail/supplierDetail",
+        "pages/myPurchaseDetail/myPurchaseDetail",
+        "pages/supplierBills/supplierBills",
+        "pages/jrdhGoodsFenxi/jrdhGoodsFenxi",
+        "pages/jrdhGoodsStars/jrdhGoodsStars",
+        "pages/supplierEdit/supplierEdit"
+      ]
+    },
+    {
+      "root": "subPackage/statistic/",
+      "name": "statistic",
+      "pages": [
+        "pages/index/index",
+        "pages/indexGoods/indexGoods",
+        "pages/purchaseDeatil/purchaseDeatil",
+        "pages/purGoodsByDate/purGoodsByDate",
+        "pages/costGoodsByDate/costGoodsByDate"
+      ]
+    },
+    {
+      "root": "subPackage/account/",
+      "name": "account",
+      "pages": [
+        "pages/payPage/payPage",
+        "pages/payList/payList",
+        "pages/couponList/couponList",
+        "pages/payDetail/payDetail",
+        "pages/userEdit/userEdit",
+        "pages/loginPay/loginPay"
+      ]
+    },
+    {
+      "root": "subPackage/common/",
+      "name": "common",
+      "pages": [
+        "pages/indexCoupon/indexCoupon",
+        "pages/purGoods/purGoods",
+        "pages/stock/index/index",
+        "pages/stock/stockList/stockList",
+        "pages/stock/stockListOneDay/stockListOneDay",
+        "pages/data/subDepStock/subDepStock",
+        "pages/data/selSupplier/selSupplier",
+        "pages/data/subDepCost/subDepCost",
+        "pages/data/dateReport/dateReport",
+        "pages/data/reportPageUnified/reportPageUnified",
+        "pages/data/reportOnePage/reportOnePage",
+        "pages/data/reportTwoPage/reportTwoPage",
+        "pages/data/reportTwoPageNx/reportTwoPageNx",
+        "pages/mendian/mendianDetail/mendianDetail",
+        "pages/mendian/addDepartment/addDepartment",
+        "pages/mendian/addSubDep/addSubDep",
+        "pages/mendian/index/index",
+        "pages/mendian/depEdit/depEdit",
+        "pages/mendian/mendianEdit/mendianEdit",
+        "pages/mendian/groupUserRegister/groupUserRegister",
+        "pages/mendian/depUserRegister/depUserRegister",
+        "pages/sel/date/date",
+        "pages/sel/searchDate/searchDate",
+        "pages/sel/filterData/filterData",
+        "pages/sel/filterDataType/filterDataType"
+      ]
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "plugins": {
+    "QCloudAIVoice": {
+      "version": "2.3.10",
+      "provider": "wx3e17776051baf153"
+    }
+  }
+}
+
+
+

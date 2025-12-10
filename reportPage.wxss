@@ -228,6 +228,7 @@ page{
 .twenty_radius{
   border-radius: 20rpx;
 }
+
 .line_father_item{
   background-color: #ebebeb;
   border-radius: 40rpx;

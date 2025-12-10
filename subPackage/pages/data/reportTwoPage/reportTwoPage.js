@@ -147,7 +147,7 @@ hideMask(){
        id  =  e.currentTarget.dataset.id;
        type = this.data.type;
      }else{
-       if(e.currentTarget.dataset.type == 'disPurGoods' ||  e.currentTarget.dataset.type == 'disPurSupplier' || e.currentTarget.dataset.type == 'disCost' || e.currentTarget.dataset.type == 'disStockNow' || e.currentTarget.dataset.type == 'disLoss' || e.currentTarget.dataset.type == 'disWaste' || e.currentTarget.dataset.type == 'disReturn'){
+       if(e.currentTarget.dataset.type == 'disPurGoods' ||  e.currentTarget.dataset.type == 'disPurSupplier'  ||  e.currentTarget.dataset.type == 'disPurSelf' || e.currentTarget.dataset.type == 'disCost' || e.currentTarget.dataset.type == 'disStockNow' || e.currentTarget.dataset.type == 'disLoss' || e.currentTarget.dataset.type == 'disWaste' || e.currentTarget.dataset.type == 'disReturn'){
         id = this.data.disId;
        }else if(e.currentTarget.dataset.type == 'disPurNxDistributer' ){
         id = this.data.nxDisId;
@@ -209,7 +209,7 @@ hideMask(){
 
 
    onUnload(){
-    wx.removeStorageSync('myDate');
+    
     wx.removeStorageSync('searchDep')
    },
    

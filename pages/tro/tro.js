@@ -114,21 +114,6 @@ Page({
 
   // 提交到服务端注册
   _doRegisterToServer(userInfo) {
-    // 伪代码:
-    // wx.request({
-    //   url: 'https://yourserver.com/api/register',
-    //   method: 'POST',
-    //   data: {
-    //     nickName: userInfo.nickName,
-    //     avatarUrl: userInfo.avatarUrl,
-    //     // phone: ...
-    //   },
-    //   success: (res) => {
-    //     // todo: store token / userId
-    //     // jump to main page
-    //     wx.navigateTo({ url: '/pages/home/index' });
-    //   }
-    // })
 
     console.log('模拟注册到服务端');
     wx.navigateTo({
@@ -136,39 +121,10 @@ Page({
     });
   },
 
-  _doBindPhone(encryptedData, iv) {
-    // 伪代码:
-    // wx.request({
-    //   url: 'https://yourserver.com/api/bindPhone',
-    //   data: {
-    //     encryptedData, iv
-    //   },
-    //   success: (res) => {
-    //     console.log('绑定成功');
-    //     // ...
-    //   }
-    // });
-  },
 
   toNext(){
-
-    wx.requestSubscribeMessage({
-      tmplIds: [
-        'CgludlqVZc_vmFaZUgVFC-iprkydrtOfF_GcODltpTc',
-        '_KhWtCVg3fIBH-tHqSV0hUk5m_vuKmxw1CGn0PEv6D0',
-        'TE6HIkd7LRQ08zdnQXowRjZu8OBK0eGEd368p2NtTeA'
-      ],
-      success(res) {
-        wx.navigateTo({
-          url: '../register/register',
-        })
-      },
-      fail(err) {
-        
-      },
-    });
-
-   
-   
+    wx.navigateTo({
+      url: '../register/register',
+    })
   },
 });

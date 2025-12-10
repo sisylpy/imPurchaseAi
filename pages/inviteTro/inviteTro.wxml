@@ -1,7 +1,7 @@
 
 
   <view class="flex flex-column">
-  <customer-navbar  style="height: {{navBarHeight}}rpx;" title="京京采购" avatar="/images/logo.png" button-text="设置" bindnavbuttontap="toEditUser"></customer-navbar>
+  <customer-navbar  style="height: {{navBarHeight}}rpx;" title="京采账本" avatar="/images/logo.png" button-text="设置" bindnavbuttontap="toEditUser"></customer-navbar>
 
 
 

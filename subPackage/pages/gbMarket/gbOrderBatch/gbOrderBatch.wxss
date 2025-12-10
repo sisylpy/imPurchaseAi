@@ -1,9 +1,4 @@
 
-
-page{
-  background: #f7f7f7;
-}
-
 .body{
   border: 1px solid lightgray;
   border-radius: 20rpx;
@@ -42,7 +37,7 @@ page{
 }
 .form_body{
   border: 1px solid rgb(226, 225, 225);
-  background-color: #fff;
+  /* background-color: rgb(238, 238, 238); */
 
 }
 
@@ -406,7 +401,7 @@ button.share_btn {
 
 .weui-input{
   border-bottom: 1px solid gray;
-  width: 100%;
+  width: 90%;
   padding: 20rpx 20rpx;
 }
 
@@ -436,3 +431,229 @@ button{
 
 }
 button::after { border: none; }
+
+/* ========== 注册弹窗样式 ========== */
+
+/* ========== 提示弹窗样式 ========== */
+.cancel-modal-container {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 50rpx 40rpx;
+  margin: 0 40rpx;
+  max-width: 400rpx;
+  width: 100%;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%) scale(0.9);
+}
+
+.overlay.show .cancel-modal-container {
+  transform: translateX(-50%) translateY(-50%) scale(1);
+}
+
+.cancel-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.cancel-icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.cancel-content {
+  text-align: center;
+}
+
+.cancel-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.cancel-message {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+.modal-container {
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-icon-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.modal-icon-bg {
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2rpx solid #e9ecef;
+}
+
+.modal-icon {
+  border-radius: 50%;
+}
+
+.modal-content {
+  padding: 80rpx 40rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+.modal-header {
+  text-align: center;
+  margin-top: 20rpx;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.modal-subtitle {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+.payment-section {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  border: 1rpx solid #e9ecef;
+}
+
+.payment-label {
+  margin-bottom: 20rpx;
+}
+
+.payment-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #495057;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: row;
+  gap: 20rpx;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 20rpx;
+  width: 100%;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20rpx 16rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+  border: 2rpx solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.radio-option:hover {
+  /* border-color: #667eea; */
+  background: #ffffff;
+}
+
+.radio-text {
+  font-size: 28rpx;
+  color: #495057;
+  margin-left: 16rpx;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 2rpx solid #e9ecef;
+}
+
+.secondary-btn:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.primary-btn {
+  background: #007bff;
+  color: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 123, 255, 0.2);
+}
+
+.primary-btn:hover {
+  background: #0056b3;
+  transform: translateY(-1rpx);
+  box-shadow: 0 6rpx 16rpx rgba(0, 123, 255, 0.3);
+}
+
+.disabled-btn {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.btn-text {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.btn-hover {
+  transform: scale(0.98);
+}

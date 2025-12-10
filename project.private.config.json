@@ -10,15 +10,78 @@
     "miniprogram": {
       "list": [
         {
-          "name": "subPackage/pages/cost/index/index",
-          "pathName": "subPackage/pages/cost/index/index",
+          "name": "subPackage-ai/pages/ai/chefOrder/chefOrder",
+          "pathName": "subPackage-ai/pages/ai/chefOrder/chefOrder",
           "query": "",
           "scene": null,
           "launchMode": "default"
         },
         {
-          "name": "subPackage/pages/ai/resGoodsAi/resGoodsAi",
-          "pathName": "subPackage/pages/ai/resGoodsAi/resGoodsAi",
+          "name": "subPackage-charts/pages/statistic/indexGoods/indexGoods",
+          "pathName": "subPackage-charts/pages/statistic/indexGoods/indexGoods",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage-charts/pages/statistic/index/index",
+          "pathName": "subPackage-charts/pages/statistic/index/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage-ai/pages/ai/resGoodsAi/resGoodsAi",
+          "pathName": "subPackage-ai/pages/ai/resGoodsAi/resGoodsAi",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/register/register",
+          "pathName": "pages/register/register",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage/pages/indexPoints/indexPoints",
+          "pathName": "subPackage/pages/indexPoints/indexPoints",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage-charts/pages/stock/index/index",
+          "pathName": "subPackage-charts/pages/stock/index/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage-ai/pages/ai/resGoodsAi/resGoodsAi",
+          "pathName": "subPackage-ai/pages/ai/resGoodsAi/resGoodsAi",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage/pages/gbMarket/gbReceiveBatch/gbReceiveBatch",
+          "pathName": "subPackage/pages/gbMarket/gbReceiveBatch/gbReceiveBatch",
+          "query": "batchId=280&retName=%E5%9B%BE%E5%9B%BE&disId=22&from=notification",
+          "launchMode": "default",
+          "scene": 1000
+        },
+        {
+          "name": "subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch",
+          "pathName": "subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch",
+          "query": "batchId=274&retName=%E5%9B%BE%E5%9B%BE%E5%92%8C&disId=22&fromBuyer=1&depId=94&buyUserId=44",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch",
+          "pathName": "subPackage/pages/gbMarket/gbOrderBatch/gbOrderBatch",
           "query": "",
           "launchMode": "default",
           "scene": null
@@ -26,5 +89,5 @@
       ]
     }
   },
-  "libVersion": "3.8.7"
+  "libVersion": "3.9.2"
 }

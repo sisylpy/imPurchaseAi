@@ -5,7 +5,7 @@
   <view class='body bg-white flex-column' style=" margin-top:{{scrollViewTop + windowHeight/3}}rpx; z-index: 9999999999; ">
 
     <view class="flex-column">
-      <view class="flex-row-between" style="background-color: #0768ac; color: #fff;">
+      <view class="flex-row-between" style="background-color: #187e6e; color: #fff;">
         <view class='flex-row goodsTitle'>
           <text class="margin-l-right p-20">{{depGoods.gbDdgDepGoodsName}}</text>
           <block wx:if="{{depGoods.gbDgGoodsStandardWeight !== 'null' && depGoods.gbDgGoodsStandardWeight.length > 0}}">
@@ -18,7 +18,7 @@
       </view>
     </view>
 
-    <view class="flex-row" style="background-color: #0768ac; color: #fff; padding-left: 20rpx;">
+    <view class="flex-row" style="background-color: #187e6e; color: #fff; padding-left: 20rpx;">
       <view class="flex-row half-row">
         <text class="margin-l-right">入库:</text>
         <text class="">{{tool.getAttrFullTime(item.gbDgsFullTime)}} </text>
@@ -29,9 +29,9 @@
       </view>
     </view>
 
-    <view class="flex-row" style="background-color: #0768ac; color: #fff; padding-left: 20rpx;">
+    <view class="flex-row" style="background-color: #187e6e; color: #fff; padding-left: 20rpx;">
       <view class="flex-row half-row">
-        <text class="margin-l-right">制作:</text>
+        <text class="margin-l-right">销售:</text>
         <text class="">{{item.gbDgsProduceWeight}}{{depGoods.gbDdgShowStandardName}}</text>
       </view>
       <view class="flex-row half-row">
@@ -40,7 +40,7 @@
       </view>
     </view>
 
-    <view class="flex-row" style="background-color: #0768ac; color: #fff; padding-left: 20rpx; {{item.gbDistributerGoodsEntity.gbDgControlFresh == 0 ? 'padding-bottom: 20rpx;' :''}}">
+    <view class="flex-row" style="background-color: #187e6e; color: #fff; padding-left: 20rpx; {{item.gbDistributerGoodsEntity.gbDgControlFresh == 0 ? 'padding-bottom: 20rpx;' :''}}">
 
       <view class="flex-row half-row">
         <text class="margin-l-right">退货:</text>
@@ -53,7 +53,7 @@
 
     </view>
 
-    <view class="flex-row" wx:if="{{item.gbDgControlFresh == 1}}" style="background-color: #0768ac; color: #fff;padding-left: 20rpx; padding-bottom: 20rpx;">
+    <view class="flex-row" wx:if="{{item.gbDgControlFresh == 1}}" style="background-color: #187e6e; color: #fff;padding-left: 20rpx; padding-bottom: 20rpx;">
       <view class="flex-row half-row">
         <text class="margin-l-right">保鲜时长:</text>
         <text class="">{{consultItem.gbDgFreshWasteHour}}小时</text>
@@ -67,9 +67,9 @@
 
     <view class='flex-column '>
       <radio-group class="radio-group flex-row-between " bindchange="radioChange">
-        <label class="radio">
+        <!-- <label class="radio">
           <radio value="5" checked="{{showType == 5}}" />新鲜度
-        </label>
+        </label> -->
         <label class="radio" wx:if="{{item.gbDgsWasteFullTime !== null && item.gbDgsWasteFullTime !== ''}}">
           <radio value="4" checked="{{showType == 4}}" />废弃
         </label>
@@ -149,6 +149,23 @@
 
           </view>
 
+          <view class="flex-row p-20" style="height: 90rpx;">
+              <text class="margin-l-right">照片:</text>
+              <view class="flex-column" style="margin-left: 10rpx;">
+
+                <image class='class_img' src="{{src.length > 0 ? src: '../../images/Photo.png' }}" bindtap='choiceImg'></image>
+                <view wx:if="{{src.length > 0}}" bindtap="delPic" style="margin-left: 100rpx;margin-top: -90rpx;">
+                  <image src="../../images/del.png" mode="aspectFill" class="icon" />
+                </view>
+              </view>
+            </view>
+
+            <view class="flex-row  p-20">
+              <text class="margin-l-right">说明:</text>
+              <view class="out">
+                <input class="mainColor orderInput" value="{{reason}}" bindinput="getLossReason" />
+              </view>
+            </view>
         </view>
 
         <view class="flex-column" wx:if="{{showType == 4}}">
@@ -172,67 +189,6 @@
           </block>
           <block wx:else>
             <view>还有{{resultTime}}个小时</view>
-          </block>
-        </view>
-
-        <view class="flex-column" wx:if="{{showType == 5}}">
-          <!-- <view class="flex-row  p-20 ">
-            <text class="margin-l-right"> 五星:</text>
-            <view class=" margin-l-right">
-              <image wx:for="{{greenStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index}}" src="/images/starGreen.png" class="starIcon" />
-             
-              <image wx:for="{{grayStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index + greenStars.length}}" src="/images/starGray.png" class="starIcon" />
-
-            </view>
-          </view> -->
-
-          <view class="flex-row  p-20 ">
-            <text class="mr-10">新鲜度:</text>
-            <view class=" mr-10">
-              <image wx:for="{{greenStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index}}" src="/images/starGreen.png" class="starIcon" />
-              <!-- 渲染灰色星星 -->
-              <image wx:for="{{grayStars}}" wx:key="index" bindtap="onStarClick" data-index="{{index + greenStars.length}}" src="/images/starGray.png" class="starIcon" />
-
-            </view>
-          </view>
-          <block wx:if="{{item.starReduce.length > 0}}">
-            <view class="flex-row p-20" style="height: 90rpx;">
-            <text class="mr-10">照片:</text>
-            <view class="flex-column" style="margin-left: 10rpx; margin-right: 40rpx;">
-              <image class='class_img' src="{{url + item.starReduce[0].gbDeGoodsStockReduceAttachmentEntity.gbDgsraFilePath}}" bindtap='choiceImg'></image>
-            </view>
-          </view>
-          <view class="flex-row  p-20">
-            <text class="mr-10">说明:</text>
-            <view class="out">
-              <input class="mainColor orderInput" value="{{item.starReduce[0].gbDeGoodsStockReduceAttachmentEntity.gbDgsraContent}}" />
-            </view>
-          </view>
-          </block>
-          <block wx:else="">
-            <view class="flex-row p-20" style="height: 90rpx;">
-            <text class="mr-10">照片:</text>
-            <view class="flex-column" style="margin-left: 10rpx; margin-right: 40rpx;">
-              <image class='class_img' src="{{src.length > 0 ? src : '../../images/Photo.png' }}" bindtap='choiceImg'></image>
-              <view wx:if="{{src.length > 0}}" bindtap="delPic" style="margin-left: 100rpx;margin-top: -90rpx;">
-                <image src="../../images/del.png" mode="aspectFill" class="icon" />
-              </view>
-            </view>
-
-            <!-- <view class="flex-column" style="margin-left: 10rpx;">
-              <image class='class_img' src="{{srcLarge.length > 0 ? srcLarge: '../../images/Photo.png' }}" bindtap='choiceImgLarge'></image>
-              <view wx:if="{{srcLarge.length > 0}}" bindtap="delPicLarge" style="margin-left: 100rpx;margin-top: -90rpx;">
-                <image src="../../images/del.png" mode="aspectFill" class="icon" />
-              </view>
-            </view> -->
-
-          </view>
-          <view class="flex-row  p-20">
-            <text class="mr-10">说明:</text>
-            <view class="out">
-              <input class="mainColor orderInput" value="{{reason}}" bindinput="getStarsReason" />
-            </view>
-          </view>
           </block>
         </view>
       </view>

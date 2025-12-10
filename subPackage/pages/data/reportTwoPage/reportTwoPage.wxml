@@ -44,7 +44,7 @@
 
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disPurGoods">全部采购</view>
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disPurSupplier">供货商</view>
-        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disPurNxDistributer" wx:if="{{nxDisId !== -1}}">京京配送</view>
+        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disPurSelf">自采</view>
 
       </view>
     </view>
@@ -55,9 +55,8 @@
         <image src="{{openIndex == 2 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"></image>
       </view>
       <view class="sub_list flex-column pl-20 pr-20 {{openIndex == 2 ? 'is-active' : ''}}">
-        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disCost">总成本(制作+损耗+废弃)</view>
-        <!-- <view class="flex-row p-30 border-bottom" bindtap="saveReport"
-    data-type="disStockNow">库存商品</view> -->
+        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disCost">总成本(销售+损耗+废弃)</view>
+    
 
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disLoss">损耗成本</view>
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="disWaste">废弃成本</view>
@@ -89,7 +88,7 @@
  <image src="{{openIndex == 2 ? '../../../../images/arrow-down-3.png' : '../../../../images/arrow-right-3.png'}}" class="icon"  ></image>
  </view> -->
       <view class="sub_list1 flex-column pl-20 pr-20 {{openIndex == 2 ? 'is-active' : ''}}">
-        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="depCost">总成本(制作+损耗+废弃)</view>
+        <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="depCost">总成本(销售+损耗+废弃)</view>
 
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="depLoss">损耗成本</view>
         <view class="flex-row p-30 border-bottom" bindtap="saveReport" data-type="depWaste">废弃成本</view>

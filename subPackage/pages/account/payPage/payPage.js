@@ -29,6 +29,10 @@ Page({
       statusBarHeight: globalData.statusBarHeight * globalData.rpxR,
     });
 
+    // 在 windowWidth 设置完成后调用 clueOffset
+    if (this.data.type !== undefined) {
+      this.clueOffset(this.data.type);
+    }
 
   },
   /**
@@ -48,11 +52,8 @@ Page({
         name: "定制",
         amount: "",
         amountOk: "",
-      }, {
-        name: "更多",
-        amount: "",
-        amountOk: "",
-      },
+      }
+      
     ],
     selArr: [],
     aaa: 0,
@@ -79,6 +80,13 @@ Page({
       })
     }
 
+    // 保存 type 参数，供 onShow 使用
+    if (options.type !== undefined) {
+      this.setData({
+        type: parseInt(options.type)
+      });
+    }
+
 
 
     var userInfo = wx.getStorageSync('userInfo');
@@ -94,11 +102,11 @@ Page({
       rpxR: globalData.rpxR,
       url: apiUrl.server,
       selIndex: 0,
-      img: 'userImage/index_share.png',
+      img: 'userImage/index_share1.png',
     })
 
     this._initData();
-    this.clueOffset(options.type);
+    // clueOffset 现在在 onShow 中调用，确保 windowWidth 已设置
 
 
   },
@@ -107,63 +115,120 @@ Page({
   _showLiwu() {
     var disInfoValue = this.data.disInfo;
 
-    var dateString = disInfoValue.gbDistributerSettleFullTime;
-    const dateParts = dateString.split(" ");
-    const dateArray = dateParts[0].split("-"); // 获取 "YYYY-MM-DD"
-    const timeArray = dateParts[1].split(":"); // 获取 "HH:MM:SS"
-
-    // 使用 Date.UTC 来创建 UTC 时间
-    const utcDate = Date.UTC(
-      parseInt(dateArray[0], 10), // 年
-      parseInt(dateArray[1], 10) - 1, // 月，注意：JavaScript 中月份是从 0 开始的
-      parseInt(dateArray[2], 10), // 日
-      parseInt(timeArray[0], 10), // 时
-      parseInt(timeArray[1], 10), // 分
-      parseInt(timeArray[2], 10) // 秒
-    );
-
-    const newDate = new Date(utcDate + this.data.liwuDay * 24 * 60 * 60 * 1000); // 加上天数（转成毫秒）
-    var ddd = newDate.toISOString().slice(0, 19).replace("T", " "); // 格式化为 "YYYY-MM-DD HH:MM:SS" 格式
-    this.setData({
-      currentTime: disInfoValue.gbDistributerSettleFullTime, // 假设当前时间
-      endTime: ddd,
-    })
-
-    const that = this;
-    const currentTime = new Date(this.data.currentTime.replace(/-/g, '/'));
-    const endTime = new Date(this.data.endTime.replace(/-/g, '/'));
-
-    // 判断活动是否已过期
-    if (currentTime > endTime) {
-      this.setData({
-        expired: true
+    // 检查必要的数据是否存在
+    if (!disInfoValue || !disInfoValue.gbDistributerSettleFullTime || !this.data.liwuDay) {
+      console.warn('Missing required data for _showLiwu:', {
+        disInfo: disInfoValue,
+        liwuDay: this.data.liwuDay
       });
-    } else {
-      // 启动倒计时
-      const currentTime = new Date();
-      const timeDiff = endTime - currentTime;
+      return;
+    }
 
-      // 如果结束时间已经过期
-      if (timeDiff <= 0) {
-        clearInterval(that.interval);
-        that.setData({
-          expired: true
-        });
+    var dateString = disInfoValue.gbDistributerSettleFullTime;
+    
+    // 验证日期字符串格式
+    if (!dateString || typeof dateString !== 'string' || !dateString.includes(' ') || !dateString.includes('-')) {
+      console.warn('Invalid date string format:', dateString);
+      return;
+    }
+
+    try {
+      const dateParts = dateString.split(" ");
+      const dateArray = dateParts[0].split("-"); // 获取 "YYYY-MM-DD"
+      const timeArray = dateParts[1].split(":"); // 获取 "HH:MM:SS"
+
+      // 验证日期和时间数组
+      if (dateArray.length !== 3 || timeArray.length < 2) {
+        console.warn('Invalid date or time format:', { dateArray, timeArray });
         return;
       }
 
-      // 计算剩余的天、小时、分钟、秒
-      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      // 验证 liwuDay 是否为有效数字
+      const liwuDay = parseInt(this.data.liwuDay);
+      if (isNaN(liwuDay) || liwuDay < 0) {
+        console.warn('Invalid liwuDay value:', this.data.liwuDay);
+        return;
+      }
 
-      // 更新倒计时文本
-      that.setData({
-        countdownText: `${days}天 ${hours} 小时 ${minutes}分钟`
+      // 使用 Date.UTC 来创建 UTC 时间
+      const utcDate = Date.UTC(
+        parseInt(dateArray[0], 10), // 年
+        parseInt(dateArray[1], 10) - 1, // 月，注意：JavaScript 中月份是从 0 开始的
+        parseInt(dateArray[2], 10), // 日
+        parseInt(timeArray[0], 10), // 时
+        parseInt(timeArray[1], 10), // 分
+        parseInt(timeArray[2] || 0, 10) // 秒，如果没有秒数则默认为0
+      );
+
+      // 验证 UTC 日期是否有效
+      if (isNaN(utcDate)) {
+        console.warn('Invalid UTC date calculated:', utcDate);
+        return;
+      }
+
+      const newDate = new Date(utcDate + liwuDay * 24 * 60 * 60 * 1000); // 加上天数（转成毫秒）
+      
+      // 验证新日期是否有效
+      if (isNaN(newDate.getTime())) {
+        console.warn('Invalid new date calculated:', newDate);
+        return;
+      }
+
+      var ddd = newDate.toISOString().slice(0, 19).replace("T", " "); // 格式化为 "YYYY-MM-DD HH:MM:SS" 格式
+      
+      this.setData({
+        currentTime: disInfoValue.gbDistributerSettleFullTime, // 假设当前时间
+        endTime: ddd,
+      })
+
+      const that = this;
+      const currentTime = new Date(this.data.currentTime.replace(/-/g, '/'));
+      const endTime = new Date(this.data.endTime.replace(/-/g, '/'));
+
+      // 验证解析后的日期是否有效
+      if (isNaN(currentTime.getTime()) || isNaN(endTime.getTime())) {
+        console.warn('Invalid parsed dates:', { currentTime, endTime });
+        return;
+      }
+
+      // 判断活动是否已过期
+      if (currentTime > endTime) {
+        this.setData({
+          expired: true
+        });
+      } else {
+        // 启动倒计时
+        const currentTime = new Date();
+        const timeDiff = endTime - currentTime;
+
+        // 如果结束时间已经过期
+        if (timeDiff <= 0) {
+          clearInterval(that.interval);
+          that.setData({
+            expired: true
+          });
+          return;
+        }
+
+        // 计算剩余的天、小时、分钟、秒
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+        // 更新倒计时文本
+        that.setData({
+          countdownText: `${days}天 ${hours} 小时 ${minutes}分钟`
+        });
+
+        // this.startCountdown(endTime);
+      }
+    } catch (error) {
+      console.error('Error in _showLiwu:', error);
+      // 设置默认值，避免页面崩溃
+      this.setData({
+        expired: true,
+        countdownText: '时间计算错误'
       });
-
-
-      // this.startCountdown(endTime);
     }
 
     var haveLiwu = wx.getStorageSync('haveLiwu');
@@ -415,9 +480,24 @@ Page({
    * 计算偏移量
    */
   clueOffset(type) {
+    // 检查必要的数据是否存在
+    if (!this.data.windowWidth || !this.data.tabs || this.data.tabs.length === 0) {
+      console.warn('Missing required data for clueOffset:', {
+        windowWidth: this.data.windowWidth,
+        tabs: this.data.tabs
+      });
+      return;
+    }
 
     itemWidth = Math.ceil(this.data.windowWidth / this.data.tabs.length);
     console.log("thiswiek", this.data.windowWidth, "itemw", itemWidth);
+    
+    // 检查 itemWidth 是否有效
+    if (isNaN(itemWidth) || itemWidth <= 0) {
+      console.warn('Invalid itemWidth calculated:', itemWidth);
+      return;
+    }
+    
     let tempArr = [];
     for (let i in this.data.tabs) {
       tempArr.push(itemWidth * i);

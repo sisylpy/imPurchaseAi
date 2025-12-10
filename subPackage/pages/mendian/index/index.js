@@ -148,47 +148,27 @@ Page({
    * @param {*} options 
    */
   onShareAppMessage: function (options) {
-     var dep = this.data.depArr[options.target.dataset.index];
-     console.log("indexindexindexindexindexindex",options.target.dataset.index)
 
-     this.setData({
-       depInfo: dep
-     })
-    
-    if(options.target.dataset.type == 'order'){
-      var depFatherId = this.data.depInfo.gbDepartmentId; // 编码参数
-      console.log("ordeoeoeoeoeodisId=" + this.data.disId + '&depFatherId=' + depFatherId  + '&admin=1')
-      // var path = "";
-      // var depId = this.data.depInfo.gbDepartmentId; // 编码参数
-      var path = "subPackage/pages/mendian/depUserRegister/depUserRegister?disId=" + this.data.disId + '&depFatherId=' + depFatherId  + '&admin=1';
-      
-    //   if (this.data.depArr.length == 1 && this.data.depArr[0].gbDepartmentSubAmount == 1) {
-    //     // 编码 query 参数
-    //    path = "subPackage/pages/mendian/groupUserRegister/groupUserRegister?disId=" + this.data.disId + '&depFatherId=' + depFatherId + '&depId=' + depId + '&admin=1'
-    // } else {
-
-    //   path = "subPackage/pages/mendian/depUserRegister/depUserRegister?disId=" + this.data.disId +
-    //   '&depFatherId=' + depFatherId + '&depId=' + depId + '&admin=1'
-    // }
-
-    console.log("paththhthht", path)
-
-      return {
-        title: "订货员注册", // 默认是小程序的名称(可以写slogan等)
-        path: path,
-        imageUrl:  this.data.url + '/userImage/say.png',
-      }
-    }else{
-      console.log('disId=' + this.data.userInfo.gbDuDistributerId + '&depFatherId=' + this.data.userInfo.gbDuDepartmentFatherId + '&depId=' + this.data.userInfo.gbDuDepartmentFatherId+ '&depName=' + this.data.userInfo.gbDuWxNickName +'&admin=2')
-      return {
-        title: "采购员注册", // 默认是小程序的名称(可以写slogan等)
-        path: '/pages/inviteAdmin/inviteAdmin?disId=' + this.data.userInfo.gbDuDistributerId + '&depFatherId=' + this.data.userInfo.gbDuDepartmentFatherId + '&depId=' + this.data.userInfo.gbDuDepartmentFatherId+ '&depName=' + this.data.userInfo.gbDuWxNickName +'&admin=2' ,
-        imageUrl:  this.data.url + '/userImage/say.png',
-      }
-    }
+    console.log(options)
+    var depIndex = options.target.dataset.index;
    
+    console.log("子部门索引:", depIndex);
   
-},
+    var depFatherId = this.data.depArr[0].gbDepartmentId; // 父部门ID
+    var depId = this.data.depArr[0].gbDepartmentEntityList[depIndex].gbDepartmentId; // 子部门ID
+    
+    console.log("父部门ID:", depFatherId, "子部门ID:", depId);
+    
+    var path = "subPackage/pages/mendian/depUserRegister/depUserRegister?disId=" + this.data.disId + '&depFatherId=' + depFatherId + '&depId=' + depId + '&admin=1';
+   
+    console.log("分享路径:", path)
+
+    return {
+      title: "订货员注册", // 默认是小程序的名称(可以写slogan等)
+      path: path,
+      imageUrl: this.data.url + '/userImage/say.png',
+    }
+  },
 
 
   

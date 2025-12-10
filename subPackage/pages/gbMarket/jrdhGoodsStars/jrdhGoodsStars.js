@@ -21,7 +21,6 @@ Page({
       statusBarHeight: globalData.statusBarHeight * globalData.rpxR,
     });
 
-
     if(this.data.update){
       
       var myDate = wx.getStorageSync('myDate');
@@ -57,23 +56,33 @@ Page({
     this.setData({
       url: apiUrl.server,
       supplierId: options.id,
-      startDate: dateUtils.getFirstDateInMonth(),
-      stopDate: dateUtils.getArriveDate(0),
-      dateType: "month",
+      from: options.from,
     
     })
-    
-    if (options.from === 'navigate') {
-      console.log('来自页面跳转')
+    var myDate = wx.getStorageSync('myDate');
+    if(myDate){
       this.setData({
-        fromNavigation: true
-      });
-    } else {
-      console.log('其他场景进入')
+        startDate: dateUtils.getDateRange(myDate.name).startDate,
+        stopDate: dateUtils.getDateRange(myDate.name).stopDate,
+        dateType: myDate.dateType,
+        hanzi:  myDate.hanzi,
+      })
+    }else{
       this.setData({
-        fromNavigation: false
-      });
+        dateType: 'month',
+        startDate: dateUtils.getFirstDateInMonth(),
+        stopDate: dateUtils.getArriveDate(0),
+        hanzi:  "本月",
+      })
     }
+
+
+   var jrdhUserInfo = wx.getStorageSync('jrdhUserInfo');
+   if(jrdhUserInfo){
+     this.setData({
+      jrdhUserInfo: jrdhUserInfo
+     })
+   }
       this._getInitData();
     
   },
@@ -83,7 +92,7 @@ Page({
       startDate: this.data.startDate,
       stopDate: this.data.stopDate,
       supplierId: this.data.supplierId,
-      nxDisId: -1,
+      goodsId: -1,
     
       
     }
@@ -94,8 +103,9 @@ Page({
         console.log(res.result.data)
         if (res.result.code == 0) {
           this.setData({
-            arr: res.result.data,
-           
+            arr: res.result.data.arr,
+            tuihuoSubtotal: res.result.data.tuihuoSubtotal,
+            tuihuoCount: res.result.data.tuihuoCount,
           })
         }
       }) 
@@ -128,7 +138,7 @@ Page({
   
 
   toBack() {
-    if(this.data.fromNavigation){
+    if(this.data.from == 'supplier'){
 
       wx.navigateBack({
         delta: 1,
@@ -145,7 +155,7 @@ Page({
 
 
   onUnload(){
-    wx.removeStorageSync('myDate');
+    
   }
 
 })

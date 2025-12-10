@@ -51,7 +51,7 @@
 
 
     <view class='log_btn flex-column-center'>
-      <view class="mainColor"  style="margin-top: 40rpx;" bind:tap="_login">登陆</view>
+      <view class="mainColor"  style="margin-top: 40rpx;" bind:tap="_userLogin">登陆</view>
     </view>
 
 

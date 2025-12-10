@@ -85,6 +85,14 @@ page{
   height: 120rpx;
 }
 
+.shrink_fix{
+  flex-shrink: 0;
+}
+
+.shrink_change{
+  flex-shrink: 1;
+}
+
 
 .navbar {
   display: flex;

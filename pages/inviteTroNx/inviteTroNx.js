@@ -225,25 +225,10 @@ Page({
 
   toNext(){
 
-    var that = this;
+    wx.navigateTo({
+      url: '../inviteRegisterNx/inviteRegisterNx?disId=' + this.data.disId,
+    })
 
-    wx.requestSubscribeMessage({
-      tmplIds: [
-        'CgludlqVZc_vmFaZUgVFC-iprkydrtOfF_GcODltpTc',
-        '_KhWtCVg3fIBH-tHqSV0hUk5m_vuKmxw1CGn0PEv6D0',
-        'TE6HIkd7LRQ08zdnQXowRjZu8OBK0eGEd368p2NtTeA'
-      ],
-      success(res) {
-        wx.navigateTo({
-          url: '../inviteRegisterNx/inviteRegisterNx?disId=' + that.data.disId,
-        })
-      },
-      fail(err) {
-        
-      },
-    });
-
-    
-  
   },
+
 });

@@ -296,7 +296,7 @@
 
 <isPurchase show="{{showIsPurchase}}" bindtoDeletePurchaseGoods="toDeletePurchaseGoods" bindtoEditPurchaseGoods="toEditPurchaseGoods" bindconfirm="confirm" bindcancle="cancleIsPurchase" bindfinish="finishgbPurGoods" item="{{item}}" consultItem="{{consultItem}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" scaleInput="{{scaleInput}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" todayBuyingPrice="{{todayBuyingPrice}}" priceLevel="{{priceLevel}}" />
 
-<disEditPurchase show="{{showEditPurchase}}"  binddelPurGoods="consfirmDeletePlanPurchseGoods" bindconfirmEditGoods="confirmEditPurGoods"  item="{{item}}" bindgetFocus="getFocus" puringIndex="{{puringIndex}}" bindcancle="cancle" modalHeight="{{windowHeight > maskHeight ? windowHeight : maskHeight }}" scrollViewTop="{{scrollViewTop}}" modalContentHeight="{{modalContentHeight}}" windowHeight="{{windowHeight}}" ids="{{ids}}" planOrder="{{planOrder}}"  purchaseGoods="{{purchaseGoods}}"  />
+
 
 <purchaseOrder show="{{showOrderPurchase}}" bindconfirmorder="confirmorder" bindcancle="cancle" item="{{item}}" maskHeight="{{maskHeight > windowHeight ? maskHeight : windowHeight}}" scrollViewTop="{{scrollViewTop}}" windowHeight="{{windowHeight}}" windowWidth="{{windowWidth}}" todayBuyingPrice="{{todayBuyingPrice}}" priceLevel="{{priceLevel}}" />
 

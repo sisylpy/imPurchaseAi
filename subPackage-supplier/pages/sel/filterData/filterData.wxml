@@ -1,0 +1,72 @@
+<wxs src="../../../../utils/fn.wxs" module="tool" />
+
+<view class="flex flex-column">
+<back-navbar  style="height: {{navBarHeight}}rpx;" title="查询" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+
+<!-- 显示当前筛选条件提示 -->
+<!-- <view class="current-filter-tip bg-light-blue p-20" wx:if="{{(currentPurUserIds && currentPurUserIds !== '-1') || (currentSupplierIds && currentSupplierIds !== '-1')}}">
+  <view class="tip-text">
+    <text class="tip-label">当前筛选条件：</text>
+    <text wx:if="{{purUserCount > 0}}">已选择 {{purUserCount}} 个采购员</text>
+    <text wx:if="{{purUserCount > 0 && supplierCount > 0}}">，</text>
+    <text wx:if="{{supplierCount > 0}}">{{supplierCount}} 个供货商</text>
+  </view>
+</view> -->
+
+<view class="flex-column bg-white">
+  <!-- 采购员列表 -->
+  <view class="section-title bg-light-gray p-20" wx:if="{{purUserList && purUserList.length > 0}}">
+    <text class="font-lg font-bold">采购员列表</text>
+  </view>
+  <view class="flex-row-between border-bottom bg-white p-20" wx:for="{{purUserList}}" wx:key="gbDepartmentUserId">
+    <view class="flex-row">
+      <image src='{{url + item.gbDuWxAvartraUrl }}' class="member_url mr-20"></image>
+      <view class="flex-column">
+        <view class="flex-row">
+          <text class="font-md">{{item.gbDuWxNickName}}</text>
+          <text wx:if="{{item.gbDepartmentUserId == userInfo.gbDepartmentUserId}}">(你自己)</text>
+        </view>
+      </view>
+    </view>
+    <view class="btnClick plr-20" bindtap="selectPurUser" data-index="{{index}}" hover-class="hover">
+      <view class="select-btn {{item.isSelected ? 'selected' : ''}}">
+        <text>{{item.isSelected ? '已选择' : '选择'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 供货商列表 -->
+  <view class="section-title bg-light-gray p-20" wx:if="{{supplierArr && supplierArr.length > 0}}">
+    <text class="font-lg font-bold">供货商列表</text>
+  </view>
+  <view wx:if="{{supplierArr && supplierArr.length > 0}}">
+    <view class="flex-row-between bg-white p-20 font-lg border-bottom" wx:for="{{supplierArr}}" wx:for-item="supplier" wx:key="nxJrdhSupplierId">
+      <view class="flex-row pr-10 pl-10 font-lg ">
+          <image src="{{url + supplier.jrdhUserEntity.nxJrdhWxAvartraUrl}}" class="url mr-20"> </image>
+          <text class="five-weight">{{supplier.nxJrdhsSupplierName}}</text>
+      </view>
+      <view class="flex-row" >
+        <view class="btnClick plr-20" bindtap="selectSupplier" data-index="{{index}}" hover-class="hover">
+          <view class="select-btn {{supplier.isSelected ? 'selected' : ''}}">
+            <text>{{supplier.isSelected ? '已选择' : '选择'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 没有数据时显示提示 -->
+  <view wx:if="{{(!purUserList || purUserList.length === 0) && (!supplierArr || supplierArr.length === 0)}}" class="no-data-tip">
+    <view class="no-data-content">
+      <text class="no-data-text">暂无数据</text>
+      <text class="no-data-desc">请返回上一页重新加载数据</text>
+      <view class="refresh-btn" bindtap="toBack">
+        <text>返回上一页</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 确认按钮已删除，选择后直接返回 -->
+
+</view>

@@ -74,7 +74,7 @@ Component({
   data: {
     items: [{
         name: '1',
-        value: '制作',
+        value: '销售',
       },
       {
         name: '2',
@@ -88,11 +88,11 @@ Component({
         name: '4',
         value: '废弃',
       },
-      ,
-      {
-        name: '5',
-        value: '新鲜度',
-      }
+      // ,
+      // {
+      //   name: '5',
+      //   value: '新鲜度',
+      // }
     ],
 
     greenStars: [], // 绿色星星数组
@@ -111,6 +111,7 @@ Component({
       this.updateStars(validStars);
     },
   },
+  
   /**
    * 组件的方法列表
    */
@@ -263,7 +264,7 @@ Component({
       var retWeight = this.data.item.gbDgsMyLossWeight;
       var src = this.data.src;
       var reason = this.data.reason;
-      if(retWeight > 0 || src.length > 0 || reason.length > 0){
+      if(retWeight > 0){
         return false;
       }else{
         return true;
@@ -399,7 +400,7 @@ Component({
       var proWeight = (Number(restWeight) - Number(e.detail.value)).toFixed(1);
       console.log(e.detail.value)
       if (e.detail.value.length > 0) {
-        if (Number(e.detail.value) < Number(restWeight) || Number(e.detail.value) == Number(restWeight)) {
+        if (Number(e.detail.value) < Number(restWeight) ) {
           this.setData({
             [myProduceWeightData]: proWeight,
             canSure: true,
@@ -408,7 +409,7 @@ Component({
         } else {
 
           wx.showToast({
-            title: '输入不正确,不能大于剩余数量',
+            title: '输入不正确,不能大于或等于剩余数量',
             icon: 'none'
           })
           this.setData({
@@ -459,7 +460,7 @@ Component({
       this.setData({
         reason: e.detail.value
       })
-      this._checkLossCanSure(e)
+      // this._checkLossCanSure(e)
     },
 
     //选择图片
@@ -494,7 +495,7 @@ Component({
     _checkLossCanSure(){
       console.log("canlosssosocansave")
       var item = this.data.item;
-      if(item.gbDgsMyLossWeight > 0 && this.data.src.length > 0 && this.data.reason.length > 0){
+      if(item.gbDgsMyLossWeight ){
         this.setData({
           canSure: true
         })
@@ -648,7 +649,7 @@ Component({
         },
 
         complete: function () {
-          _this._checkStarsCanSure(e)
+          // _this._checkStarsCanSure(e)
         }
       })
     },
@@ -706,15 +707,16 @@ Component({
 
 
   },
-  lifetimes: {
-    attached() {
 
-        this.updateStars(this.data.item.gbDgsStars);
+  // lifetimes: {
+  //   attached() {
+
+  //       this.updateStars(this.data.item.gbDgsStars);
       
-      // 初始化星星数据
+  //     // 初始化星星数据
      
-    },
-  },
+  //   },
+  // },
 
 
 

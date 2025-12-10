@@ -1,99 +1,58 @@
 <!-- bb -->
 <view class="flex flex-column ">
 
-  <back-navbar style="height: {{navBarHeight}}rpx;" title="门店列表" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
+  <back-navbar style="height: {{navBarHeight}}rpx;" title="门店管理" avatar="/images/back-gray.png" button-text="设置" bindnavbuttontap="toBack"></back-navbar>
 
 
-  <view class="flex-column">
-    <view class="flex-row-reverse p-20">
-      <!-- addDepartment -->
-      <view class="button-container-white" style="background-color: #f9fdfd;" bindtap="addDepartment" hover-class="hover" data-type="dis">
-        <image src="/images/add.png" mode="aspectFill" class="icon" />
+  <view class="flex-column" wx:for="{{depArr}}" wx:for-item="dep" wx:key="gbDepartmentId">
+    <view class="flex-row-between p-20">
+      <text class="p-20 font-md" style="width: {{windowWidth - 200}}rpx;">部门列表</text>
+      <view class="mainBack_new_btn"  bindtap="addSub" data-id="{{dep.gbDepartmentId}}">+        
       </view>
     </view>
-    <!-- <view class="flex-column">
-      <view class="flex-row">
-        <text class="p-20 font-xs text-secondary" style="width: {{windowWidth - 200}}rpx;">采购组用户列表:</text>
-      </view>
-      <view class="flex-row-between border-bottom bg-white p-20" wx:for="{{userArr}}" wx:key="gbDepartmentUserId">
-        <view class="flex-row">
-          <image src='{{url + item.gbDuWxAvartraUrl }}' class="member_url mr-20"></image>
-          <view class="flex-column">
+   
+
+    <view class="flex-column  p-10  mb-30 bg-white" >
+
+        <view class="flex-column font-lg-2 border-bottom mb-30" wx:for="{{dep.gbDepartmentEntityList}}" wx:for-item="sub" wx:key="gbDepartmentId">
+          <view class="flex-row-between p-20">
             <view class="flex-row">
-              <text class="font-md">{{item.gbDuWxNickName}}</text>
-              <text wx:if="{{item.gbDepartmentUserId == userInfo.gbDepartmentUserId}}">(你自己)</text>
+              <view class="text-secondary mr-20">部门:</view>
+              <view>{{sub.gbDepartmentName}}</view>
+             
             </view>
-          </view>
-        </view>
-
-       <block wx:if="{{item.gbDepartmentUserId == userInfo.gbDepartmentUserId}}">
-        <view class="btnClick plr-20"  bindtap="editUser" data-id="{{item}}" hover-class="hover" data-type="dis">
-          <image src="/images/edit-2.png" mode="aspectFill" class="icon" />
-        </view>
-       </block>
-       <block wx:else="">
-        <view class="btnClick plr-20"  bindtap="delUser" data-id="{{item.gbDepartmentUserId}}" hover-class="hover" data-type="dis">
-          <image src="/images/del.png" mode="aspectFill" class="icon" />
-        </view>
-       </block>
-    
-      </view>
-    </view> -->
-
-    <view class="flex-column  p-10  mb-30 bg-white" wx:for="{{depArr}}" wx:for-item="dep" wx:key="gbDepartmentId">
-
-      <view class="flex-column center-content font-bold font-lg"> 
-       <view class="flex-row">
-        <view>{{dep.gbDepartmentName}}</view>
-        <view class="button-container-white" bind:tap="toEditMendian" data-item="{{dep}}">
-              <image src="/images/edit-2.png" mode="aspectFill" class="icon" />
-            </view>
-       <!--  -->
-       </view>
-      </view>
-   
-   
-      <view class="flex-column">
-        <view class="flex-row-between font-sm  p-20">
-
-            <view class="flex-row-default">
-          <view class="text-secondary  p-10">部门:</view>
-          <!-- <view class="p-20">“部门”功能可以帮助餐厅精准管理采购和成本分析。</view> -->
-        </view>
-          <!-- <view class="button-container" style="background-color: #f9fdfd;" hover-class="hover" bindtap="addSub" data-id="{{dep.gbDepartmentId}}" hover-class="hover">
-            <image src="../../../../images/add.png" class="icon"></image>
-          </view> -->
-        </view>
-        <view class="flex-column p-10 " wx:for="{{dep.gbDepartmentEntityList}}" wx:for-item="sub" wx:key="gbDepartmentId">
-          <view class="flex-row-between">
-            <view class="flex-row p-20 font-lg-2" style="width: {{windowWidth - 200}}rpx;"> {{sub.gbDepartmentName}}</view>
             <view class="button-container-white" bind:tap="editDepartment" data-item="{{sub}}">
               <image src="/images/edit-2.png" mode="aspectFill" class="icon" />
             </view>
           </view>
-          <view class="flex-column">
-            <view class="flex-row p-20 border-bottom" wx:for="{{sub.gbDepartmentUserEntities}}" wx:for-item="subUser" wx:key="gbDepartmentUserId">
-              <image src="{{url + subUser.gbDuWxAvartraUrl}}" mode="aspectFill" class="itemPic mr-20" />
-              <text class="font-md">{{subUser.gbDuWxNickName}}</text>
+
+          <view class="flex-column p-20">
+            <view class="flex-row-between">
+              <text class=" text-secondary" style="width: {{windowWidth - 200}}rpx;">部门下单用户:</text>
+
+              <!-- <button class="big mainBack_new_btn " open-type="share" data-index="{{index}}" data-father-index="{{depIndex}}">
+                +
+              </button> -->
+
 
             </view>
+
+            <view class="flex-row-wrap mb-20 mt-20">
+              <view class="flex-column-center p-10 mr-30 " wx:for="{{sub.gbDepartmentUserEntities}}" wx:for-item="subUser" wx:key="gbDepartmentUserId">
+                <image src="{{url + subUser.gbDuWxAvartraUrl}}" mode="aspectFill" class="itemPic mr-20" />
+                <text class="font-xs">{{subUser.gbDuWxNickName}}</text>
+
+              </view>
+            </view>
+
+            
           </view>
+
+
+
         </view>
 
-        <view class="flex-row">
-          <view class="center-content flex-column">
-            <button class="apply_btn" open-type="share" data-type="order" data-index="{{index}}" style="width: {{windowWidth / 2 - 40}}rpx;">
-              邀请下单同事注册
-            </button>
-          </view>
-          <view class="center-content flex-column" bindtap="addSub" data-id="{{dep.gbDepartmentId}}" >
-             <!-- <view>添加部门</view> -->
-             <button class="apply_btn_green" style="width: {{windowWidth / 2 - 40}}rpx;">
-              添加部门
-            </button>
-          </view>
-        </view>
-      </view>
+    
 
     </view>
 

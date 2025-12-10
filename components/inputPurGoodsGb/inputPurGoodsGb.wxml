@@ -102,7 +102,7 @@
 					<text class="mr-10" style="width: 100rpx;">订单:</text>
 					<scroll-view scroll-y="true" class=" flex-column"
 						style="max-height: {{windowHeight / 3}}rpx; width: {{windowWidth - 180}}rpx;background-color: aliceblue; font-size: 32rpx;">
-						<view class="flex-column " wx:for="{{item.gbDepartmentOrdersEntities}}" wx:key="gbDepartmentOrdersId"
+						<view class="flex-column " wx:for="{{item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities}}" wx:key="gbDepartmentOrdersId"
 							style="padding-left: 20rpx; 	background-color:#f3f6f8; margin-bottom: 10rpx; padding-top: 10rpx;padding-right: 10rpx;"
 							wx:for-item="orders" wx:for-index="orderIndex">
                <view class="flex-row-between">

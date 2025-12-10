@@ -53,7 +53,7 @@ Page({
       batchId: options.batchId,
       retName: options.retName,
       disId: options.disId,
-      buyerUserId: options.buyerUserId,
+      buyUserId: options.buyUserId,
     })
    
 

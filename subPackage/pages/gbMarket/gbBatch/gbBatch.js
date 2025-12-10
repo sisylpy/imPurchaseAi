@@ -229,10 +229,10 @@ Page({
     var value = e.currentTarget.dataset.value;
 
     //输入单价
-    var oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
+    var oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
     //1，输入数字
     if (value <= 9 && value >= 0) {
-      oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
+      oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
       var newValue = 0;
       if (oldValue !== null && oldValue !== "0.0") {
         newValue = oldValue + value;
@@ -240,15 +240,15 @@ Page({
         newValue = value
       }
       this.setData({
-        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
-        ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+        ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
         ["orders.gbDoWeight"]: newValue
       })
       this._getTotalQuantity();
     } else {
       //2，输入“dian”
       if (value == ".") {
-        oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
+        oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
         var newValue = 0;
         if (oldValue.indexOf(".") != -1) {} else {
           if (oldValue > 0) {
@@ -258,8 +258,8 @@ Page({
             newValue = "0."
           }
           this.setData({
-            ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
-            ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+            ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+            ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
             ["orders.gbDoWeight"]: newValue
           })
           this._getTotalQuantity();
@@ -269,8 +269,8 @@ Page({
       if (value == "del") {
         newValue = oldValue.substr(0, oldValue.length - 1);
         this.setData({
-          ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
-          ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+          ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
+          ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: newValue,
           ["orders.gbDoWeight"]: newValue
         })
         this._getTotalQuantity();
@@ -318,10 +318,10 @@ Page({
 
   // 普通录入换算数量
   _getTotalQuantity() {
-    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities;
+    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
     var temp = "";
     for (var i = 0; i < arr.length; i++) {
-      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[i].gbDoWeight;
+      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[i].gbDoWeight;
       if (weightValue) {
         temp = Number(temp) + Number(weightValue);
       }
@@ -344,11 +344,11 @@ Page({
         ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDpgBuySubtotal"]: subtotal.toFixed(1),
         ["item.gbDpgBuySubtotal"]: subtotal.toFixed(1)
       })
-      var orderWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
+      var orderWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoWeight;
       var sub = Number(orderWeight) * Number(price)
       this.setData({
-        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: sub.toFixed(1),
-        ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: sub.toFixed(1),
+        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: sub.toFixed(1),
+        ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: sub.toFixed(1),
       })
     }
     this._getOrderSubTotal();
@@ -371,10 +371,10 @@ Page({
   _multipleInput(e) {
     var value = e.currentTarget.dataset.value;
     //输入单价
-    var oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
+    var oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
     //1，输入数字
     if (value <= 9 && value >= 0) {
-      oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
+      oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
       var newValue = 0;
       if (oldValue !== null && oldValue !== "0.0") {
         newValue = oldValue + value;
@@ -382,15 +382,15 @@ Page({
         newValue = value
       }
       this.setData({
-        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
-        ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+        ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
         ["orders.gbDoScaleWeight"]: newValue
       })
       this._getDoWeightScale();
     } else {
       //2，输入“dian”
       if (value == ".") {
-        oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
+        oldValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
         var newValue = 0;
         if (oldValue.indexOf(".") != -1) {} else {
           if (oldValue > 0) {
@@ -401,8 +401,8 @@ Page({
           }
           this.setData({
 
-            ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
-            ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+            ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+            ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
             ["orders.gbDoScaleWeight"]: newValue
           })
           this._getDoWeightScale();
@@ -412,8 +412,8 @@ Page({
       if (value == "del") {
         newValue = oldValue.substr(0, oldValue.length - 1);
         this.setData({
-          ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
-          ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+          ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
+          ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoScaleWeight"]: newValue,
           ["orders.gbDoScaleWeight"]: newValue
         })
         this._getDoWeightScale();
@@ -462,13 +462,13 @@ Page({
 
   // 换算每个订单的重量
   _getDoWeightScale() {
-    var scaleWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
-    var scale = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoDsStandardScale;
+    var scaleWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
+    var scale = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoDsStandardScale;
     console.log(scaleWeight);
     var doWeight = (Number(scaleWeight) * Number(scale)).toFixed(1);
     this.setData({
-      ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: doWeight,
-      ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: doWeight,
+      ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: doWeight,
+      ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoWeight"]: doWeight,
       ["orders.gbDoWeight"]: doWeight
     })
 
@@ -478,10 +478,10 @@ Page({
 
   _getSclaeOrderTotal() {
 
-    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities;
+    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
     var temp = "";
     for (var i = 0; i < arr.length; i++) {
-      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[i].gbDoWeight;
+      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[i].gbDoWeight;
 
       if (weightValue) {
         temp = Number(temp) + Number(weightValue);
@@ -496,12 +496,12 @@ Page({
     var scalePrice = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDpgBuyScalePrice;
     console.log("scalrpririir000000000" + scalePrice)
     if (scalePrice) {
-      var orderWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
+      var orderWeight = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[this.data.orderIndex].gbDoScaleWeight;
       var orderSubtotal = (Number(scalePrice) * Number(orderWeight)).toFixed(1);
       console.log("orderSubtotal" + orderSubtotal)
       this.setData({
-        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: orderSubtotal,
-        ["item.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: orderSubtotal,
+        ["batch.gbDPGEntities[" + this.data.focusIndex + "].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: orderSubtotal,
+        ["item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + this.data.orderIndex + "].gbDoSubtotal"]: orderSubtotal,
         ["orders.gbDoSubtotal"]: orderSubtotal
       })
     }
@@ -509,10 +509,10 @@ Page({
 
 
   _getTotalScale() {
-    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities;
+    var arr = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
     var temp = "";
     for (var i = 0; i < arr.length; i++) {
-      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDepartmentOrdersEntities[i].gbDoScaleWeight;
+      var weightValue = this.data.batch.gbDPGEntities[this.data.focusIndex].gbDistributerGoodsEntity.gbDepartmentOrdersEntities[i].gbDoScaleWeight;
       if (weightValue) {
         temp = Number(temp) + Number(weightValue);
       }

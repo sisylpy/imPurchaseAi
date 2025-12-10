@@ -3,14 +3,14 @@ var load = require('../../../../lib/load.js');
 import apiUrl from '../../../../config.js'
 
 import {
-  depOrderUserSaveWithFileGb,
+  
   getSubDepartmentsGb,
-  jjdhUserLogin
 } from '../../../../lib/apiDepOrder'
 
 
 import {
   gbPurchaserRegitsteWithFile,
+  depOrderUserSaveWithFileGb,
   gbLogin,
 
 } from '../../../../lib/apiDistributer'
@@ -49,9 +49,11 @@ Page({
 
     
     // 设置页面数据
+    console.log('解析后的参数:', params);
     this.setData({
       disId: params.disId || '',
       depFatherId: params.depFatherId || '',
+      depId: params.depId || '', // 添加 depId 参数
     });
     this.setData({
       windowWidth: globalData.windowWidth * globalData.rpxR,
@@ -62,6 +64,7 @@ Page({
       nickName: "",
       depFatherId: options.depFatherId,
       disId: options.disId,
+      depId: options.depId, // 添加 depId 参数
       admin: options.admin,
       avatarUrl: "/images/user.png",
       canRegister: false,
@@ -72,10 +75,32 @@ Page({
       console.log("fdfa")
       if (res.result.code == 0) {
         load.hideLoading();
+        
+        // 根据传入的 depId 自动选择对应的部门
+        let defaultDeptIndex = 0;
+        let defaultDeptName = res.result.data[0].gbDepartmentName;
+        let defaultDeptId = res.result.data[0].gbDepartmentId;
+        
+        console.log('当前 depId:', this.data.depId);
+        console.log('子部门列表:', res.result.data);
+        
+        if (this.data.depId) {
+          // 查找匹配的部门
+          const targetDept = res.result.data.find(item => item.gbDepartmentId == this.data.depId);
+          console.log('找到的目标部门:', targetDept);
+          if (targetDept) {
+            defaultDeptName = targetDept.gbDepartmentName;
+            defaultDeptId = targetDept.gbDepartmentId;
+            // 找到匹配部门的索引
+            defaultDeptIndex = res.result.data.findIndex(item => item.gbDepartmentId == this.data.depId);
+            console.log('自动选择部门:', defaultDeptName, 'ID:', defaultDeptId);
+          }
+        }
+        
         this.setData({
           subDepArr: res.result.data,
-          selDepartmentName: res.result.data[0].gbDepartmentName,
-          nxDuDepartmentId: res.result.data[0].gbDepartmentId,
+          selDepartmentName: defaultDeptName,
+          nxDuDepartmentId: defaultDeptId,
         })
       } else {
         wx.showToast({
@@ -85,7 +110,7 @@ Page({
     })
 
     this._aaa();
-    this._userLogin();
+    // this._userLogin();
   },
 
   
@@ -146,15 +171,15 @@ Page({
 
 //swiper one before
 _userLogin() {
+  console.log("_userLogin")
   wx.login({
     success: (resLogin) => {
       gbLogin(resLogin.code)
         .then((res) => {
           if (res.result.code !== -1) {
-            wx.setStorageSync('disInfo', res.result.data.disInfo);
-            wx.setStorageSync('userInfo', res.result.data.depUserInfo);
+          
             wx.redirectTo({
-              url: '../../ai/chefOrder/chefOrder',
+              url: '../../../../subPackage-ai/pages/ai/chefOrderDep/chefOrderDep',
             })
             //跳转到首页
           } else {
@@ -249,12 +274,17 @@ save(e) {
             if (jsonObject.code === 0) {
 
               wx.setStorageSync('disInfo', jsonObject.data.disInfo);
-              wx.setStorageSync('userInfo', jsonObject.data.depUser);
-
+              wx.setStorageSync('userInfo', jsonObject.data.depUserInfo);
+              wx.setStorageSync('orderDepInfo', jsonObject.data.depInfo);
               wx.redirectTo({
-                url: '../../../../subPackage/pages/ai/chefOrder/chefOrder',
+                url: '../../../../subPackage-ai/pages/ai/chefOrderDep/chefOrderDep',
               });
 
+            }else{
+             wx.showToast({
+               title: jsonObject.msg,
+               icon: 'none'
+             })
             }
 
           })

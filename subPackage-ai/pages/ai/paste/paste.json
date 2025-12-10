@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "myDismodal": "/components/myDismodal/myDismodal",
+    "addStandard": "/components/addStandard/addStandard" ,
+    "back-navbar": "/components/back-navbar/back-navbar",
+    "delWarnModal": "/components/delWarnModal/delWarnModal",
+    "deepseek-loading": "/components/deepseek-loading/deepseek-loading"
+  }
+}

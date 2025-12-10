@@ -10,7 +10,7 @@ let itemWidth = 0;
 
 import {
  //1swiper-item
- getDepBills,
+ 
  depGetDepFood,
  
  depGetDepGoodsGb,
@@ -263,6 +263,10 @@ Page({
   
   
   toDatePage() {
+
+    this.setData({
+      update: true,
+    })
     wx.navigateTo({
       url: '../../sel/date/date?startDate=' + this.data.startDate +
         '&stopDate=' + this.data.stopDate + '&dateType=' + this.data.dateType,

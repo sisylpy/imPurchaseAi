@@ -147,9 +147,9 @@ Component({
     getOrderWeight(e) {
       var index = e.currentTarget.dataset.index;
       var price = Number(this.data.item.gbDpgBuyPrice);
-      var orderWeightData = "item.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoWeight";
-      var orderPriceData = "item.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoPrice";
-      var subData = "item.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoSubtotal";
+      var orderWeightData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoWeight";
+      var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoPrice";
+      var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + index + "].nxDepartmentOrdersEntity.nxDoSubtotal";
       var orderWeighValue = e.detail.value;
       //输入非空 
       if (orderWeighValue.length > 0) {
@@ -284,10 +284,10 @@ Component({
     },
 
     _emptyInputPrice() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var subData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
+        var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
         this.setData({
           [orderPriceData]: "",
           [subData]: ""
@@ -302,11 +302,11 @@ Component({
     },
     
     _emptyInputPriceScale() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var subData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
-        var sellingSubData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoSellingSubtotal";
+        var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoSubtotal";
+        var sellingSubData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoSellingSubtotal";
         this.setData({
           [orderPriceData]: "",
           [subData]: "",
@@ -328,15 +328,15 @@ Component({
     _countEveryOrderData() {
       console.log(this.data.item)
       var price = Number(this.data.item.gbDpgBuyPrice);
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for (var i = 0; i < arr.length; i++) {
-        var orderPriceData = "item.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
-        var orderPriceDataNx = "item.gbDepartmentOrdersEntities[" + i + "].nxDepartmentOrdersEntity.nxDoPrice";
+        var orderPriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].gbDoPrice";
+        var orderPriceDataNx = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i + "].nxDepartmentOrdersEntity.nxDoPrice";
         this.setData({
           [orderPriceData]: price,
           [orderPriceDataNx]: price,
         })
-        var orderWeight = this.data.item.gbDepartmentOrdersEntities[i].nxDepartmentOrdersEntity.nxDoWeight;
+        var orderWeight = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[i].nxDepartmentOrdersEntity.nxDoWeight;
 
         if(orderWeight !== null && orderWeight > 0){
           this._getSubTotal(i);
@@ -349,9 +349,9 @@ Component({
     
 
   _getSubTotal: function (indexData) {
-    var nxDoPrice = Number(this.data.item.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoPrice);
-    var nxDoWeight = Number(this.data.item.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoWeight);
-    var nxDoSubtotal = "item.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoSubtotal";
+    var nxDoPrice = Number(this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoPrice);
+    var nxDoWeight = Number(this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoWeight);
+    var nxDoSubtotal = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoSubtotal";
   
     if (nxDoPrice > 0 && nxDoWeight > 0) {
       var subtotal = (nxDoPrice * nxDoWeight).toFixed(1);
@@ -360,12 +360,12 @@ Component({
         [nxDoSubtotal]: subtotal,
       })
       //profit 
-      var nxDoCostPrice = this.data.item.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoCostPrice;
+      var nxDoCostPrice = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoCostPrice;
       var nxDoCostSubtotal = (Number(nxDoCostPrice) * Number(nxDoWeight)).toFixed(1);
       
-      var profitSubData = "item.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoProfitSubtotal";
-      var profitScaleData = "item.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoProfitScale";
-      var costSubtotalData = "item.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoCostSubtotal";
+      var profitSubData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoProfitSubtotal";
+      var profitScaleData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoProfitScale";
+      var costSubtotalData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + indexData + "].nxDepartmentOrdersEntity.nxDoCostSubtotal";
       
       var profitSubtotal = (Number(subtotal) - Number(nxDoCostSubtotal)).toFixed(1);
       var profitScale = (Number(profitSubtotal) / Number(subtotal) * 100).toFixed(2);
@@ -383,8 +383,8 @@ Component({
       })
     }
 
-    var costPrice = this.data.item.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoCostPrice;
-    var profitScaleData = "item.gbDepartmentOrdersEntities[" + indexData +"].nxDepartmentOrdersEntity.nxDoProfitScale";
+    var costPrice = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[indexData].nxDepartmentOrdersEntity.nxDoCostPrice;
+    var profitScaleData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + indexData +"].nxDepartmentOrdersEntity.nxDoProfitScale";
     if (costPrice !== null && nxDoPrice !== null && nxDoPrice > 0) {
       console.log("profitScaleDataprofitScaleData")
       var profitScale = Number((Number(nxDoPrice) - Number(costPrice)) / Number(nxDoPrice) * 100).toFixed(2);
@@ -402,7 +402,7 @@ Component({
 
     _getBuySubtotal(e) {
       console.log("_getBuySubtotal")
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       var total = "";
       var weightTotal = "";
       for (var i = 0; i < arr.length; i++) {
@@ -431,11 +431,11 @@ Component({
     getScaleWeight(e) {
       var value = e.detail.value;
       var orderIndex = e.currentTarget.dataset.index;
-      var scale = this.data.item.gbDepartmentOrdersEntities[orderIndex].gbDoDsStandardScale;
+      var scale = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[orderIndex].gbDoDsStandardScale;
       var orderWeight = Number(scale) * Number(value);
 
-      var itemData = "item.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoScaleWeight";
-      var itemOrderData = "item.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoWeight";
+      var itemData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoScaleWeight";
+      var itemOrderData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + orderIndex + "].gbDoWeight";
       this.setData({
         orderIndex: orderIndex,
         [itemData]: value,
@@ -450,7 +450,7 @@ Component({
     },
 
     _getTotalWeightScale() {
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       var scaleQuantityTotal = 0;
       var scaleOrderQuantityTotal = 0;
       for (var i = 0; i < arr.length; i++) {
@@ -471,9 +471,9 @@ Component({
     },
 
     _getOrderSubtotalScale(){
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for(var i = 0; i < arr.length; i++){
-        var subData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoSubtotal";
+        var subData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoSubtotal";
         var weight = arr[i].gbDoScaleWeight;
         var price = arr[i].gbDoScalePrice;
        
@@ -503,10 +503,10 @@ Component({
     _countOrderPrice(){
       var doPrice = this.data.item.gbDpgBuyPrice;
       var scalePrice = this.data.item.gbDpgBuyScalePrice;
-      var arr = this.data.item.gbDepartmentOrdersEntities;
+      var arr = this.data.item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities;
       for(var i = 0; i < arr.length; i++){
-        var priceData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoPrice";
-        var scalePriceData = "item.gbDepartmentOrdersEntities[" + i +"].gbDoScalePrice";
+        var priceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoPrice";
+        var scalePriceData = "item.gbDistributerGoodsEntity.gbDepartmentOrdersEntities[" + i +"].gbDoScalePrice";
 
         this.setData({
           [priceData]: doPrice,

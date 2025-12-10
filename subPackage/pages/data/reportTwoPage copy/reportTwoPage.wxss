@@ -1,9 +1,0 @@
-
-
-
-.sub_list{
-  display: none;
-}
-.sub_list.is-active{
-  display: block;
-}

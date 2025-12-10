@@ -53,6 +53,7 @@ Page({
       stopDate: options.stopDate,
       dateType: options.dateType,
       userId: options.userId,
+      type: options.type,
 
     })
     var datetype = this.data.dateType;
@@ -76,7 +77,7 @@ Page({
           itemIndex: 2,
         })
       }
-    } if (datetype == 'selfDate')  {
+    } if (datetype == 'customer')  {
       this.setData({
         tab1Index: 3,
         itemIndex: 3,
@@ -105,200 +106,47 @@ Page({
   },
 
   selectDay(e) {
-    this.setData({
+     // 获取选择的日期类型和名称
+     var dateType = e.currentTarget.dataset.type;
+     var dateName = e.currentTarget.dataset.name || '';
+     var hanzi = e.currentTarget.dataset.hanzi || '';
      
+     var startDate, stopDate;
+     
+     // 如果是 lastThirtyDays，使用客户端计算
+     if (dateName === 'lastThirtyDays') {
+       var dateUtils = require('../../../../utils/dateUtil');
+       var dateRange = dateUtils.getDateRange('lastThirtyDays');
+       startDate = dateRange.startDate;
+       stopDate = dateRange.stopDate;
+       console.log('使用客户端计算的 lastThirtyDays:', startDate, '到', stopDate);
+     } else {
+       // 其他情况使用服务器数据
+       startDate = e.currentTarget.dataset.startdate;
+       stopDate = e.currentTarget.dataset.stopdate;
+     }
+    
+   
+    this.setData({
       dateType: e.currentTarget.dataset.type,
       startDate: e.currentTarget.dataset.startdate,
       stopDate: e.currentTarget.dataset.stopdate,
+      hanzi: hanzi
     })
-    wx.redirectTo({
-      url: '../reportTwoPage/reportTwoPage?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate + '&dateType=' + this.data.dateType +  '&type=dis'
-         + '&userId=' + this.data.userId,
-    })
-
-    // var pages = getCurrentPages();
+    if(this.data.type == 'cost' || this.data.type == 'business'){
+      console.log("subDepCost")
+      wx.redirectTo({
+        url: '../subDepCost/subDepCost?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate
+        + '&type=' + this.data.type,
+      })
+    }else if(this.data.type == 'purchase'){
+      wx.redirectTo({
+        url: '../selSupplier/selSupplier?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate,
+      })
+    }
   
-    // var prevPage = pages[pages.length - 2]; //上一个页面
-    // //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
-    // prevPage.setData({
-    //   update: true,
-    //   updateMyDate: false,
-    //   dateType: e.currentTarget.dataset.type,
-    //   startDate: e.currentTarget.dataset.startdate,
-    //   stopDate: e.currentTarget.dataset.stopdate,
-    // })
-
-    // wx.navigateBack({
-    //   delta: 1,
-    // })
   },
 
-  _countCompareData(e) {
-    var startData = e.currentTarget.dataset.startdate;
-    var newDate = new Date(startData);
-    newDate.setTime(newDate.getTime() - 24 * 60 * 60 * 1000);
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = newDate.getDay();
-    var week = "";
-    if (day == 7) {
-      week = "星期日"
-    } else {
-      week = weeks[day];
-    }
-
-    var year = newDate.getFullYear()
-    var date = newDate.getDate();
-    var month = newDate.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3 = year + "-" + month + "-" + date
-    var lastWeek = new Date(startData);
-    lastWeek.setTime(newDate.getTime() - 24 * 60 * 60 * 1000 * 6);
-
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = lastWeek.getDay();
-    var weekLast = "";
-    if (day == 7) {
-      weekLast = "星期日"
-    } else {
-      weekLast = weeks[day];
-    }
-
-    var year = lastWeek.getFullYear()
-    var date = lastWeek.getDate();
-    var month = lastWeek.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3lastWeekDate = year + "-" + month + "-" + date
-    this.setData({
-      lastDate: s3,
-      lastWeek: week,
-      lastWeekSameDate: s3lastWeekDate,
-      lastWeekSameDay: weekLast
-    })
-
-  },
-
-
-  _countComareDataWeek(e) {
-    var startData = e.currentTarget.dataset.startdate;
-    var stopDate = e.currentTarget.dataset.stopdate;
-    var newDate = new Date(startData);
-    newDate.setTime(newDate.getTime() - 24 * 60 * 60 * 1000);
-
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = newDate.getDay();
-    var week = "";
-    if (day == 7) {
-      week = "星期日"
-    } else {
-      week = weeks[day];
-    }
-
-    var year = newDate.getFullYear()
-    var date = newDate.getDate();
-    var month = newDate.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3 = year + "-" + month + "-" + date
-    var lastWeek = new Date(startData);
-    lastWeek.setTime(newDate.getTime() - 24 * 60 * 60 * 1000 * 6);
-
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = lastWeek.getDay();
-    var weekLast = "";
-    if (day == 7) {
-      weekLast = "星期日"
-    } else {
-      weekLast = weeks[day];
-    }
-
-    var year = lastWeek.getFullYear()
-    var date = lastWeek.getDate();
-    var month = lastWeek.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3lastWeekDate = year + "-" + month + "-" + date
-    this.setData({
-      lastDate: s3,
-      lastWeek: week,
-      lastWeekSameDate: s3lastWeekDate,
-      lastWeekSameDay: weekLast
-    })
-  },
-
-
-
-  _countComareDataMonth(e) {
-    var startData = e.currentTarget.dataset.startdate;
-    var stopDate = e.currentTarget.dataset.stopdate;
-    var newDate = new Date(startData);
-    newDate.setTime(newDate.getTime() - 24 * 60 * 60 * 1000);
-
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = newDate.getDay();
-    var week = "";
-    if (day == 7) {
-      week = "星期日"
-    } else {
-      week = weeks[day];
-    }
-
-    var year = newDate.getFullYear()
-    var date = newDate.getDate();
-    var month = newDate.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3 = year + "-" + month + "-" + date
-    var lastWeek = new Date(startData);
-    lastWeek.setTime(newDate.getTime() - 24 * 60 * 60 * 1000 * 6);
-
-    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var day = lastWeek.getDay();
-    var weekLast = "";
-    if (day == 7) {
-      weekLast = "星期日"
-    } else {
-      weekLast = weeks[day];
-    }
-
-    var year = lastWeek.getFullYear()
-    var date = lastWeek.getDate();
-    var month = lastWeek.getMonth() + 1;
-    if (date < 10) {
-      date = '0' + date;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    var s3lastWeekDate = year + "-" + month + "-" + date
-    this.setData({
-      lastDate: s3,
-      lastWeek: week,
-      lastWeekSameDate: s3lastWeekDate,
-      lastWeekSameDay: weekLast
-    })
-  },
 
 
   /**
@@ -369,21 +217,59 @@ Page({
 
 
   selectSelfDate() {
-    // wx.setStorageSync('startDate', this.data.startDate);
-    // wx.setStorageSync('stopDate', this.data.stopDate);
-    // wx.setStorageSync('dateType', "selfDate");
-
+    console.log("自定义日期选择:", this.data.startDate, "到", this.data.stopDate);
+    
+    // 验证日期范围
+    if (!this.data.startDate || !this.data.stopDate) {
+      wx.showToast({
+        title: '请选择开始和结束日期',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 验证开始日期不能晚于结束日期
+    var startDate = new Date(this.data.startDate);
+    var stopDate = new Date(this.data.stopDate);
+    
+    if (startDate > stopDate) {
+      wx.showToast({
+        title: '开始日期不能晚于结束日期',
+        icon: 'none'
+      });
+      return;
+    }
+    
+   
+    
+    var myDate = {
+      startDate: this.data.startDate,
+      stopDate: this.data.stopDate,
+      dateType: "customer",
+      name: "custom",
+      hanzi: "自定义",
+    }
+ 
+    wx.setStorageSync('myDate', myDate)
     let pages = getCurrentPages();
     let prevPage = pages[pages.length - 2];
     prevPage.setData({
       startDate: this.data.startDate,
       stopDate: this.data.stopDate,
-      dateType: "selfDate",
+      dateType: "customer",
       update: true,
     })
-    wx.navigateBack({
-      delta: 1,
-    })
+    if(this.data.type == 'cost' || this.data.type == 'business'){
+      console.log("subDepCost")
+      wx.redirectTo({
+        url: '../subDepCost/subDepCost?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate
+        + '&type=' + this.data.type,
+      })
+    }else if(this.data.type == 'purchase'){
+      wx.redirectTo({
+        url: '../selSupplier/selSupplier?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate,
+      })
+    }
   },
 
 

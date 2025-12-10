@@ -101,6 +101,7 @@ Page({
     })
   },
 
+  
   toDatePage(){
     wx.navigateTo({
       url: '../../../../pages/sel/dateReport/dateReport?startDate=' + this.data.startDate + '&stopDate=' + this.data.stopDate + '&dateType=' + this.data.dateType + '&userId=' + this.data.userInfo.gbDepartmentUserId,

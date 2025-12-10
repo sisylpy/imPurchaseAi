@@ -12,12 +12,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-
     restaurantName: '',
     phone: '',
     address: '',
-    avatarUrl: '' // 选
-
+    avatarUrl: '', // 选
+    agreed: false, // 是否同意条款
+    showTerms: false, // 是否显示条款弹窗
+    canRegister: false // 是否可以注册（需要同意条款且餐厅名称有内容）
   },
 
   onShow() {
@@ -68,9 +69,12 @@ Page({
   },
 
   onRestaurantNameInput(e) {
+    const value = e.detail.value;
     this.setData({
-      restaurantName: e.detail.value
+      restaurantName: value
     });
+    // 更新可注册状态
+    this._updateCanRegister(value, this.data.agreed);
   },
   // 联系电话输入
   onPhoneInput(e) {
@@ -130,6 +134,11 @@ Page({
       wx.showToast({ title: '请输入联系电话', icon: 'none' });
       return;
     }
+    // 校验是否同意条款
+    if (!this.data.agreed) {
+      wx.showToast({ title: '请先阅读并同意充值条款', icon: 'none' });
+      return;
+    }
 
     // 2. 把头像赋值到 data，给前端做预览
     this.setData({ avatarUrl });
@@ -179,6 +188,43 @@ Page({
 
   toBack() {
     wx.navigateBack({delta: 1});
+  },
+
+  // 同意条款复选框变化
+  onAgreementChange(e) {
+    const checked = e.detail.value.includes('agree');
+    this.setData({
+      agreed: checked
+    });
+    // 更新可注册状态
+    this._updateCanRegister(this.data.restaurantName, checked);
+  },
+
+  // 更新可注册状态
+  _updateCanRegister(restaurantName, agreed) {
+    const canRegister = restaurantName.trim().length > 0 && agreed;
+    this.setData({
+      canRegister: canRegister
+    });
+  },
+
+  // 显示条款弹窗
+  showTermsModal() {
+    this.setData({
+      showTerms: true
+    });
+  },
+
+  // 隐藏条款弹窗
+  hideTermsModal() {
+    this.setData({
+      showTerms: false
+    });
+  },
+
+  // 阻止弹窗内容区域点击关闭
+  preventClose() {
+    // 空函数，阻止事件冒泡
   },
 
 })
